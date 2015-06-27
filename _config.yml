@@ -1,15 +1,12 @@
 # Site settings
-title: Wanglinzhizhi 
+title: wanglinzhizhi's blog
 email: wanglinzhizhi@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   游走在上下文无关文法间
-baseurl: "" # the subpath of your site, e.g. /blog/ 
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://yourdomain.com" # the base hostname & protocol for your site
+twitter_username: wanglinzhizhi
 github_username:  wagnlinzh
-
 
 # Build settings
 markdown: kramdown
-highlighter: pygments
-permalink: pretty
-paginate: 5
-exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
