@@ -4,13 +4,14 @@ title: About
 permalink: /about/
 ---
 
-游走在上下文无关文法间。
+
+###万有引力的作用下，每个人的时间是相对的#
 
 
 你可以通过[github](https://github.com/wagnlinzh) 联系我
 
 也可以通过邮箱联系到我：
-[Gmail](wanglinzhizhi@gmail.com)
-[Hotmail](wanglinzhizhi@hotmail.com)
+Gmail:wanglinzhizhi[at]gmail.com
+Hotmail:wanglinzhizhi[at]hotmail.com
 
 
