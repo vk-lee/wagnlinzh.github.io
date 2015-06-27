@@ -1,6 +1,6 @@
 # Site settings
 title: wanglinzhizhi's blog
-email: your-email@domain.com
+email: wanglinzhizhi@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   万有引力的作用下，每个人的时间是相对的
 baseurl: "" # the subpath of your site, e.g. /blog/
