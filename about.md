@@ -16,5 +16,5 @@ permalink: /about/
 **Gmail**:wanglinzhizhi[at]gmail.com
 
 **Hotmail**:wanglinzhizhi[at]hotmail.com
-
+	
 
