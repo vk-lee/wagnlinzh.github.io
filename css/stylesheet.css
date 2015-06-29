@@ -253,5 +253,9 @@ a {
 }
 
 section#post-main-content p {
-    font-size: 1.6rem;
+  font-size: 1.6rem;
+}
+
+section#post-main-content hr{
+  margin: 7rem 0;
 }
