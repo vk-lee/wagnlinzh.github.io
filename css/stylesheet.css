@@ -251,3 +251,7 @@ a {
 .post-heading h1{
   font-size:3rem;
 }
+
+section#post-main-content p {
+    font-size: 1.6rem;
+}
