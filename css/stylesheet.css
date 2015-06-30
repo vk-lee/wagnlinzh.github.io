@@ -198,7 +198,7 @@ a {
     padding: 0;
     margin-bottom: 1rem; }
 .main-content hr {
-  height: 2px;
+  height: 1px;
   padding: 0;
   margin: 1rem 0;
   background-color: #eff0f1;
@@ -258,4 +258,12 @@ section#post-main-content p {
 
 section#post-main-content hr{
   margin: 7rem 0;
+}
+
+ul.pager {
+    margin-bottom: 2rem;
+}
+
+hr#page-hr {
+    margin-top: 8rem;
 }
