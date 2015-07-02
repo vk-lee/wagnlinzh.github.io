@@ -267,3 +267,7 @@ ul.pager {
 hr#page-hr {
     margin-top: 8rem;
 }
+
+article#post-article {
+    width: 98%;
+}
