@@ -271,3 +271,8 @@ hr#page-hr {
 article#post-article {
     width: 98%;
 }
+
+
+article#post-article ul {
+    font-size: 1.5rem;
+}
