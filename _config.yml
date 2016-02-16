@@ -12,5 +12,5 @@ markdown: kramdown
 # markdown: redcarpet
 highlighter: pygments
 # permalink: pretty
-paginate: 7
+paginate: 10
 exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
