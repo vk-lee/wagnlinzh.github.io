@@ -11,7 +11,7 @@ title:  "算法：BinarySearch和FibSearch"
 
 ## 算法：BinarySearch  和 FibSearch
 
-
+<hr/>
 
     ``` c++
     binarySearch(int[] A,int e,int lo,int hi){
