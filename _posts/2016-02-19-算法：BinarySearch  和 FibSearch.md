@@ -76,4 +76,7 @@ title:  "算法：BinarySearch和FibSearch"
 
 另外一个发现是关于fibonacci数列的。以前只知道有 Fibonacci数列，但是没有想过它的用途，现在发现这货还是很有用的。而且原来Fibonacci 数列与黄金分割点之间存在相关关系。
 
-tips，fibonacci数列千万不要使用递归来构造。
+tips，fibonacci数列千万不要使用递归来构造。 :)
+
+
+by wanglinzhizhi
