@@ -1,10 +1,9 @@
 ---
 layout: page
 title: About
-description: "something about me"
+description: "about me"
 permalink: /about/
 ---
-
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -86,6 +85,7 @@ font-weight: normal;
 .mr_name_edit .cancel,.mr_intro_edit .cancel{color:#00b38a;}
 .mr_p_info .info_t{text-align:center;margin-bottom:8px;}
 .mr_p_info .info_b{text-align:center;}
+.info_b1{text-align:center;margin-bottom:10px; }
 .mr_p_info .mobile{margin-right:18px;}
 .mr_p_info .mobile i{width:12px;height:14px;background-position:-131px -70px;}
 .mr_p_info .email i{width:14px;height:10px;background-position:-150px -73px;}
@@ -415,17 +415,46 @@ content:"...";
 							<span class="base_info"><i></i>男&nbsp;&nbsp;&nbsp;24岁&nbsp;&nbsp;&nbsp;本科
 							<span class="job_span">&nbsp;&nbsp;</span><span class="birth_span dn">1991.02年出生</span>&nbsp;&nbsp;&nbsp;武汉</span>
 						</div>
+						<div class="info_b1">
+							<span class="websitep"><i></i>个人博客：http://www.wanglinzhizhi.me</span>
+						</div>
 						<div class="info_b">
 							<span class="mobile"><i></i>18707193152</span>&nbsp;&nbsp;
 							<span class="email"><i></i>wanglinzhizhi@hotmail.com</span>
 						</div>
+
 						<div class="mr_sns">
 						<!--   -------------------社交账号     -----------------       -->
 							<a href="https://github.com/wagnlinzh" target="_blank" data-sns="6" data-site="https://github.com/wagnlinzh"><span><em></em></span></a>
 						</div>
 					</div>	
 				</div>
-			</div>	
+			</div>
+			<!--                   期望工作                                                  -->
+					<div id="expectJob">
+						<div>
+						<div class="mr_moudle_head clearfixs mr_w604">
+							<div class="mr_head_l">
+								<div class="mr_title">
+									<span class="mr_title_l"></span><span class="mr_title_c">期望工作</span><span class="mr_title_r"></span>
+								</div>
+							</div>
+						</div>
+						<div class="mr_moudle_content clearfixs mr_w604">
+							<div class="expectjob_list">
+								<input id="expHideId" type="hidden" value="$!expectJobses.id" />
+								<div class="mr_job_info" data-id="$!expectJobses.id">
+									<ul class="clearfixs">
+										<li class="mr_name_li" ><i></i><span class="mr_job_name" title="互联网软件开发工程师">互联网 前端工程师</span></li>
+										<li class="mr_jobtype_li"> <i></i><span class="mr_job_type" title="$!expectJobses.positionType">全职</span></li>
+										<li class="mr_city_li"> <i></i><span class="mr_job_adr" title="$!expectJobses.city">北京/深圳</span></li>
+										
+									</ul>
+								</div>	
+							</div>
+						</div>						
+					</div>
+					</div>	
 			<!--                  工作经历                                                 -->
 			<div class="mr_content">
 				<div class="mr_w604">
@@ -556,7 +585,7 @@ content:"...";
 											</div>	
 										</div>
 										<div class="mr_self_site">
-                                            <a class="mr_self_sitelink" href="http://t.cn/RGVAXNo" target="_blank">http://t.cn/RGVAXNo</a>
+                                            <a class="mr_self_sitelink" href="http://www.wanglinzhizhi.me" target="_blank">http://www.wanglinzhizhi.me</a>
 										</div>
 										<div class="mr_wo_preview olpf"><p>个人博客。博客的模板是基于github默认博客模板的基础上加入了bootstrap框架修改而成。<br /></p></div>
 									</div>																
@@ -677,32 +706,30 @@ content:"...";
 								</div>														
 							</div>						
 						</div>
-					</div>					
-					<!--                   期望工作                                                  -->
-					<div id="expectJob">
+					</div>	
+					<!--               自我描述                                             -->
+					<div id="selfDescription">
 						<div>
-						<div class="mr_moudle_head clearfixs mr_w604">
-							<div class="mr_head_l">
-								<div class="mr_title">
-									<span class="mr_title_l"></span><span class="mr_title_c">期望工作</span><span class="mr_title_r"></span>
+							<div class="mr_moudle_head clearfixs">
+								<div class="mr_head_l">
+									<div class="mr_title">
+										<span class="mr_title_l"></span><span class="mr_title_c">获奖情况</span><span class="mr_title_r"></span>
+									</div>
 								</div>
 							</div>
+							<div class="mr_moudle_content clearfixs">
+									
+								<div class="mr_self_r">
+									<ul>
+ <li><p>2014.06	 	IBM Java高级软件工程师资格认证<br /></p></li>
+ <li><p>2014.05	 	蓝桥杯 Java 省二等奖</p><p><br /></p></li>
+
+</ul> 								
+								</div>														
+							</div>						
 						</div>
-						<div class="mr_moudle_content clearfixs mr_w604">
-							<div class="expectjob_list">
-								<input id="expHideId" type="hidden" value="$!expectJobses.id" />
-								<div class="mr_job_info" data-id="$!expectJobses.id">
-									<ul class="clearfixs">
-										<li class="mr_name_li" ><i></i><span class="mr_job_name" title="互联网软件开发工程师">互联网软件开发工程师</span></li>
-										<li class="mr_jobtype_li"> <i></i><span class="mr_job_type" title="$!expectJobses.positionType">全职</span></li>
-										<li class="mr_city_li"> <i></i><span class="mr_job_adr" title="$!expectJobses.city">深圳/北京</span></li>
-										
-									</ul>
-								</div>	
-							</div>
-						</div>						
-					</div>
-					</div>
+					</div>				
+					
 					
 					<div id="skillsAssess">
 						<div>
@@ -736,7 +763,7 @@ content:"...";
 									<span class="mr_skill_level">熟悉</span>
 								</div>	
 								<div class="mr_skill_con">
-									<span class="mr_skill_name" title="javascript jquery">javascript jquery</span>
+									<span class="mr_skill_name" title="javascript jquery">javascript</span>
 									<span class="mr_skill_plan" data-skillLevel = "22">
 									 <em style="width: 22%"></em>
 									</span>
