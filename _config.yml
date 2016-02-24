@@ -10,7 +10,8 @@ github_username:  wagnlinzh
 # Build settings
 markdown: kramdown
 # markdown: redcarpet
-highlighter: pygments
+# highlighter: pygments
+highlighter: rouge
 # permalink: pretty
 paginate: 10
 exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
