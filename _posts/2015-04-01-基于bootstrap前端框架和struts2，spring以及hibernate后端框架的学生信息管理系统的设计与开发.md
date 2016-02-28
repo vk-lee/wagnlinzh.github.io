@@ -1,6 +1,6 @@
 ---
 layout： post
-title： "基于bootstrap前端框架 ，struts2，spring和hibernate后端框架的学生信息管理系统的开发"
+title： "基于bootstrap前端框架和struts2，spring以及hibernate后端框架的学生信息管理系统的设计与开发"
 ---
 
 
