@@ -7,7 +7,7 @@ title: "基于bootstrap前端框架和struts2,spring以及hibernate后端框架�
 
 ## 基于bootstrap前端框架 ，struts2，spring和hibernate后端框架的学生信息管理系统的开发
 
-
+    Note: 这是毕业设计，是对LinzhiOS的设计，正在慢慢往站点上building……
 
 ## 摘 要
 
