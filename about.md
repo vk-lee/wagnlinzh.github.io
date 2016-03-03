@@ -69,7 +69,6 @@ LinzhiOS系统的前端和后台的设计与开发  **项目负责人**
 - 2014.06  IBM Java高级软件工程师资格认证      
 - 2014.05  蓝桥杯 Java 省二等奖
 
-
 <hr />
 ###  个人技能
 
@@ -108,14 +107,19 @@ LinzhiOS系统的前端和后台的设计与开发  **项目负责人**
 
 
 <hr />
+
 ### 个人作品
 
+1. 个人网站
+ 
 ![wanglinzhizhi.me](/img/wanglinzhizhi1.png)
 
 ![wanglinzhizhi.me](/img/wanglinzhizhi5.png)
 
 wanglinzhizhi.me 个人网站,是基于Bootstrap对github Pages原生模板的重构。重构之后的页面拥有更好的**跨平台特性**。
 
+<hr />
+2. LinzhiOS 系统(前端+后端)
 
 ![LinzhiOS 成绩查询模块](/img/1.png)
 
@@ -136,6 +140,10 @@ LinzhiOS选课模块的前端。
 ![linzhiOS后端的体系结构](/img/3.png)
 
 linzhiOS后端的体系结构，LinzhiOS的系统的后端架构是基于Struts，Hibernate，Spring等框架，以上是Spring框架中系统的体系结构图。
+
+
+<hr />
+3. 致爱丽丝 模板
 
 ![致爱丽丝 模板](img/Alice.png)
 
