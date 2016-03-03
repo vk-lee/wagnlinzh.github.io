@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "about"
+title: "About"
 description: "about me"
 ---
 
@@ -111,7 +111,7 @@ LinzhiOS系统的前端和后台的设计与开发  **项目负责人**
 ### 个人作品
 
 -  **个人网站**
- 
+
 ![wanglinzhizhi.me](/img/wanglinzhizhi1.png)
 
 ![wanglinzhizhi.me](/img/wanglinzhizhi5.png)
