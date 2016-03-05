@@ -2,6 +2,7 @@
 layout: page
 title: "About"
 description: "about me"
+permalink: /about/
 ---
 
 ## 王琳 wanglinzhizhi
