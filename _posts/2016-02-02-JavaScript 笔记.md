@@ -284,7 +284,6 @@ slice() 方法可从已有的数组中返回选定的元素。
    我们将创建一个新数组，然后从其中选取的元素，代码如下：
 
 
-
 ```
    var myarr = new Array(1,2,3,4,5,6);
    document.write(myarr + "<br>");
@@ -306,7 +305,8 @@ sort()方法使数组中的元素按照一定的顺序排列。
 
 
 语法:
-		arrayObject.sort(方法函数)
+
+	arrayObject.sort(方法函数)
 参数说明：
 
 1.如果不指定<方法函数>，则按unicode码顺序排列。
@@ -443,7 +443,7 @@ Hello,JavaScript,John,love
 
 ​```
 
-
+```
 
 
 
@@ -470,36 +470,38 @@ setInterval(代码,交互时间);
    setInterval(clock,1000)
 
 我们设置一个计时器，每隔100毫秒调用clock()函数，并将时间显示出来，代码如下:
+
+
+
+
+
+
+
+
+
+
+     <!DOCTYPE HTML>
+     <html>
+     <head>
+     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+       <title>计时器</title>
+       <script type="text/javascript">
+     		var int=setInterval(clock, 100)
+             function clock(){
+               var time=new Date();
+               document.getElementById("clock").value = time;
+             }
+       </script>
+    </head>
+    <body>
+    <form>
+     <input type="text" id="clock" size="50"  />
+    </form>
+    </body>
+    </html>
    
 
-
 ```
-   <!DOCTYPE HTML>
-   <html>
-   <head>
-   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-   <title>计时器</title>
-   <script type="text/javascript">
-     var int=setInterval(clock, 100)
-     function clock(){
-       var time=new Date();
-       document.getElementById("clock").value = time;
-     }
-   </script>
-   </head>
-   <body>
-   <form>
-   <input type="text" id="clock" size="50"  />
-   </form>
-   </body>
-   </html>
-
-```
-
-
-
-```html
-
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -915,7 +917,6 @@ setAttribute() 方法增加一个指定名称和值的新属性，或者把一�
 
 
 
-
 ### 节点属性
 
 
@@ -944,7 +945,6 @@ setAttribute() 方法增加一个指定名称和值的新属性，或者把一�
 - **元素节点**的 nodeValue 是 undefined 或 null
 - **文本节点**的 nodeValue 是文本自身
 - **属性节点**的 nodeValue 是属性的值
-
 
 
 
