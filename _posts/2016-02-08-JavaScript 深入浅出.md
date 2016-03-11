@@ -86,20 +86,20 @@ title: "Web前端 JavaScript 深入浅出"
 - duck type
 
 ```javascript
-typeof 100 === “number”
-typeof true === “boolean”
-typeof function () {} === “function”
+typeof 100 === "number"
+typeof true === "boolean"
+typeof function () {} === "function"
 
 
-typeof(undefined) ) === “undefined”
-typeof(new Object() ) === “object”
-typeof( [1， 2] ) === “object”
-typeof(NaN ) === “number”
-typeof(null) === “object”
+typeof(undefined) ) === "undefined"
+typeof(new Object() ) === "object"
+typeof( [1, 2] ) === "object"
+typeof(NaN ) === "number"
+typeof(null) === "object"
 ```
 
 ```javascript
-typeof null === “object”
+typeof null === "object"
 ```
 
 
@@ -127,12 +127,12 @@ Object.prototype.toString.apply(null).slice(7,12);
 
 ```javascript
 
-Object.prototype.toString.apply([]); === “[object Array]”;
-Object.prototype.toString.apply(function(){}); === “[object Function]”;
-Object.prototype.toString.apply(null); === “[object Null]”
-Object.prototype.toString.apply(undefined); === “[object Undefined]”
+Object.prototype.toString.apply([]); === "[object Array]";
+Object.prototype.toString.apply(function(){}); === "[object Function]";
+Object.prototype.toString.apply(null); === "[object Null]"
+Object.prototype.toString.apply(undefined); === "[object Undefined]"
 
-//  IE6/7/8 Object.prototype.toString.apply(null) 返回”[object Object]”
+//  IE6/7/8 Object.prototype.toString.apply(null) 返回"[object Object]"
 //  bugs
 ```
 
