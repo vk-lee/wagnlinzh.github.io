@@ -35,7 +35,6 @@ title: "Web前端 JavaScript 深入浅出"
 
 
 
-
 ### 隐式转换
 
 - a==b
@@ -64,7 +63,6 @@ title: "Web前端 JavaScript 深入浅出"
 
       ​
 
-
 ### a==b 
 
 **当类型相同** ,同===
@@ -76,7 +74,6 @@ title: "Web前端 JavaScript 深入浅出"
 - boolean==? //**转number** 1==true  //true
 - object == number | string 尝试对象转为基本类型 new String("hi") =="hi" //true
 - 其他:false
-
 
 
 
@@ -173,15 +170,15 @@ instanceof
 
 
 
-```javascript
-<!-- 任务
+```html
+<!--任务
 请在index.html文件中，编写arraysSimilar函数，实现判断传入的两个数组是否相似。具体需求：
 1. 数组中的成员类型相同，顺序可以不同。例如[1, true] 与 [false, 2]是相似的。
 2. 数组的长度一致。
 3. 类型的判断范围，需要区分:String, Boolean, Number, undefined, null, 函数，日期, window.
 当以上全部满足，则返回"判定结果:通过"，否则返回"判定结果:不通过"。
 
- -->
+-->
 
 <!DOCTYPE HTML>
 <html>
@@ -216,6 +213,7 @@ instanceof
 
         }
 
+        //方法2
         function arraysSimilar(arr1, arr2) {
             var t1 = [];
             var t2 = [];
@@ -244,7 +242,6 @@ instanceof
 
 
 
-
 ```
 
 
@@ -258,8 +255,8 @@ instanceof
 
 
 
-
-##表达式与运算符
+<hr />
+## 表达式与运算符
 
 
 
@@ -294,13 +291,16 @@ instanceof
 
 ### for...in
 
-    ​```
+```
     var p;
     var obj = {x : 1, y: 2}
     
     for (p in obj) {
     }
+```
+
 **for in 的需要注意的地方**
+
 
 ```
 - 顺序不确定
@@ -351,6 +351,8 @@ console.log(form.name.value);
 ```
 
 
+
+### 严格模式
 
 Note:严格模式是一种特殊的执行模式，它修复了部分语言上的不足，它修复了部分语言上的不足，提供更强的错误检查，并增强安全性。
 
@@ -417,9 +419,10 @@ function func() {
 - eval, arguments变为关键字，不能作为变量、函数名
 - eval独立作用域
 
-```
-**严格模式**
 
+**严格模式-小结**
+
+```
 - 不允许用with
 - 所有变量必须声明, 赋值给为声明的变量报错，而不是隐式创建全局变量。
 - eval中的代码不能创建eval所在作用域下的变量、函数。而是为eval单独创建一个作用域，并在eval返回时丢弃。
@@ -438,8 +441,8 @@ function func() {
 
 
 
-
-## **对象**
+<hr />
+## 对象
 
 对象中包含一系列属性，这些属性是无序的。
 
@@ -1050,7 +1053,7 @@ JSON.stringify(obj); // "{"x":1,"y":2,"o":3}"
 
 
 
-
+<hr />
 
 ## 数组
 
@@ -1496,7 +1499,7 @@ Array.prototype.join.call(str, "_");
 
 
 
-
+<hr />
 ## 函数
 
 函数是一块JavaScript代码，被定义一次，但可执行和调用多次。  JS中的函数也是对象，所以JS函数可以像其它对象那样操作和传递  所以我们也常叫JS中的函数为函数对象。
@@ -1514,14 +1517,12 @@ Array.prototype.join.call(str, "_");
 
 
 
-
 ### 不同的调用方法:
 
 - **直接调用** foo();
 - **对象方法** obj.method();
 - **构造器** new Foo();
 - **call/apply/bind**   func.call(obj);
-
 
 
 
@@ -1641,28 +1642,30 @@ var globalVal='global';
 
 
 
-
+<hr />
 ## this  
 
 - 全局的this (浏览器) ,指向window/浏览器.
-  ```javascript
-  console.log(this.document  ===  document);  //  true  
-  console.log(this  ===  window);  //  true  
-  this.a  =  37;   console.log(window.a);  //  37
-  ```
+    
+    ```javascript
+    console.log(this.document  ===  document);  //  true  
+    console.log(this  ===  window);  //  true  
+    this.a  =  37;   console.log(window.a);  //  37
+    ```
 
 - 一般函数的this(浏览器),指向浏览器/window.
+  
   ```javascript
-  function  f1(){      
-      return  this;   
-      }  
-  f1()  ===  window;  //  true,  global  object
+      function  f1(){      
+          return  this;   
+          }  
+      f1()  ===  window;  //  true,  global  object
 
-  function  f2(){
-        "use  strict";  //  see  strict  mode
-         return  this;
-       }  
-  f2()  ===  undefined;  //  true
+      function  f2(){
+            "use  strict";  //  see  strict  mode
+             return  this;
+           }  
+      f2()  ===  undefined;  //  true
   ```
 
 - 作为对象方法的函数的this,指向所创建的对象
@@ -1674,7 +1677,7 @@ var globalVal='global';
              return  this.prop;
           }
     }; 
-    - console.log(o.f());  //  logs  37
+   console.log(o.f());  //  logs  37
 
     var  o  =  {prop:  37};  
     function  independent()  {
@@ -1689,20 +1692,22 @@ var globalVal='global';
 - 对象原型链上的this
 
 ​	指向最具体层的对象,虽然在这里是this是p的原型链p上的this,创建过程中指向了p
-  ```
-  var o = {
-    f:function(){ 
-      return this.a + this.b; 
-    }
-  };  
-  var p = Object.create(o);  
-  p.a = 1;  
-  p.b = 4; 
 
-  console.log(p.f()); // 5
+  ```
+    var o = {
+      f:function(){ 
+        return this.a + this.b; 
+      }
+    };  
+    var p = Object.create(o);  
+    p.a = 1;  
+    p.b = 4; 
+
+    console.log(p.f()); // 5
   ```
 
 - get/set方法与this 指向get/set的对应的对象
+
 
   ```javascript
   function modulus(){
@@ -1724,31 +1729,33 @@ var globalVal='global';
   ```
 
 - 构造器中的this
+
   ```javascript
-  function  MyClass(){
-        this.a  =  37;
-      }  
+    function  MyClass(){
+          this.a  =  37;
+        }  
 
-  var  o  =  new  MyClass(); //new 若没有返回值或返回值为基本类型,则将this作为返回值,返回给新创建的对象
-  console.log(o.a);  //  37,来资源原型链中查找到,而不是自身的
-    
-  function  C2(){
-        this.a  =  37;
-        return  {a  :  38}; 
-  }  
+    var  o  =  new  MyClass(); //new 若没有返回值或返回值为基本类型,则将this作为返回值,返回给新创建的对象
+    console.log(o.a);  //  37,来资源原型链中查找到,而不是自身的
 
-   /*当我们使用new(作为构造器)来创建对象的时候,
-      这时this会指向一个空的对象,这个空对象的原型会指向是Myclass.porotary
-      this会指向MyClass.porototype的空对象 
-      但是当有返回值时,如果返回的是个对象的话,那么会把对象作为返回值,所以这里o.a =38,这里的o的this指向返回的对象{a:38},所以o.a=38
-  */
-  o  =  new  C2();
-  console.log(o.a);  //  38  
+    function  C2(){
+          this.a  =  37;
+          return  {a  :  38}; 
+    }  
+
+     /*当我们使用new(作为构造器)来创建对象的时候,
+        这时this会指向一个空的对象,这个空对象的原型会指向是Myclass.porotary
+        this会指向MyClass.porototype的空对象 
+        但是当有返回值时,如果返回的是个对象的话,那么会把对象作为返回值,所以这里o.a =38,这里的o的this指向返回的对象{a:38},所以o.a=38
+    */
+    o  =  new  C2();
+    console.log(o.a);  //  38  
   ```
 
 
 
 - call/apply方法与this 
+
   ```javascript
   function  add(c,  d){
         return  this.a  +  this.b  +  c  +  d;
@@ -1767,13 +1774,14 @@ var globalVal='global';
   //Notes:call(this,arg[0],arg[1],...);我们用这个函数去调用没法直接调用的方法
   ```
 
+
 - bind方法与this
 
   **作用同call/apply,更简单高效ES5支持**
 
+  
   ```javascript
 
-  ​```
   function  f(){
         return  this.a;   
    }
@@ -1788,8 +1796,7 @@ var globalVal='global';
 
 
 
-
-
+<hr />
 ## 参数属性与arguments
 
 ```javascript
@@ -1825,19 +1832,19 @@ bind方法
 
 ```javascript
 	
-    this.x  =  9;
-    var  module  =  {
-       x:  81,
-        getX:  function()  {  return  this.x;  }   
-	};  
-	
-	module.getX();  //  81  
+    this.x=9;
+    var module={
+        x:81,
+        getX:function(){return this.x; }
+    };
 
-	var  getX  =  module.getX;
-	getX();  //  9  
-	
-	var  boundGetX  =  getX.bind(module);
-	boundGetX();  //  81
+    module.getX();//81
+
+    var getX = module.getX;
+    getX();//9
+
+    var boundGetX=getX.bind(module);
+    boundGetX();//81
 ```
 
 
@@ -1889,7 +1896,7 @@ bind 与 new
 
 
 
-
+<hr />
 ## 闭包
 
     !function(){
@@ -1930,6 +1937,7 @@ bind 与 new
 
 
 改正如下:
+
 ```
 document.body.innerHTML="<div id=div1>aa</div>"
     +"<div id=div2>bbb</div><div id=div3>ccc</div>";
@@ -2003,9 +2011,13 @@ from  维基百科
 
 
 
+
+
+<hr />
 ## 作用域
 
 作用域(全局、函数、eval)
+
 ```javascript
 var a = 10;                   //全局
 (function() {
@@ -2025,6 +2037,7 @@ var a = 10;                   //全局
 
 
 ### 作用域链
+
 ```
 function outer2(){
   var local2=1;
@@ -2050,6 +2063,7 @@ outer();
 
 
 ### 利用函数作用域封装
+
 ```
 (function(){
   //to do sth here
@@ -2162,6 +2176,7 @@ outer();
 
 
 ## 继承
+
 
 ```javascript
 // 继承

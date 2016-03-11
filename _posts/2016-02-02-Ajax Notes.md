@@ -95,7 +95,7 @@ Notes:request.setRequestHeader 这个必须要加,渲染方式
 
 
 
-### 
+
 
 <hr />
 
@@ -175,18 +175,19 @@ javascript出于安全方面的考虑，不允许跨域调用其他页面的对�
    比如在北京的web服务器的后台(www.beijing.com/proxy-shanghaiservice.php)来调用上海服务器(www.shanghai.com/services.php)的服务，然后再把访问结果返回给前端，这样前端调用北京同域名的服务就和调用上海的服务效果相同了。
    ​
 2. **JSONP(只支持GET请求)：**
-   ```
-   <script src="http://www.bbb.com/jsonp.js"></script>
-   在www.aaa.com页面中
-   <script>
-   function jsonp(json){
-   alert(json["name"]);
-   }
-   </script>
-   在www.bbb.com页面中:
-   jsonp({"name":"洪七公",'age':24});
-   jsonp只能对get请求起作用,不能对post请求起作用(不支持post请求)
-   ```
+   
+       ```
+       <script src="http://www.bbb.com/jsonp.js"></script>
+       在www.aaa.com页面中
+       <script>
+       function jsonp(json){
+       alert(json["name"]);
+       }
+       </script>
+       在www.bbb.com页面中:
+       jsonp({"name":"洪七公",'age':24});
+       jsonp只能对get请求起作用,不能对post请求起作用(不支持post请求)
+       ```
 
 JSONP可用于解决主流浏览器的跨域数据访问的问题。
 在www.aaa.com页面中：
@@ -200,9 +201,11 @@ JSONP可用于解决主流浏览器的跨域数据访问的问题。
 	<script src="http;//www.bbb.com/jsonp.js"></script>
 ```
 在www.bbb.com页面中：
+
   ```
   jsonp({'name':'xx','age':24})
   ```
+
 这样就可以实现在www.aaa.com客户端访问获取www.bbb.com所在服务器中的文件或数据,从而实现跨域
 
 
@@ -215,21 +218,21 @@ JSONP可用于解决主流浏览器的跨域数据访问的问题。
 HTML5 提供的XMLHttpRequest Level2已经实现了跨域访问以及其他一些新功能:
 
 对于解决跨域问题,只需要对**服务端**做较小的改变, 客户端不需要做改变
-```
-header("Content-Type:application/json;charset=utf-8");
+    ```
+    header("Content-Type:application/json;charset=utf-8");
 
-header("Access-Control-Allow-Origin:*");
+    header("Access-Control-Allow-Origin:*");
 
-header("Access-Control-Allow-Methods:POST,GET");
-```
+    header("Access-Control-Allow-Methods:POST,GET");
+    ```
 
 
 
 Notes:
 
-1.HTML5提供的XMLHttpRequest Level2已经实现了跨域访问以及其他的一些新功能
-2.IE10以下的版本都不支持
-3.在服务器端
+1. HTML5提供的XMLHttpRequest Level2已经实现了跨域访问以及其他的一些新功能
+2. IE10以下的版本都不支持
+3. 在服务器端
 
 
 
