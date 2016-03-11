@@ -6,14 +6,14 @@ title: "Web前端 JavaScript Notes"
 
 
 
-
+<hr />
 # JavaScript Note
 
 
 
 
 
-## 字符串
+### 字符串
 
 返回指定的字符串首次出现的位置
 
@@ -43,7 +43,7 @@ indexOf() 方法可返回某个指定的字符串值在字符串中首次出现�
     </script>
 
 
-    以上代码的输出：
+    //以上代码的输出：
     0
     4
     9
@@ -55,6 +55,7 @@ indexOf() 方法可返回某个指定的字符串值在字符串中首次出现�
 
 
 找到第二个o出现的位置
+
 ```javascript
 var mystr="Hello World!"
 (mystr.indexOf('o',mystr.indexOf('o')+1));//用两次indexOf
@@ -112,17 +113,19 @@ substring() 方法用于提取字符串中介于两个指定下标之间的字�
 语法:
 
 ```javascript
-	stringObject.substring(starPos,stopPos) 
+	stringObject.substring(starPos,stopPos);
 ```
 
 
 参数说明:
 
 注意：
+
 1. 返回的内容是从 start开始(包含start位置的字符)到 stop-1 处的所有字符，其长度为 stop 减start。
 2. 如果参数 start 与 stop 相等，那么该方法返回的就是一个空串（即长度为 0 的字符串）。
 3. 如果 start 比 stop 大，那么该方法在提取子串之前会先交换这两个参数。
    使用 substring() 从字符串中提取字符串，代码如下：
+   
    ```javascript
 
      <script type="text/javascript">
@@ -135,7 +138,8 @@ substring() 方法用于提取字符串中介于两个指定下标之间的字�
      love
    ```
 
-## 提取指定数目的字符substr()
+<hr />
+### 提取指定数目的字符substr()
 
 substr() 方法从字符串中提取从 startPos位置开始的指定数目的字符串。
 语法:
@@ -154,7 +158,7 @@ substr() 方法从字符串中提取从 startPos位置开始的指定数目的�
   document.write(mystr.substr(7));
   document.write(mystr.substr(2,4));
 </script>
-运行结果：
+//运行结果：
 JavaScript!
 love
 ```
@@ -214,7 +218,7 @@ I,love,JavaScript
   myarr[2] = "JavaScript";
   document.write(myarr.join("."));
 </script>
-运行结果：
+//运行结果：
 I.love.JavaScript
 ```
 
@@ -237,15 +241,17 @@ reverse() 方法用于颠倒数组中元素的顺序。
 定义数组myarr并赋值，然后颠倒其元素的顺序：
 
 ```javascript
-<script type="text/javascript">
+
+
   var myarr = new Array(3)
   myarr[0] = "1"
   myarr[1] = "2"
   myarr[2] = "3"
   document.write(myarr + "<br />")
   document.write(myarr.reverse())
-</script>
-运行结果：
+
+
+//运行结果：
 1,2,3
 3,2,1
 ```
@@ -276,15 +282,16 @@ slice() 方法可从已有的数组中返回选定的元素。
    2.如果 end 未被规定，那么 slice() 方法会选取从 start 到数组结尾的所有元素。
 3. String.slice() 与 Array.slice() 相似。
    我们将创建一个新数组，然后从其中选取的元素，代码如下：
+   
    ```javascript
 
-   <script type="text/javascript">
+   
    var myarr = new Array(1,2,3,4,5,6);
    document.write(myarr + "<br>");
    document.write(myarr.slice(2,4) + "<br>");
    document.write(myarr);
-   </script>
-   运行结果：
+
+   //   运行结果：
    1,2,3,4,5,6
    3,4
    1,2,3,4,5,6
@@ -292,8 +299,8 @@ slice() 方法可从已有的数组中返回选定的元素。
    ```
 
    ​
-
-## 数组排序sort()
+<hr />
+### 数组排序sort()
 
 sort()方法使数组中的元素按照一定的顺序排列。
 
@@ -303,6 +310,7 @@ sort()方法使数组中的元素按照一定的顺序排列。
 参数说明：
 
 1.如果不指定<方法函数>，则按unicode码顺序排列。
+
 2.如果指定<方法函数>，则按<方法函数>所指定的排序方法排序。
 
 
@@ -310,9 +318,12 @@ myArray.sort(sortMethod);
 
 
 注意: 该函数要比较两个值，然后返回一个用于说明这两个值的相对顺序的数字。比较函数应该具有两个参数 a 和 b，其返回值如下： 
-  若返回值<=-1，则表示 A 在排序后的序列中出现在 B 之前。
-  若返回值>-1 && <1，则表示 A 和 B 具有相同的排序顺序。
-  若返回值>=1，则表示 A 在排序后的序列中出现在 B 之后。
+  
+  - 若返回值<=-1，则表示 A 在排序后的序列中出现在 B 之前。
+  
+  - 若返回值>-1 && <1，则表示 A 和 B 具有相同的排序顺序。
+  - 若返回值>=1，则表示 A 在排序后的序列中出现在 B 之后。
+
 1.使用sort()将数组进行排序，代码如下：
 
 ```
@@ -358,11 +369,11 @@ Hello,JavaScript,John,love
 
 
 
+<hr />
+### 日期格式
 
-## 日期格式
 
-
-	​```html
+	​```
 	<!DOCTYPE  HTML>
 	<html >
 	<head>
@@ -439,7 +450,7 @@ Hello,JavaScript,John,love
 
 
 
-
+<hr />
 ### 计时器setInterval()
 
 
@@ -450,14 +461,18 @@ setInterval(代码,交互时间);
 
 1. 代码：要调用的函数或要执行的代码串。
 2. 交互时间：周期性执行或调用表达式之间的时间间隔，以毫秒计（1s=1000ms）。
-   返回值:
+   
+返回值:
    一个可以传递给 clearInterval() 从而取消对"代码"的周期性执行的值。
    调用函数格式(假设有一个clock()函数):
+   
    setInterval("clock()",1000)
    或
    setInterval(clock,1000)
-   我们设置一个计时器，每隔100毫秒调用clock()函数，并将时间显示出来，代码如下:
-   ```javascript
+   
+我们设置一个计时器，每隔100毫秒调用clock()函数，并将时间显示出来，代码如下:
+
+   ```
    <!DOCTYPE HTML>
    <html>
    <head>
@@ -510,7 +525,7 @@ setInterval(代码,交互时间);
 
 
 
-
+<hr />
 ### 取消计时器clearInterval()
 
 
@@ -527,9 +542,9 @@ id_of_setInterval：由 setInterval() 返回的 ID 值。
 
 
 每隔 100 毫秒调用 clock() 函数,并显示时间。当点击按钮时，停止时间,代码如下:
-<!DOCTYPE HTML>
 
-```javascript
+```
+<!DOCTYPE HTML>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -566,7 +581,7 @@ id_of_setInterval：由 setInterval() 返回的 ID 值。
 
 
 
-
+<hr />
 ### 计时器setTimeout()
 
 
@@ -579,7 +594,8 @@ setTimeout()计时器，在载入后延迟指定时间后,去执行一次表达�
 2. 延时时间：在执行代码前需等待的时间，以毫秒为单位（1s=1000ms)。
    当我们打开网页3秒后，在弹出一个提示框，代码如下:
 
-```javascript
+
+```
    <!DOCTYPE HTML>
    <html>
    <head>
@@ -609,7 +625,8 @@ setTimeout()计时器，在载入后延迟指定时间后,去执行一次表达�
 ```
 
    要创建一个运行于无穷循环中的计数器，我们需要编写一个函数来调用其自身。在下面的代码，当按钮被点击后，输入域便从0开始计数。
-```javascript
+
+```
    <!DOCTYPE HTML>
    <html>
    <head>
@@ -639,8 +656,8 @@ setTimeout()计时器，在载入后延迟指定时间后,去执行一次表达�
 
 
 
-
- ### 取消计时器clearTimeout()
+<hr />
+### 取消计时器clearTimeout()
 
 
 setTimeout()和clearTimeout()一起使用，停止计时器。
@@ -658,7 +675,7 @@ setTimeout()和clearTimeout()一起使用，停止计时器。
 下面的例子和上节的无穷循环的例子相似。唯一不同是，现在我们添加了一个 "Stop" 按钮来停止这个计数器：
 
 
-```javascript
+```
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -691,7 +708,7 @@ setTimeout(timedCount,1000);
 
 
 
-
+<hr />
 ### History 对象
 
 history对象记录了用户曾经浏览过的页面(URL)，并可以实现浏览器前进与后退相似导航的功能。
@@ -701,11 +718,11 @@ window.history.[属性|方法]
 注意：window可以省略。
 History 对象属性
 
-History 对象方法
+### History 对象方法
 
 使用length属性，当前窗口的浏览历史总长度，代码如下：
 
-```javascript
+```
 
 <script type="text/javascript">
   var HL = window.history.length;
@@ -747,8 +764,8 @@ window.history.go(-1);
 
 
 
-
-## userAgent
+<hr />
+### userAgent
 
 返回用户代理头的字符串表示(就是包括浏览器版本信息等的字符串)
 语法
@@ -757,7 +774,8 @@ navigator.userAgent
 
 使用userAgent判断使用的是什么浏览器(假设使用的是IE8浏览器),代码如下:
 
-```javascript
+
+```
 
 function validB(){ 
   var u_agent = navigator.userAgent; 
@@ -791,6 +809,7 @@ function validB(){
 
 
 HTML文档可以说由节点构成的集合，DOM节点有:
+
 1. **元素节点**：<html>、<body>、<p>等元素节点，即**标签**。
 2. **文本节点**: 向用户展示的内容，如<li>...</li>中的**文本**。
 3. **属性节点**: 元素属性，如<a>标签的链接属性href="http://www.imooc.com"。
@@ -818,7 +837,7 @@ HTML文档可以说由节点构成的集合，DOM节点有:
 
 
 
-
+<hr />
 ### 区别getElementByID,getElementsByName,getElementsByTagName
 
 
@@ -829,7 +848,8 @@ HTML文档可以说由节点构成的集合，DOM节点有:
 3. TagName可看似某类，getElementsByTagName获取相同类的人集合。如获取小孩这类人，getElementsByTagName("小孩")。
 
 把上面的例子转换到HTML中，如下:
-```javascript
+
+```
 <input type="checkbox" name="hobby" id="hobby1">  音乐
    input标签就像人的类别。
    name属性就像人的姓名。
@@ -841,7 +861,9 @@ HTML文档可以说由节点构成的集合，DOM节点有:
 
 注意：方法区分大小写
 通过下面的例子(6个name="hobby"的复选项，两个按钮)来区分三种方法的不同:
-```javascript
+
+
+```
   <input type="checkbox" name="hobby" id="hobby1">  音乐
   <input type="checkbox" name="hobby" id="hobby2">  登山
   <input type="checkbox" name="hobby" id="hobby3">  游泳
@@ -860,26 +882,31 @@ HTML文档可以说由节点构成的集合，DOM节点有:
 
 
 
-
-##getAttribute()方法
+<hr />
+### getAttribute()方法
 
 
 通过元素节点的属性名称获取属性的值。
 语法：
 
 	elementNode.getAttribute(name)
+
 说明:
 
 1. elementNode：使用getElementById()、getElementsByTagName()等方法，获取到的元素节点。
 2. name：要想查询的元素节点的**属性**名字
+
 
 ### setAttribute()方法
 
 
 setAttribute() 方法增加一个指定名称和值的新属性，或者把一个现有的属性设定为指定的值。
 语法：
+
 ​		elementNode.setAttribute(name,value)
+
 说明：
+
 1.name: 要设置的属性名。
 2.value: 要设置的属性值。
 
@@ -913,23 +940,20 @@ setAttribute() 方法增加一个指定名称和值的新属性，或者把一�
 ```
 
 一、nodeName 属性: 节点的名称，是只读的。
-   **元素节点**的 nodeName 与标签名相同
-   **属性节点**的 nodeName 是属性的名称
-   **文本节点**的 nodeName 永远是 #text
-   **文档节点**的 nodeName 永远是 #document
+
+-   **元素节点**的 nodeName 与标签名相同
+
+-   **属性节点**的 nodeName 是属性的名称
+   
+-   **文本节点**的 nodeName 永远是 #text
+   
+-   **文档节点**的 nodeName 永远是 #document
 
 二、nodeValue 属性：节点的值
- **元素节点**的 nodeValue 是 undefined 或 null
- **文本节点**的 nodeValue 是文本自身
- **属性节点**的 nodeValue 是属性的值
 
-三、nodeType 属性: 节点的类型，是只读的。以下常用的几种结点类型:
-    元素类型    节点类型
-    元素          1
-    属性          2
-    文本          3
-    注释          8
-    文档          9
+- **元素节点**的 nodeValue 是 undefined 或 null
+- **文本节点**的 nodeValue 是文本自身
+- **属性节点**的 nodeValue 是属性的值
 
 
 
@@ -945,19 +969,23 @@ setAttribute() 方法增加一个指定名称和值的新属性，或者把一�
 
 
 
- ### 访问子结点childNodes
+
+<hr />
+### 访问子结点childNodes
 
 
 访问选定元素节点下的所有子节点的列表，返回的值可以看作是一个数组，他具有length属性。
 语法：
+
 ​		elementNode.childNodes
+
 注意：
 如果选定的节点没有子节点，则该属性返回不包含节点的 NodeList。
 
 
 示例代码：
 
-```javascript
+```
 <script type="text/javascript">
   	var x=document.getElementsByTagName('ul')[0].childNodes;
   	document.write("UL子节点个数: "+x.length+"<br/>");
@@ -971,6 +999,7 @@ IE:
 其它浏览器:
    UL子节点个数:7
    节点类型:3
+
 ```
 
 
@@ -986,12 +1015,14 @@ IE:
 ```
 
 运行结果:（IE和其它浏览器结果是一样的）
+  
   UL子节点个数:3
+  
   节点类型:1
 
 
 
-```javascript
+```
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -1033,7 +1064,7 @@ for(var i=0;i<x.length;i++){
 
 
 
-
+<hr />
 ### 访问子结点的第一和最后项
 
 
@@ -1084,7 +1115,7 @@ for(var i=0;i<x.length;i++){
 
 看看下面的例子,获取 P 节点的父节点，代码如下:
 
-```javascript
+```
 <div id="text">
   <p id="con"> parentNode 获取指点节点的父节点</p>
 </div> 
@@ -1131,7 +1162,7 @@ DIV
 试一试，通过获取的mylist节点，使用访问父节点parentNode，将"HTML/CSS"课程内容输出。
 补充第30行代码，将"HTML/CSS"课程内容输出
 
-```javascript
+```
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -1170,10 +1201,10 @@ DIV
 <script  type="text/javascript">    
    var mylist = document.getElementById("tcon"); 
 
-​```
+​
 // document.write(mylist.parentNode.lastChild.nodeName);
 document.write(mylist.parentNode.parentNode.parentNode.lastChild.innerHTML);
-​```
+​
 
 </script> 
 
@@ -1184,7 +1215,7 @@ document.write(mylist.parentNode.parentNode.parentNode.lastChild.innerHTML);
 ```
 
 
-
+<hr />
 ### 访问兄弟节点
 
 
@@ -1201,6 +1232,7 @@ document.write(mylist.parentNode.parentNode.parentNode.lastChild.innerHTML);
    解决问题方法:
    判断节点nodeType是否为1, 如是为元素节点，跳过
 
+<hr />
 ### 插入节点appendChild()
 
 
@@ -1216,7 +1248,7 @@ newnode：指定追加的节点。
 1.在代码编辑器中，script标签内，为ul添加一个li。
 2.设置li内容为PHP。
 
-```javascript
+```html
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -1262,7 +1294,7 @@ node: 指定此节点前插入节点。
 任务
 试一试，在script 标签内补充代码，实现创建一个新li标签，内容为"php",并将新创建的li插入到内容为HTML的标签前。
 
-```javascript
+```html
 
 <!DOCTYPE HTML>
 <html>
@@ -1308,7 +1340,7 @@ node ：必需，指定需要删除的节点。
 
 
 
-```javascript
+```html
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -1365,7 +1397,7 @@ function clearText() {
 
 
 
-
+<hr />
 
 ### 替换元素节点replaceChild()
 
@@ -1379,7 +1411,7 @@ oldnew : 必需，被 newnode 替换的对象。
 
 
 
-```javascript
+```html
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -1420,7 +1452,7 @@ oldnew : 必需，被 newnode 替换的对象。
 
 
 
-
+<hr />
 
 ### 创建元素节点createElement
 
@@ -1433,7 +1465,7 @@ tagName：字符串值，这个字符串用来指明创建元素的类型。
 注意：要与appendChild() 或 insertBefore()方法联合使用，将元素显示在页面中。
 我们来创建一个按钮，代码如下：
 
-```javascript
+```html
 <script type="text/javascript">
    var body = document.body; 
    var input = document.createElement("input");  
@@ -1447,7 +1479,7 @@ tagName：字符串值，这个字符串用来指明创建元素的类型。
 效果：在HTML文档中，创建一个按钮。
 我们也可以使用setAttribute来设置属性，代码如下：
 
-```javascript
+```html
 <script type="text/javascript">  
    var body= document.body;             
    var btn = document.createElement("input");  
@@ -1467,7 +1499,7 @@ tagName：字符串值，这个字符串用来指明创建元素的类型。
 
 
 
-```javascript
+```html
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -1524,7 +1556,7 @@ data : 字符串值，可规定此节点的文本。
 
 
 
-```javascript
+```html
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -1561,8 +1593,8 @@ data : 字符串值，可规定此节点的文本。
 
 
 
-
-## 浏览器窗口可视区域大小
+<hr />
+### 浏览器窗口可视区域大小
 
 
 获得浏览器窗口的尺寸（浏览器的视口，不包括工具栏和滚动条）的方法:
@@ -1588,7 +1620,7 @@ var h= document.documentElement.clientHeight|| document.body.clientHeight;
 任务
 在script标签内，补充右边编辑器代码，获取浏览器当前窗口大小。
 
-```javascript
+```html
 
 <!DOCTYPE HTML>
 <html>
@@ -1621,7 +1653,7 @@ document.write(h);
 
 
 
-
+<hr />
 ### 网页尺寸scrollHeight
 
 scrollHeight和scrollWidth，获取网页内容高度和宽度。
@@ -1642,7 +1674,7 @@ scrollHeight和scrollWidth还可获取Dom元素中内容实际占用的高度和
 
 
 
-```javascript
+```html
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -1709,10 +1741,12 @@ offsetHeight = clientHeight + 滚动条 + 边框。
 ### 网页卷去的距离与偏移量
 
 
-scrollLeft:设置或获取位于给定对象左边界与窗口中目前可见内容的最左端之间的距离 ，即左边灰色的内容。
-scrollTop:设置或获取位于对象最顶端与窗口中可见内容的最顶端之间的距离 ，即上边灰色的内容。
-offsetLeft:获取指定对象相对于版面或由 offsetParent 属性指定的父坐标的计算左侧位置 。
-offsetTop:获取指定对象相对于版面或由 offsetParent 属性指定的父坐标的计算顶端位置 。
+- scrollLeft:设置或获取位于给定对象左边界与窗口中目前可见内容的最左端之间的距离 ，即左边灰色的内容。
+- scrollTop:设置或获取位于对象最顶端与窗口中可见内容的最顶端之间的距离 ，即上边灰色的内容。
+- offsetLeft:获取指定对象相对于版面或由 offsetParent 属性指定的父坐标的计算左侧位置 。
+- offsetTop:获取指定对象相对于版面或由 offsetParent 属性指定的父坐标的计算顶端位置 。
+
 注意:
+
 1. 区分大小写
 2. offsetParent：布局中设置postion属性(Relative、Absolute、fixed)的父容器，从最近的父节点开始，一层层向上找，直到HTML的body。
