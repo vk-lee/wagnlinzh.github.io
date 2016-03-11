@@ -5,6 +5,8 @@ title: "Web前端: Ajax Notes"
 
 
 
+<hr />
+
 # Ajax Notes
 
 
@@ -17,13 +19,23 @@ HTML和CSS 来实现页面，表达信息
 
 
 
+
+
+<hr />
+
 ## XMLHttpRequest 对象创建
 
+
+
+```
 var request=new XMLHttpRequest();
+```
 
 
 
 
+
+<hr>
 
 ## HTTP请求
 
@@ -52,14 +64,11 @@ POST请求(相对安全):
 
 - 对所发送信息的数量无限制
 
-
-
 HTTP响应:
 
 1. 数字和文字,状态码
 2. 响应头.和请求头一样包含许多有用的信息,服务器类型,日期时间,内容类型和长度等
 3. 响应体
-
 
 XMLHttpRequest发送请求
 
@@ -67,8 +76,6 @@ XMLHttpRequest发送请求
 
 
 - sent(string)
-
-
 
 **demo**
 
@@ -88,11 +95,9 @@ Notes:request.setRequestHeader 这个必须要加,渲染方式
 
 
 
+### 
 
-
-### XHR的响应
-
-
+<hr />
 
 ##  JSON的解析
 
@@ -135,14 +140,17 @@ http://jsonlint.com/
 
 Notes:CND加速的jquery库
 
+```
 <script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
+```
+
 // 使用了CDN加速,调用很快.
 
 
 
 
 
-
+<hr />
 
 ## 跨域问题
 
@@ -167,51 +175,46 @@ javascript出于安全方面的考虑，不允许跨域调用其他页面的对�
    比如在北京的web服务器的后台(www.beijing.com/proxy-shanghaiservice.php)来调用上海服务器(www.shanghai.com/services.php)的服务，然后再把访问结果返回给前端，这样前端调用北京同域名的服务就和调用上海的服务效果相同了。
    ​
 2. **JSONP(只支持GET请求)：**
+   ```
+   <script src="http://www.bbb.com/jsonp.js"></script>
+   在www.aaa.com页面中
+   <script>
+   function jsonp(json){
+   alert(json["name"]);
+   }
+   </script>
+   在www.bbb.com页面中:
+   jsonp({"name":"洪七公",'age':24});
+   jsonp只能对get请求起作用,不能对post请求起作用(不支持post请求)
+   ```
 
-   ​
-
-	<script src="http://www.bbb.com/jsonp.js"></script>
-	
-	在www.aaa.com页面中
-	<script>
-	function jsonp(json){
-		alert(json["name"]);
-	}
-	</script>
-​	
-​	
-
-	在www.bbb.com页面中:
-	
-	jsonp({"name":"洪七公",'age':24});
-​	
-​	
-
-	jsonp只能对get请求起作用,不能对post请求起作用(不支持post请求)
-```
 JSONP可用于解决主流浏览器的跨域数据访问的问题。
 在www.aaa.com页面中：
-<script>
-  function jsonp(json){
-      alert(json["name"]);
-  }
-</script>
-<script src="http;//www.bbb.com/jsonp.js"></script>
-在www.bbb.com页面中：
-jsonp({'name':'xx','age':24})
-这样就可以实现在www.aaa.com客户端访问获取www.bbb.com所在服务器中的文件或数据,从而实现跨域
+
 ```
+	<script>
+ 	function jsonp(json){
+      alert(json["name"]);
+  	}
+	</script>
+	<script src="http;//www.bbb.com/jsonp.js"></script>
+```
+在www.bbb.com页面中：
+  ```
+  jsonp({'name':'xx','age':24})
+  ```
+这样就可以实现在www.aaa.com客户端访问获取www.bbb.com所在服务器中的文件或数据,从而实现跨域
 
 
 
-### 3. XHR2
+**3.XHR2**
+
 
 
 
 HTML5 提供的XMLHttpRequest Level2已经实现了跨域访问以及其他一些新功能:
 
 对于解决跨域问题,只需要对**服务端**做较小的改变, 客户端不需要做改变
-
 ```
 header("Content-Type:application/json;charset=utf-8");
 
@@ -237,9 +240,7 @@ Notes:
 跨域处理，三种方法：
 1、处理跨域方法一 代理
 
-
 2、处理跨域方式二——
-
 
 3、处理跨域的方法三——XHR2：
 
@@ -249,34 +250,36 @@ header('Access-Control-Allow-Methods:POST,GET');
 
 
 
-
+<hr />
 
 ## Demo
 
-JavaScript原生版实现demo
+JavaScript原生版实现demo,这里只给出了ajax需要部分的代码,后端的 json已经前端的样式等内容都未写出来(因为太多了...)
 
 ```javascript
-<script>
-document.getElementById("search").onclick = function() { 
-	var request = new XMLHttpRequest();
-	request.open("GET", "serverjson.php?number=" + document.getElementById("keyword").value);
-	request.send();
-	request.onreadystatechange = function() {
-		if (request.readyState===4) {
-			if (request.status===200) { 
-				var data = JSON.parse(request.responseText);
-				if (data.success) { 
-					document.getElementById("searchResult").innerHTML = data.msg;
-				} else {
-					document.getElementById("searchResult").innerHTML = "出现错误：" + data.msg;
-				}
-			} else {
-				alert("发生错误：" + request.status);
-			}
-		} 
-	}
-}
 
+<script>
+	document.getElementById("search").onclick = function() { 
+	var request = new XMLHttpRequest();
+	request.open("GET", "serverjson.php?number=" + 	document.getElementById("keyword").value);
+	request.send();
+	
+    request.onreadystatechange = function() {
+	if (request.readyState===4) {
+		if (request.status===200) { 
+			var data = JSON.parse(request.responseText);
+			if (data.success) { 
+				document.getElementById("searchResult").innerHTML = data.msg;
+			} else {
+				document.getElementById("searchResult").innerHTML = "出现错误：" + data.msg;
+			}
+		} else {
+			alert("发生错误：" + request.status);
+		}
+	} 
+	}
+
+	}
 document.getElementById("save").onclick = function() { 
 	var request = new XMLHttpRequest();
 	request.open("POST", "serverjson.php");
@@ -312,11 +315,11 @@ document.getElementById("save").onclick = function() {
 
 jQuery版的实现
 
-jQuery中封装了request.setRequestHeader("Content-type"... 故不需要额外添加句代码
+jQuery中封装了request.setRequestHeader("Content-type"... 故不需要额外添加句代码 
 
-```javascript
-<script>
-$(document).ready(function(){ 
+```
+	<script>
+	$(document).ready(function(){
 	$("#search").click(function(){ 
 		$.ajax({ 
 		    type: "GET", 	
@@ -335,7 +338,7 @@ $(document).ready(function(){
 			},     
 		});
 	});
-	
+
 	$("#save").click(function(){ 
 		$.ajax({ 
 		    type: "POST", 	
@@ -362,6 +365,3 @@ $(document).ready(function(){
 });
 </script>
 ```
-
-
-
