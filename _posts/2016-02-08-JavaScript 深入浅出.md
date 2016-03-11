@@ -34,7 +34,6 @@ title: "Web前端 JavaScript 深入浅出"
 
 
 
-
 ### 隐式转换
 
 - a==b
@@ -74,7 +73,6 @@ title: "Web前端 JavaScript 深入浅出"
 - boolean==? //**转number** 1==true  //true
 - object == number | string 尝试对象转为基本类型 new String("hi") =="hi" //true
 - 其他:false
-
 
 
 
@@ -294,7 +292,7 @@ instanceof
 ```
     var p;
     var obj = {x : 1, y: 2}
-    
+
     for (p in obj) {
     }
 ```
@@ -418,7 +416,6 @@ function func() {
 - 禁止八进制字面量
 - eval, arguments变为关键字，不能作为变量、函数名
 - eval独立作用域
-
 
 **严格模式-小结**
 
@@ -1516,14 +1513,12 @@ Array.prototype.join.call(str, "_");
 
 
 
-
 ### 不同的调用方法:
 
 - **直接调用** foo();
 - **对象方法** obj.method();
 - **构造器** new Foo();
 - **call/apply/bind**   func.call(obj);
-
 
 
 
@@ -1605,6 +1600,8 @@ function add(a,b){
 
 
 命名函数表达
+
+
 ```
   var func = function nfe() {};  
   alert(func === nfe);  
@@ -1646,15 +1643,15 @@ var globalVal='global';
 ## this  
 
 - 全局的this (浏览器) ,指向window/浏览器.
-    
-    ```javascript
+
+  ```
     console.log(this.document  ===  document);  //  true  
     console.log(this  ===  window);  //  true  
     this.a  =  37;   console.log(window.a);  //  37
-    ```
+  ```
 
 - 一般函数的this(浏览器),指向浏览器/window.
-  
+
   ```javascript
       function  f1(){      
           return  this;   
@@ -1694,8 +1691,8 @@ var globalVal='global';
 ​	指向最具体层的对象,虽然在这里是this是p的原型链p上的this,创建过程中指向了p
 
   ```
-    var o = {
-      f:function(){ 
+  var o = {
+     f:function(){ 
         return this.a + this.b; 
       }
     };  
@@ -1704,12 +1701,12 @@ var globalVal='global';
     p.b = 4; 
 
     console.log(p.f()); // 5
+    
   ```
 
 - get/set方法与this 指向get/set的对应的对象
 
-
-  ```javascript
+```javascript
   function modulus(){
      return Math.sqrt(this.re * this.re + this.im * this.im);
        } 
@@ -1726,7 +1723,7 @@ var globalVal='global';
        get: modulus, enumerable:true, configurable:true}); 
 
   console.log(o.phase, o.modulus); // logs -0.78 1.4142
-  ```
+```
 
 - 构造器中的this
 
@@ -1779,8 +1776,7 @@ var globalVal='global';
 
   **作用同call/apply,更简单高效ES5支持**
 
-  
-  ```javascript
+```javascript
 
   function  f(){
         return  this.a;   
@@ -1791,7 +1787,7 @@ var globalVal='global';
 
   var  o  =  {a  :  37,  f  :  f,  g  :  g};
   console.log(o.f(),  o.g());  //  37,  test
-  ```
+```
 
 
 
@@ -2001,14 +1997,16 @@ from  维基百科
 
 ### 闭包-小结
 
+**优点**
+
 - 灵活和方便
 - 封装
 
-缺点
+**缺点**
+
 - 空间浪费
 - 内存泄漏
 - 性能消耗
-
 
 
 
