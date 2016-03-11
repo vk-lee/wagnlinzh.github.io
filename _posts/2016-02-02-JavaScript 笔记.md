@@ -34,7 +34,7 @@ indexOf() 方法可返回某个指定的字符串值在字符串中首次出现�
 
 例如: 对 "I love JavaScript!" 字符串内进行不同的检索：
 
-```javascript
+```
     <script type="text/javascript">
       var str="I love JavaScript!"
       document.write(str.indexOf("I") + "<br />");
@@ -125,7 +125,7 @@ substring() 方法用于提取字符串中介于两个指定下标之间的字�
 2. 如果参数 start 与 stop 相等，那么该方法返回的就是一个空串（即长度为 0 的字符串）。
 3. 如果 start 比 stop 大，那么该方法在提取子串之前会先交换这两个参数。
    使用 substring() 从字符串中提取字符串，代码如下：
-   
+
    ```javascript
 
      <script type="text/javascript">
@@ -282,10 +282,10 @@ slice() 方法可从已有的数组中返回选定的元素。
    2.如果 end 未被规定，那么 slice() 方法会选取从 start 到数组结尾的所有元素。
 3. String.slice() 与 Array.slice() 相似。
    我们将创建一个新数组，然后从其中选取的元素，代码如下：
-   
-   ```javascript
 
-   
+```
+1. ```javascript
+
    var myarr = new Array(1,2,3,4,5,6);
    document.write(myarr + "<br>");
    document.write(myarr.slice(2,4) + "<br>");
@@ -295,10 +295,13 @@ slice() 方法可从已有的数组中返回选定的元素。
    1,2,3,4,5,6
    3,4
    1,2,3,4,5,6
+```
+
+
 
    ```
 
-   ​
+
 <hr />
 ### 数组排序sort()
 
@@ -306,7 +309,7 @@ sort()方法使数组中的元素按照一定的顺序排列。
 
 
 语法:
-​		arrayObject.sort(方法函数)
+		arrayObject.sort(方法函数)
 参数说明：
 
 1.如果不指定<方法函数>，则按unicode码顺序排列。
@@ -318,15 +321,15 @@ myArray.sort(sortMethod);
 
 
 注意: 该函数要比较两个值，然后返回一个用于说明这两个值的相对顺序的数字。比较函数应该具有两个参数 a 和 b，其返回值如下： 
-  
+
   - 若返回值<=-1，则表示 A 在排序后的序列中出现在 B 之前。
-  
+
   - 若返回值>-1 && <1，则表示 A 和 B 具有相同的排序顺序。
   - 若返回值>=1，则表示 A 在排序后的序列中出现在 B 之后。
 
 1.使用sort()将数组进行排序，代码如下：
 
-```
+​```
 <script type="text/javascript">
   var myarr1 = new Array("Hello","John","love","JavaScript"); 
   var myarr2 = new Array("80","16","50","6","100","1");
@@ -340,7 +343,7 @@ Hello,JavaScript,John,love
 
 
 
-```
+​```
 
 注意:上面的代码没有按照数值的大小对数字进行排序。
 
@@ -348,8 +351,6 @@ Hello,JavaScript,John,love
 2.如要实现这一点，就必须使用一个排序函数，代码如下：
 
 ```
-
-
 <script type="text/javascript">
   function sortNum(a,b) {
   return a - b;
@@ -373,8 +374,8 @@ Hello,JavaScript,John,love
 ### 日期格式
 
 
-	​```
-	<!DOCTYPE  HTML>
+```
+   <!DOCTYPE  HTML>
 	<html >
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -429,7 +430,7 @@ Hello,JavaScript,John,love
 		var index = arr[i].indexOf(':'); //根据 ： 符号确定数字开始的位置 
 		sum += parseInt(  arr[i].substr(index+1,2)  );  // parseInt() 字符串类型转成整型
 	   }
-​	
+
 
 		av = sum/arr.length;
 		av = Math.floor(av);  // 取整
@@ -442,8 +443,8 @@ Hello,JavaScript,John,love
 	<body>
 	</body>
 	</html>
-	
-	​```
+
+​```
 
 
 
@@ -451,6 +452,7 @@ Hello,JavaScript,John,love
 
 
 <hr />
+
 ### 计时器setInterval()
 
 
@@ -461,18 +463,20 @@ setInterval(代码,交互时间);
 
 1. 代码：要调用的函数或要执行的代码串。
 2. 交互时间：周期性执行或调用表达式之间的时间间隔，以毫秒计（1s=1000ms）。
-   
+
 返回值:
    一个可以传递给 clearInterval() 从而取消对"代码"的周期性执行的值。
    调用函数格式(假设有一个clock()函数):
-   
+
    setInterval("clock()",1000)
    或
    setInterval(clock,1000)
-   
-我们设置一个计时器，每隔100毫秒调用clock()函数，并将时间显示出来，代码如下:
 
-   ```
+我们设置一个计时器，每隔100毫秒调用clock()函数，并将时间显示出来，代码如下:
+   
+
+
+```
    <!DOCTYPE HTML>
    <html>
    <head>
@@ -493,7 +497,9 @@ setInterval(代码,交互时间);
    </body>
    </html>
 
-   ```
+```
+
+
 
 ```html
 
@@ -593,7 +599,6 @@ setTimeout()计时器，在载入后延迟指定时间后,去执行一次表达�
 1. 要调用的函数或要执行的代码串。
 2. 延时时间：在执行代码前需等待的时间，以毫秒为单位（1s=1000ms)。
    当我们打开网页3秒后，在弹出一个提示框，代码如下:
-
 
 ```
    <!DOCTYPE HTML>
@@ -814,9 +819,6 @@ HTML文档可以说由节点构成的集合，DOM节点有:
 2. **文本节点**: 向用户展示的内容，如<li>...</li>中的**文本**。
 3. **属性节点**: 元素属性，如<a>标签的链接属性href="http://www.imooc.com"。
 
-
-
-
 ### getElementsByTagName()方法
 
 
@@ -878,10 +880,6 @@ HTML文档可以说由节点构成的集合，DOM节点有:
 2. document.getElementsByName("hobby")，结果为获取属性name="hobby"的元素，共6个。
 3. document.getElementById("hobby6")，结果为获取属性id="hobby6"的元素，只有一个，"跑步"这个复选项。
 
-
-
-
-
 <hr />
 ### getAttribute()方法
 
@@ -895,7 +893,6 @@ HTML文档可以说由节点构成的集合，DOM节点有:
 
 1. elementNode：使用getElementById()、getElementsByTagName()等方法，获取到的元素节点。
 2. name：要想查询的元素节点的**属性**名字
-
 
 ### setAttribute()方法
 
@@ -922,10 +919,6 @@ setAttribute() 方法增加一个指定名称和值的新属性，或者把一�
 
 
 
-
-
-
-
 ### 节点属性
 
 
@@ -944,9 +937,9 @@ setAttribute() 方法增加一个指定名称和值的新属性，或者把一�
 -   **元素节点**的 nodeName 与标签名相同
 
 -   **属性节点**的 nodeName 是属性的名称
-   
+
 -   **文本节点**的 nodeName 永远是 #text
-   
+
 -   **文档节点**的 nodeName 永远是 #document
 
 二、nodeValue 属性：节点的值
@@ -954,10 +947,6 @@ setAttribute() 方法增加一个指定名称和值的新属性，或者把一�
 - **元素节点**的 nodeValue 是 undefined 或 null
 - **文本节点**的 nodeValue 是文本自身
 - **属性节点**的 nodeValue 是属性的值
-
-
-
-
 
 
 
@@ -1015,9 +1004,9 @@ IE:
 ```
 
 运行结果:（IE和其它浏览器结果是一样的）
-  
+
   UL子节点个数:3
-  
+
   节点类型:1
 
 
