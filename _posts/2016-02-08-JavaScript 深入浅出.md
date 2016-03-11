@@ -34,7 +34,6 @@ title: "Web前端 JavaScript 深入浅出"
 
 
 
-
 ### 隐式转换
 
 - a==b
@@ -74,7 +73,6 @@ title: "Web前端 JavaScript 深入浅出"
 - boolean==? //**转number** 1==true  //true
 - object == number | string 尝试对象转为基本类型 new String("hi") =="hi" //true
 - 其他:false
-
 
 
 ### 类型检测
@@ -1511,14 +1509,12 @@ Array.prototype.join.call(str, "_");
 - **不同 的调用方法**
 - **不同 的创建方法**
 
-
 ### 不同的调用方法:
 
 - **直接调用** foo();
 - **对象方法** obj.method();
 - **构造器** new Foo();
 - **call/apply/bind**   func.call(obj);
-
 
 
 
@@ -1884,8 +1880,8 @@ bind 与 new
 
  var func = foo.bind({a:1});
 
- func();      //1
- new func();  //{b:100}
+ func();      //1，这里返回1，并且函数对象获得一个b=100的属性，但不作为返回值
+ new func();  //{b:100}。new之后会有一个空对象,空对象的原型会指向foo.prototype.这样一个空对象的b属性会被设置为b=100,整个空对象作为返回值返回,忽略掉return this.a的一个return.用new调用,对于这种this的情况,会被忽略掉.
 ```
 
 
@@ -2005,7 +2001,6 @@ from  维基百科
 - 空间浪费
 - 内存泄漏
 - 性能消耗
-
 
 
 <hr />
