@@ -283,9 +283,9 @@ slice() 方法可从已有的数组中返回选定的元素。
 3. String.slice() 与 Array.slice() 相似。
    我们将创建一个新数组，然后从其中选取的元素，代码如下：
 
-```
-1. ```javascript
 
+
+```
    var myarr = new Array(1,2,3,4,5,6);
    document.write(myarr + "<br>");
    document.write(myarr.slice(2,4) + "<br>");
@@ -297,9 +297,6 @@ slice() 方法可从已有的数组中返回选定的元素。
    1,2,3,4,5,6
 ```
 
-
-
-   ```
 
 
 <hr />
