@@ -4,6 +4,8 @@ title: "Web前端 JavaScript 深入浅出"
 ---
 # JavaScript 深入浅出
 
+<hr />
+
 > 慕课网 学习javascript的部分笔记:)
 
 ## 数据类型
@@ -20,7 +22,6 @@ title: "Web前端 JavaScript 深入浅出"
   - Array
   - Date
   - ……
-
 
 
 
@@ -73,7 +74,6 @@ title: "Web前端 JavaScript 深入浅出"
 - boolean==? //**转number** 1==true  //true
 - object == number | string 尝试对象转为基本类型 new String("hi") =="hi" //true
 - 其他:false
-
 
 
 
@@ -1512,14 +1512,12 @@ Array.prototype.join.call(str, "_");
 - **不同 的创建方法**
 
 
-
 ### 不同的调用方法:
 
 - **直接调用** foo();
 - **对象方法** obj.method();
 - **构造器** new Foo();
 - **call/apply/bind**   func.call(obj);
-
 
 
 
@@ -1701,7 +1699,7 @@ var globalVal='global';
     p.b = 4; 
 
     console.log(p.f()); // 5
-    
+
   ```
 
 - get/set方法与this 指向get/set的对应的对象
@@ -2010,7 +2008,6 @@ from  维基百科
 
 
 
-
 <hr />
 ## 作用域
 
@@ -2205,3 +2202,27 @@ if (!Object.create) {
 
 
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<hr />
+个人心得:
+以前在学C++,Java的时候没觉得面向对象怎么怎么样,觉得继承也好,重载也好,就应该是那样的,没什么了不起的.现在学Javascript感慨JavaScript是彻头彻尾的面向对象啊(嗯?我知道它也可以是函数式啦),各种设计模式满天飞啊~~
