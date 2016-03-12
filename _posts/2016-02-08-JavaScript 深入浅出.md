@@ -68,12 +68,13 @@ title: "Web前端 JavaScript 深入浅出"
 
 **当类型不同**,尝试类型转化和比较:
 
-- null==undefined
-- number==string //**转number** 1=="1.0" true
-- boolean==? //**转number** 1==true  //true
-- object == number|string  //尝试对象转为基本类型 new String("hi") =="hi" //true
-- 其他:false
-
+```
+  - null==undefined
+  - number==string //**转number** 1=="1.0" true
+  - boolean==? //**转number** 1==true  //true
+  - object == number|string  //尝试对象转为基本类型 new String("hi") =="hi" //true
+  - 其他:false
+```
 
 ### 类型检测
 
