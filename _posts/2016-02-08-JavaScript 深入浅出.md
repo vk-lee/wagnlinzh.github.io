@@ -142,7 +142,7 @@ Object.prototype.toString.apply(undefined); === "[object Undefined]"
 
 ### 类型检测小结
 
-```javascript
+```
 typeof
 适合基本类型及function检测，遇到null失效。
 
@@ -1646,7 +1646,7 @@ var globalVal='global';
 
 - 一般函数的this(浏览器),指向浏览器/window.
 
-  ```javascript
+  ```
       function  f1(){      
           return  this;   
           }  
@@ -1661,7 +1661,7 @@ var globalVal='global';
 
 - 作为对象方法的函数的this,指向所创建的对象
 
-  ```javascript
+  ```
   var  o  =  {
         prop:  37,
         f:  function()  {
@@ -1681,20 +1681,19 @@ var globalVal='global';
   ​
 
 - 对象原型链上的this
-
-​	指向最具体层的对象,虽然在这里是this是p的原型链p上的this,创建过程中指向了p
+  指向最具体层的对象,虽然在这里是this是p的原型链p上的this,创建过程中指向了p
 
   ```
-  var o = {
-     f:function(){ 
-        return this.a + this.b; 
-      }
-    };  
-    var p = Object.create(o);  
-    p.a = 1;  
-    p.b = 4; 
+    var o = {
+       f:function(){ 
+          return this.a + this.b; 
+        }
+      };  
+      var p = Object.create(o);  
+      p.a = 1;  
+      p.b = 4; 
 
-    console.log(p.f()); // 5
+      console.log(p.f()); // 5
 
   ```
 
@@ -1721,7 +1720,7 @@ var globalVal='global';
 
 - 构造器中的this
 
-  ```javascript
+  ```
     function  MyClass(){
           this.a  =  37;
         }  
@@ -1747,7 +1746,7 @@ var globalVal='global';
 
 - call/apply方法与this 
 
-  ```javascript
+  ```
   function  add(c,  d){
         return  this.a  +  this.b  +  c  +  d;
       }  
