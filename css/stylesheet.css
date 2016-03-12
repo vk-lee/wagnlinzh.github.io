@@ -139,7 +139,7 @@ a {
     font-size: 1.5rem;
     color: #567482;
     word-break: normal;
-    white-space: pre;
+    white-space: pre-wrap;
     background: transparent;
     border: 0; }
 .main-content .highlight {
