@@ -713,11 +713,13 @@ ECMAScript5 通过新增Object.create()方法规范化了原型式继承.这个�
 	```
 	function inheritPrototype(subType,superType) {
 		var prototype=Object(SuperType.prototype);//创建对象
+		//等价于 var prototype=Object.create(superType.prototype);
+
+
+		//下面两行完成原型链的链接,其实本质上就是两个List节点的拼接.
 		prototype.constructor = subType;		//增强对象
 		subType.prototype = prototype;			//指定对象
 	}
-
-
 
 	function SuperType(name) {
 		this.name=name;
@@ -739,7 +741,7 @@ ECMAScript5 通过新增Object.create()方法规范化了原型式继承.这个�
 	inheritPrototype(subType,SuperType);
 
 	SubType.prototype.sayAge=function(){
-		console.log(this.name);
+		console.log(this.age);
 	}
 
 	```
