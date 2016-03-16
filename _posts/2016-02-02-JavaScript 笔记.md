@@ -326,43 +326,43 @@ myArray.sort(sortMethod);
 
 1.使用sort()将数组进行排序，代码如下：
 
-​```
-<script type="text/javascript">
-  var myarr1 = new Array("Hello","John","love","JavaScript"); 
-  var myarr2 = new Array("80","16","50","6","100","1");
-  document.write(myarr1.sort()+"<br>");
-  document.write(myarr2.sort());
-</script>
+    ​```
+    <script type="text/javascript">
+      var myarr1 = new Array("Hello","John","love","JavaScript"); 
+      var myarr2 = new Array("80","16","50","6","100","1");
+      document.write(myarr1.sort()+"<br>");
+      document.write(myarr2.sort());
+    </script>
 
-//运行结果：
-Hello,JavaScript,John,love
-1,100,16,50,6,80
+    //运行结果：
+    Hello,JavaScript,John,love
+    1,100,16,50,6,80
 
 
 
-​```
+    ​```
 
 注意:上面的代码没有按照数值的大小对数字进行排序。
 
 
 2.如要实现这一点，就必须使用一个排序函数，代码如下：
 
-```
-<script type="text/javascript">
-  function sortNum(a,b) {
-  return a - b;
- //升序，如降序，把“a - b”该成“b - a”
-}
- var myarr = new Array("80","16","50","6","100","1");
-  document.write(myarr + "<br>");
-  document.write(myarr.sort(sortNum));
-</script>
+    ```
+    <script type="text/javascript">
+      function sortNum(a,b) {
+      return a - b;
+     //升序，如降序，把“a - b”该成“b - a”
+    }
+     var myarr = new Array("80","16","50","6","100","1");
+      document.write(myarr + "<br>");
+      document.write(myarr.sort(sortNum));
+    </script>
 
-//运行结果：
-80,16,50,6,100,1
-1,6,16,50,80,100
+    //运行结果：
+    80,16,50,6,100,1
+    1,6,16,50,80,100
 
-```
+    ```
 
 
 
