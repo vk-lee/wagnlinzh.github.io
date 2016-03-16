@@ -333,7 +333,7 @@ myArray.sort(sortMethod);
       document.write(myarr1.sort()+"<br>");
       document.write(myarr2.sort());
     </script>
-
+    
     //运行结果：
     Hello,JavaScript,John,love
     1,100,16,50,6,80
@@ -347,7 +347,7 @@ myArray.sort(sortMethod);
 
 2.如要实现这一点，就必须使用一个排序函数，代码如下：
 
-    ```
+    ​```
     <script type="text/javascript">
       function sortNum(a,b) {
       return a - b;
@@ -357,12 +357,12 @@ myArray.sort(sortMethod);
       document.write(myarr + "<br>");
       document.write(myarr.sort(sortNum));
     </script>
-
+    
     //运行结果：
     80,16,50,6,100,1
     1,6,16,50,80,100
-
-    ```
+    
+    ​```
 
 
 
@@ -499,7 +499,7 @@ setInterval(代码,交互时间);
     </form>
     </body>
     </html>
-   
+
 
 ```
 <!DOCTYPE HTML>
@@ -839,7 +839,11 @@ HTML文档可以说由节点构成的集合，DOM节点有:
 
 
 <hr />
-### 区别getElementByID,getElementsByName,getElementsByTagName
+### 区别getElementByID,getElementsByName,
+
+### getElementsByTagName
+
+
 
 
 以人来举例说明，人有能标识身份的身份证，有姓名，有类别(大人、小孩、老人)等。
