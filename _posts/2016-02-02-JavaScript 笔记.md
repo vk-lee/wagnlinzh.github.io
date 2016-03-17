@@ -107,7 +107,7 @@ w,w,w,.,i
 
 
 
-##提取字符串substring()
+###提取字符串substring()
 
 substring() 方法用于提取字符串中介于两个指定下标之间的字符。
 语法:
@@ -169,7 +169,9 @@ love
 
 
 
+<hr />
 
+### 数组
 
 
 
@@ -367,7 +369,12 @@ myArray.sort(sortMethod);
 
 
 
+
+
 <hr />
+
+
+
 ### 日期格式
 
 
