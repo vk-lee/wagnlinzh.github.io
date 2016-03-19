@@ -489,6 +489,7 @@ Spring容器初始化之后， Spring容器中的Bean被Struts2的Action访问�
 
 可以由struts2 在SigninAction.java中完成，具体代码如下：
 
+
 ```
     public void validate() {
 
@@ -533,6 +534,7 @@ Spring容器初始化之后， Spring容器中的Bean被Struts2的Action访问�
 ### 3.4.6 业务逻辑的登录验证
 
 实现业务逻辑的登录验证的代码实在SigninAction的executive实现的：
+
 
 ```
     public String
@@ -696,6 +698,7 @@ List<Course> courseList =managerService.listAllCourseService(email);
 
 checkGradeJspAction.Java部分核心代码如下：
 
+
 ```
             public String execute() throws Exception {
 
@@ -730,6 +733,7 @@ checkGradeJspAction.Java部分核心代码如下：
 
 在对应的checkGrade页面上的迭代输出的部分核心代码如下：
 
+
 ```
     <%@ taglib prefix="s"uri="/struts-tags" %>
 
@@ -756,6 +760,7 @@ checkGradeJspAction.Java部分核心代码如下：
 
 其实现逻辑类似于前面讲解的成绩查询模块。但比之前的成绩查询模块要稍微复杂一些。导航栏，单击选课系统，则触发struts2 的chooseClass.action。进而有ChooseClassAction接管。之前ChooseClassAction的代码。
 
+
 ```
     <action name="chooseClassJsp"
 
@@ -765,7 +770,9 @@ checkGradeJspAction.Java部分核心代码如下：
 
     </action>
 ```
+
 下面是getClassSchedule的核心代码。
+
 
 ```
 
@@ -810,6 +817,7 @@ checkGradeJspAction.Java部分核心代码如下：
       }
 ```
 
+
 首先需要使用Service为其提供的接口，来获取到对应学生的课程名称，上课时间，课程类型（是选修还是必修）等信息，并且需要他们之间的一一对应的关系。再然后，将其课程名称，上课时间，课程类型（是选修还是必修）封装到一个类中，这个类命名为ClassDetail，在将该类添加到classInfoList中，再然后，将classInfoList放到Session中，要想在JSP页面中读取到这些数据，必须将其设置到JSP的scope中，所以我将其设置到到Session中，然后在前端的JSP中，依然通过Struts2的标签库将其迭代的输出出来。到这里完成了第一阶段的呈现课程表的过程。参见图3.16，选课模块的课表。
 
 ![](/img/3.16.png)
@@ -830,6 +838,7 @@ Class.jsp页面的具体画面参见图3.17。
 
 Struts2 的代码：
 
+
 ```
     <action name="ClassName" class="className_Spring">
 
@@ -845,6 +854,7 @@ Struts2 的代码：
 className的代码的作用是将用户所选择的课程的名称，和对应的上课时间等基本信息通过Struts，通过Action，通过Action对Service的操作，将这些信息存入数据库中。与此同时，在跳转到chooseClass页面的时候，将用户刚才所选的课程，取代掉之前在那个按钮上的课程名称。
 
 Class页面的选课模块的部分核心代码如下：
+
 
 ```
         public String execute() throws Exception {
@@ -889,9 +899,11 @@ Class页面的选课模块的部分核心代码如下：
         }
 ```
 
+
 上述过程中，进行遍历的目的是通过先遍历一遍，检查在classInfo列表中有没有对应的classInfo.classDetails.classTimeNum == classTime，有的话，先删除，然后在在添加，或者用set方法替代掉。如果没有的话直接添加对象classDetail。
 
 在chooseClass页面显示这些课程表，以及对应格子中的课程名称的部分核心代码如下。
+
 
 ```
 
@@ -920,7 +932,8 @@ Class页面的选课模块的部分核心代码如下：
 
 这部分代码的目的是，填满chooseClass页面中课表的内容，课表的内容分为几种可能的情况，第一种已经选了课程的，那么将具体选择的课程放入相应的格子里（比如说，星期一的第一节课是数据结构，则把数据结构放入周一的第一节课中）。还有一类是必修课，标记classType为1的那一类课程，则直接输入到页面上来。这个过程中遍历一遍所有的课程。通过Struts2的标签负责赋值，通过标签来迅速获取到标签中的属性并且将标签中的属性迭代输出到页面上。
 
-    当从class页面选课之后跳转回到chooseClass页面的时候，需要对选课之前的格子的内容进行更新。这个过程的实现也是通过一次遍历所有课程表的课程格子来实现的。*
+    当从class页面选课之后跳转回到chooseClass页面的时候，需要对选课之前的格子的内容进行更新。这个过程的实现也是通过一次遍历所有课程表的课程格子来实现的。
+
 
 ```
          var BtnID = <%=session.getAttribute("classTimeNum")%>;
@@ -962,6 +975,7 @@ Class页面的选课模块的部分核心代码如下：
 
 SignoutAction.java的代码如下：
 
+
 ```
 public class SignoutAction extends ActionSupport {
 
@@ -982,7 +996,7 @@ public class SignoutAction extends ActionSupport {
 
 
 
-## [3.5 LinzhiOS的中的拦截器的设置](undefined)
+## 3.5 LinzhiOS的中的拦截器的设置
 
 对于没有登录系统的用户，在系统中没有读取到他的信息，则将其请求的页面无条件跳转到登录页面，并提示其没有登录。具体的拦截器的设置如下：
 
@@ -1046,7 +1060,7 @@ public class SignoutAction extends ActionSupport {
 
 ## 第四章  数据库设计和实现
 
-## [4.1 Hibernate简介](undefined)
+## 4.1 Hibernate简介
 
 Hibernate是轻量级Java EE应用的持久层解决方案，Hibernate不仅管理者Java类到数据库表的映射（包括Java 数据类型到SQL数据类型的映射），还提供数据查询和获取数据的方法，可以大幅度的缩短使用JDBC处理数据持久化的时间。[4]
 
@@ -1054,11 +1068,11 @@ Hibernate是轻量级Java EE应用的持久层解决方案，Hibernate不仅管�
 
 JavaEE应用能够使得面向对象分析、面向对象设计以及面向对象编程三个过程彼此和谐甚至构成一个整体是主要基于Hibernate框架。
 
-## [4.2 ORM](undefined)
+## 4.2 ORM
 
 现在流行的编程语言向Java、C# 等，它们都是面向对象的编程语言，而与之对应的当前主流的数据库软件产品像Oracle、DB2，MySQL等，依然是关系型数据库。编程语言和底层数据库之间的不协调发展，是ORM框架诞生的主要催化剂。ORM框架诞生的目标是为了解决面向对象语言和关系型数据库的不一致性。
 
-### 4.2.1 对象/关系数据库映射（ORM 
+### 4.2.1 对象/关系数据库映射(ORM)
 
 ORM（即Object/Relation Mapping，对象/关系数据库映射）。ORM是一种规范，它概述了这类框架的基本特征：完成面向对象编程语言和关系型数据库的映射。由于面向对象编程在性能上稍逊关系型数据库，所以在数据库中使用关系型数据库依然有很大的性能优势。而面向对象的优势在于能够大大缩短开发时间。所以通过ORM映射之后，可以集关系型数据库和面向对象两者的优势。因此，我们可以把ORM框架当成是应用程序和数据库的桥梁。
 
@@ -1126,7 +1140,7 @@ ORM基本映射有如下这几条映射关系：
 
 基于这些基本的映射方式，ORM工具可完成对对象模型和关系模型之间的相互映射。显而易见的是，通过ORM框架，只要对象是被持久化之后，开发人员对数据库的操作只需要通过对持久化对象的操作，使用面向对象的方法对对象进行的操作。而不必在乎底层数据库是怎么操作的，这个过程由ORM框架负责搞定，对开发人员透明。
 
-## [4.3 Hibernate 的数据库操作](undefined)
+## 4.3 Hibernate 的数据库操作
 
 ORM框架中有一个非常重要的媒介：PO（Persistent Object，持久化对象）。持久化对象的作用是完成持久化操作，也即是说，通过该对象可以对数据执行增删查改的操作，一面向对象的方式操作数据库。
 
@@ -1249,55 +1263,58 @@ PO与Session的关联关系，PO可有如下三种状态：
 
 以上的Stuent与课程之间是多对多映射，故Stuent中有一个Course 的Set集合，同理，Course中也有一个Student的Set集合。原因是一个学生可以选择多门课，一门课也可以被多个学生选择。所以Student与Course之间是many-to-many的关系。另外Student与Score之间，一个成绩只能对应特定的一个学生，而一个学生可以有多个成绩，所以是one-to-many的关系。同理，Course与Score之间也是，一个成绩只能对应到特定的一门课，而一门课可以有过多成绩，所以也是one-to-many 的关系。因此在Course对象和Student对象中都有Score的Set集合，而在Score对象中只是有Student对象和Course对象的单个对象的引用。
 
-图4.7  Student的类图
+图4.7  Student的类图
 
 以上的POJO类之间的关系很重要，是配置cfg的重要依据，在下面会用到。LinzhiOS系统中对应Student，Score，Course的映射文件如下：
-```
-    <class name="linzhi.bean.Student" table="Student">
 
-        <id name="id" column="sid" type="string">
-        <generator class="uuid"/></id>
-        <property name="name" column="sname" type="string"/>
-        <property name="email" column="email" type="string"/>
-        <property name="password" column="password" type="string"/>
-        <set name="courses" table="S_C" cascade="save-update">
-            <key column="S_id"></key>
-            <many-to-many class="linzhi.bean.Course" column="C_id"/
-        </set>
+    ```
+        <class name="linzhi.bean.Student" table="Student">
 
-        <set name="scores" table="S_C" cascade="save-update" inverse="true" order-by="scid asc">
+            <id name="id" column="sid" type="string">
+            <generator class="uuid"/></id>
+            <property name="name" column="sname" type="string"/>
+            <property name="email" column="email" type="string"/>
+            <property name="password" column="password" type="string"/>
+            <set name="courses" table="S_C" cascade="save-update">
+                <key column="S_id"></key>
+                <many-to-many class="linzhi.bean.Course" column="C_id"/
+            </set>
 
-            <key column="S_id"/>
+            <set name="scores" table="S_C" cascade="save-update" inverse="true" order-by="scid asc">
 
-            <one-to-many class="linzhi.bean.Score"/>
-         </set>
-    </class>
-```
+                <key column="S_id"/>
+
+                <one-to-many class="linzhi.bean.Score"/>
+             </set>
+        </class>
+    ```
+
 通过上述的hbm文件，可以清晰的看到，Student与Score表的one-to-many的对应关系，Student与Course对象之间的many-to-many关系。同样从另外的两个映射文件中也可以看到这种对应关系。
 
 这里有一个inverse="true"的属性，是为了让many的一端来控制关联关系，而不要让one的一端来控制关联关系。
 
 Course类的映射文件Course.hbm.xml：
-```
-<class name="linzhi.bean.Course" table="Course">
 
-<id name="id" column="cid" type="string">
-	<generator class="uuid"/>
-</id>
+	  ```
+	  <class name="linzhi.bean.Course" table="Course">
 
-<property name="name" column="cname" type="string"/>
-<property name="timeNum" column="timeNum" type="int"/>
-<set name="students" table="S_C" cascade="save-update" order-by="id asc">
-   <key column="C_id"></key>
-   <many-to-many class="linzhi.bean.Student" column="S_id"/>
-</set>
+	  <id name="id" column="cid" type="string">
+	      <generator class="uuid"/>
+	  </id>
 
-<set name="scores" table="S_C" cascade="save-update" inverse="true">
-            <key column="C_id"/>
-            <one-to-many class="linzhi.bean.Score"/>
-</set>
-</class>
-```
+	  <property name="name" column="cname" type="string"/>
+	  <property name="timeNum" column="timeNum" type="int"/>
+	  <set name="students" table="S_C" cascade="save-update" order-by="id asc">
+	     <key column="C_id"></key>
+	     <many-to-many class="linzhi.bean.Student" column="S_id"/>
+	  </set>
+
+	  <set name="scores" table="S_C" cascade="save-update" inverse="true">
+	              <key column="C_id"/>
+	              <one-to-many class="linzhi.bean.Score"/>
+	  </set>
+	  </class>
+	  ```
 
 在与Stuent表的many-to-many的映射中，有两个属性需要注意的。
 
@@ -1305,27 +1322,28 @@ cascade="save-update"，级联操作，是指在Stuent中save或者update一个S
 
 order-by="idasc"。顾名思义，如果需要获取多个对象数据时，按照对象数据的id升序排列。
 
+
 Socre类的映射文件Score.hbm.xml：
 
-```
 
-<class name="linzhi.bean.Score" table="S_C">
+	    ```
+	    <class name="linzhi.bean.Score" table="S_C">
 
-    <id name="id" column="scid" type="string"> 
-    <generator class="uuid"/></id>
+	        <id name="id" column="scid" type="string"> 
+	        <generator class="uuid"/></id>
 
-    <property name="score" column="score" type="int"/>
+	        <property name="score" column="score" type="int"/>
 
-    <property name="classTimeNum" column="classTimeNum" type="int"/>
+	        <property name="classTimeNum" column="classTimeNum" type="int"/>
 
-    <property name="classType" column="classType" type="int" not-null="true"/>
+	        <property name="classType" column="classType" type="int" not-null="true"/>
 
-    <many-to-one name="student" class="linzhi.bean.Student" column="S_id" fetch="join" cascade="save-update"/>
+	        <many-to-one name="student" class="linzhi.bean.Student" column="S_id" fetch="join" cascade="save-update"/>
 
-    <many-to-one name="course" class="linzhi.bean.Course"
-    column="C_id" fetch="join" cascade="save-update"/>
-</class>
-```
+	        <many-to-one name="course" class="linzhi.bean.Course"
+	        column="C_id" fetch="join" cascade="save-update"/>
+	    </class>
+	    ```
 
 可以看到，在这三个配置文件中，都有一个id属性，与以前数据库课程中的经验不同的是，这里的id属性没有做任何有用的逻辑属性，而是纯粹的uuid码，这样做是由于Hibernate本身不提倡id属性作为逻辑属性，同时这样做也有可能到值不必要的耦合，因此不建议将id做为主键的同时还为其增加逻辑属性的做法。
 
@@ -1358,7 +1376,7 @@ DAO模式是一种更符合软件工程的开发方式，使用DAO模式有如�
 
 表4-1 DAO模式的优点
 
-![](file:///C:\Users\WANGLI~1\AppData\Local\Temp\msohtmlclip1\01\clip_image016.jpg)
+
 
 对于不同的持久层技术，Spring的DAO提供了一个DAO模版，将通用的操作放在模版里完成，而对特定的操作，则通过回调接口完成。
 
@@ -1388,87 +1406,88 @@ DAO的接口定义参见图4.8所示。
 
 以下是ScoreManagerDAOImpl对于ScoreManagerDAO接口中声明的方法的实现代码。首先是ListAllScore（String Email），通过这个业务组件方法列出该学生相应的所有的课程的成绩。下面是相关函数实现的具体的相关核心代码。
 
-```
-public List<Integer> listAllScore(String email) {
-        List<Integer> list = null;
-        try {transaction = session.beginTransaction();
-            list = session.createQuery("select score from linzhi.bean.Score").list();
-            transaction.commit();
-        }catch (HibernateException e) {
-            HibernateUtil.rollback(transaction);
-        } 
-        return list; 
-}
-```
+	```
+	public List<Integer> listAllScore(String email) {
+	        List<Integer> list = null;
+	        try {transaction = session.beginTransaction();
+	            list = session.createQuery("select score from linzhi.bean.Score").list();
+	            transaction.commit();
+	        }catch (HibernateException e) {
+	            HibernateUtil.rollback(transaction);
+	        } 
+	        return list; 
+	}
+	```
 
 列出所有课程时间：listAllClassTime()。通过这个业务组件方法列出该学生所有的上课时间。下面是相关函数实现的具体的相关核心代码。
 
-```
-    public List<Integer> listAllClassTime(String email) {
 
-        List<Integer> list = null;
+	```
+	    public List<Integer> listAllClassTime(String email) {
 
-        try {
+	        List<Integer> list = null;
 
-            transaction =session.beginTransaction();
+	        try {
 
-            list =session.createQuery("select classTimeNum from linzhi.bean.Score").list();
+	            transaction =session.beginTransaction();
 
-            transaction.commit();
+	            list =session.createQuery("select classTimeNum from linzhi.bean.Score").list();
 
-        } catch (HibernateException e){ 
-        	HibernateUtil.rollback(transaction);
-        } finally {   
-        	HibernateUtil.closeSession();
-        }
-        return list;
-    }
+	            transaction.commit();
 
-     updateSCInfo(String email, String className, int classTimeNum, int classType)
-```
+	        } catch (HibernateException e){ 
+	        	HibernateUtil.rollback(transaction);
+	        } finally {   
+	        	HibernateUtil.closeSession();
+	        }
+	        return list;
+	    }
+
+	     updateSCInfo(String email, String className, int classTimeNum, int classType)
+	```
 
 根据用户的email，来处理用户的选课时候的选课逻辑的操作。即通过获取到用户的email，以及在选课页面获取的时间和课程类型等信息，最终确认的用户的选课信息。下面是具体的操作相关的核心代码。
 
-```
-public void updateSCInfo(String email, String className, int classTimeNum, int classType) {
-        try { 
-        	transaction = session.beginTransaction();
-            Student stu = (Student)session.createQuery("from Student s where s.email = ?").setString(0,email).uniqueResult();
-            c = new Course(); c.setName(className);
-            c.setTimeNum(classTimeNum);
-            score.setStudent(stu);
-     		score.setCourse(c);
-     		score.setClassTimeNum(classTimeNum);\*虽然不互斥，但是也不要一样*/
-            score.setClassType(classType);  \*1:必修  0 ：选修 not null*/
+	```
+	public void updateSCInfo(String email, String className, int classTimeNum, int classType) {
+	        try { 
+	        	transaction = session.beginTransaction();
+	            Student stu = (Student)session.createQuery("from Student s where s.email = ?").setString(0,email).uniqueResult();
+	            c = new Course(); c.setName(className);
+	            c.setTimeNum(classTimeNum);
+	            score.setStudent(stu);
+	     		score.setCourse(c);
+	     		score.setClassTimeNum(classTimeNum);\*虽然不互斥，但是也不要一样*/
+	            score.setClassType(classType);  \*1:必修  0 ：选修 not null*/
 
-      		List listClassTimeNum =session.createQuery("select classTimeNum from Score").list();
-      		boolean flag =false; 
-      		int hover = -1;               
-            for (int i = 0; i < listClassTimeNum.size(); i++) {
-                if (classTimeNum == (int)listClassTimeNum.get(i))  
-                	flag = true;
-               		hover=i; 
-               	}
+	      		List listClassTimeNum =session.createQuery("select classTimeNum from Score").list();
+	      		boolean flag =false; 
+	      		int hover = -1;               
+	            for (int i = 0; i < listClassTimeNum.size(); i++) {
+	                if (classTimeNum == (int)listClassTimeNum.get(i))  
+	                	flag = true;
+	               		hover=i; 
+	               	}
 
-	            if (flag) {
-          			List<Score> scoreList = (List<Score>) 			
-                    session.createQuery("from Score ").list();
-					Score score1 = scoreList.get(hover);
-	                session.delete(score1);
-       			}
+		            if (flag) {
+	          			List<Score> scoreList = (List<Score>) 			
+	                    session.createQuery("from Score ").list();
+						Score score1 = scoreList.get(hover);
+		                session.delete(score1);
+	       			}
 
-       			session.save(score);
+	       			session.save(score);
 
-              	transaction.commit();
-  	 		}catch (HibernateException e){
-			    HibernateUtil.rollback(transaction);
-        	}finally {
-        		HibernateUtil.closeSession();
-            }
-         }
-  }
+	              	transaction.commit();
+	  	 		}catch (HibernateException e){
+				    HibernateUtil.rollback(transaction);
+	        	}finally {
+	        		HibernateUtil.closeSession();
+	            }
+	         }
+	  }
 
-```
+	```
 
 UserDAO这个DAO主要负责用户登录，登出，check用户是否能够正确登录，用户名密码是否匹配，新注册用户的保存，管理员对用户的删除等操作。同样，在UserDAO中声明了这个DAO的接口，在UserDAOImpl中实现相关接口，主要接口参见表4-2。
 
@@ -1487,138 +1506,139 @@ UserDAO这个DAO主要负责用户登录，登出，check用户是否能够正�
 
 student）的代码，作用是新建用户，将User对象通过映射转换之后插入到关系型数据库中。
 
-```
-public void create(Student student) {
-        try {
-            transaction = session.beginTransaction();
-            session.save(student);
-            transaction.commit();
+	```
+	public void create(Student student) {
+	        try {
+	            transaction = session.beginTransaction();
+	            session.save(student);
+	            transaction.commit();
 
-        } catch (HibernateException e) {
-            HibernateUtil.rollback(transaction);
-        } finally {
-            HibernateUtil.closeSession();
-        }
-    }
-```
+	        } catch (HibernateException e) {
+	            HibernateUtil.rollback(transaction);
+	        } finally {
+	            HibernateUtil.closeSession();
+	        }
+	    }
+	```
 
 对应增加用户，当然也有删除用户的操作。对应于管理员来说的。其作用是将数据库中无效的用户全部删除。下面是具体相关的核心代码。
 
-```
-    public void delete(Student student) {
-        try {
-            transaction = session.beginTransaction();
-            session.delete(student);
-            transaction.commit();
-        } catch (HibernateException e) {
-            HibernateUtil.rollback(transaction);
-        } finally {
-            HibernateUtil.closeSession();
-        }
-    }
-```
+	```
+	    public void delete(Student student) {
+	        try {
+	            transaction = session.beginTransaction();
+	            session.delete(student);
+	            transaction.commit();
+	        } catch (HibernateException e) {
+	            HibernateUtil.rollback(transaction);
+	        } finally {
+	            HibernateUtil.closeSession();
+	        }
+	    }
+	```
 
 以下是通过id查询相应的用户的操作，通过用户的id查询出用户对象，返回对象。下面是具体相关的核心代码：
 
-```
- public Student find(int id) {
-        Student student = null;
-        try {
-            transaction =session.beginTransaction();
+	```
+	 public Student find(int id) {
+	        Student student = null;
+	        try {
+	            transaction =session.beginTransaction();
 
-            student= (Student)session.get(Student.class, id);
+	            student= (Student)session.get(Student.class, id);
 
-            transaction.commit();
+	            transaction.commit();
 
-        } catch (HibernateException e) {
-            HibernateUtil.rollback(transaction);
-        } finally {
-            HibernateUtil.closeSession();
-        }
-        return student;    
-}
-```
+	        } catch (HibernateException e) {
+	            HibernateUtil.rollback(transaction);
+	        } finally {
+	            HibernateUtil.closeSession();
+	        }
+	        return student;    
+	}
+	```
 
 Update函数的作用是在用户信息发生变化时，更新用户信息，以整个对象的形式写入到数据库中。以下是相关的部分核心代码：
 
 
-```
-    public void update(Student student) {
-        try {
-            transaction = session.beginTransaction();
-            session.update(student);
-            transaction.commit();
-        } catch (HibernateException e) {
-            HibernateUtil.rollback(transaction);
-        } finally {
-            HibernateUtil.closeSession();
-    	}
-    }
-```
+	```
+	    public void update(Student student) {
+	        try {
+	            transaction = session.beginTransaction();
+	            session.update(student);
+	            transaction.commit();
+	        } catch (HibernateException e) {
+	            HibernateUtil.rollback(transaction);
+	        } finally {
+	            HibernateUtil.closeSession();
+	    	}
+	    }
+	```
 
 以下的check(String email, String password)方法，作用是通过email,password
 
 检查用户登录，正确返回ture，错误返回false。下面是具体相关的核心代码：
 
-```
-public boolean check(String email, String password) {
-        try {
-        	List list = null;
-            transaction = session.beginTransaction();
-            list= session.createQuery("select stu.password from Student stu where stu.email =?").setString(0,email).list()；
-            transaction.commit();
-            if (!list.isEmpty()) {
-	            Iterator iterator = list.iterator();
-                while(iterator.hasNext()) {
-                    String token_pass =(String) iterator.next();
-                    System.out.println(token_pass);
-                    if(token_pass.equals(password)) {
-                    	return true;
-                    }
-                 }
-            } 
-       		return false;
-         }
-}
-```
+	```
+	public boolean check(String email, String password) {
+	        try {
+	        	List list = null;
+	            transaction = session.beginTransaction();
+	            list= session.createQuery("select stu.password from Student stu where stu.email =?").setString(0,email).list()；
+	            transaction.commit();
+	            if (!list.isEmpty()) {
+		            Iterator iterator = list.iterator();
+	                while(iterator.hasNext()) {
+	                    String token_pass =(String) iterator.next();
+	                    System.out.println(token_pass);
+	                    if(token_pass.equals(password)) {
+	                    	return true;
+	                    }
+	                 }
+	            } 
+	       		return false;
+	         }
+	}
+	```
 
 另外需要补充的一点是，在移植到Spring框架之后的代码在此基础上有所变化，以ListAllScore为对比来说明。在这里当使用了HibernateDaoSupport的情况下，可以使得代码的冗余度在很大程度上再一次减少一部分。第一次的减少是Hibernate对于关系型数据库的封装。
 
-```
-    public List<Integer> listAllScore(String email) {
+	```
+	    public List<Integer> listAllScore(String email) {
 
-        List<Integer> list = null;
+	        List<Integer> list = null;
 
-        try {
+	        try {
 
-            transaction = session.beginTransaction();
+	            transaction = session.beginTransaction();
 
-            list =session.createQuery("select score from linzhi.bean.Score").list();
+	            list =session.createQuery("select score from linzhi.bean.Score").list();
 
-            transaction.commit();
+	            transaction.commit();
 
-        } catch (HibernateException e) {
-	        HibernateUtil.rollback(transaction);
-        } finally {
-            HibernateUtil.closeSession();
-        }
-        
-        return list;
-}
-```
+	        } catch (HibernateException e) {
+		        HibernateUtil.rollback(transaction);
+	        } finally {
+	            HibernateUtil.closeSession();
+	        }
+	        
+	        return list;
+	}
+	```
+
 上述代码等价于下面的使用了HibernateDaoSupper的代码，可以看出这样可以进一步精简代码。
 
-```
-    public List<Integer> listAllScore(String email) {
+	```
+	    public List<Integer> listAllScore(String email) {
 
-        List<Integer> list = null;
+	        List<Integer> list = null;
 
-        list = (List<Integer>) this.getHibernateTemplate().find("select score from linzhi.bean.Score ")；
+	        list = (List<Integer>) this.getHibernateTemplate().find("select score from linzhi.bean.Score ")；
 
-        return list;
+	        return list;
 
-    }
-```
+	    }
+	```
 
 实质上是因为Spring中封装了hibernate操作的事务操作的代码，通过getHibernateTemplate方法，是这些需要事务处理的方法全部隐藏起来。但是需要注意的是，在使用这种方式的操作的类需要继承HibernateDaoSupper这个类。getHibernate的作用相当于上述在不使用HibernateDaoSupper的时候的try{…}catch{…}finial{…}块中的内容，从Spring的源码的文档中很容易可以找到相关内容。在Spring4以上的版本之后，关于HibernateDaoSupper有了一些变化，具体是对于事务的操作不再支持，原因是因为Hibernate3以上的版本中对于事务处理和回滚等操作已经有足够强大的支持，所以可以提倡使用Hiberenate原生的事务处理方法。
 
@@ -1633,48 +1653,48 @@ public boolean check(String email, String password) {
 
 
 
-  ```
-  public class HibernateORMappingTest2 {
-      private static SessionFactory sessionFactory;
-      @BeforeClass
-      public static void beforeClass() {
-          Configuration configuration = new Configuration();
-          configuration.configure();
-          ServiceRegistry serviceRegistry =new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-      sessionFactory=configuration.buildSessionFactory(serviceRegistry);
-  }
+		```
+				  public class HibernateORMappingTest2 {
+				      private static SessionFactory sessionFactory;
+				      @BeforeClass
+				      public static void beforeClass() {
+				          Configuration configuration = new Configuration();
+				          configuration.configure();
+				          ServiceRegistry serviceRegistry =new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+				      sessionFactory=configuration.buildSessionFactory(serviceRegistry);
+				  }
 
-      @AfterClass
+				      @AfterClass
 
-      public static void afterClass() {
+				      public static void afterClass() {
 
-          sessionFactory.close();
+				          sessionFactory.close();
 
-      }
+				      }
 
-      @Test
+				      @Test
 
-      public void testSave() {
+				      public void testSave() {
 
-         Session session = sessionFactory.openSession();
+				         Session session = sessionFactory.openSession();
 
-          session.beginTransaction();
+				          session.beginTransaction();
 
-          Student student=new Student ();
+				          Student student=new Student ();
 
-         student.setName("alan@me.com");
+				         student.setName("alan@me.com");
 
-          student.setPassword("123");
+				          student.setPassword("123");
 
-          session.save(student);
+				          session.save(student);
 
-          session.getTransaction().commit();
+				          session.getTransaction().commit();
 
-          session.close();
+				          session.close();
 
-     }
-}
-  ```
+				     }
+				}
+		```
 
 
 ## 4.5 实现Service层
@@ -1812,73 +1832,76 @@ Spring的两大关键特性，一个是上面提到的DI，依赖注入，另外
 下面通过具体的例子来说明代理模式的工作的基本原理：
 
 首先定义一个类Client，这个类即是用户类，用户会请求一些具体的操作，会发出一些请求。用户类Client的简单代码如下：
-```
-public class Client{
 
-    public static void main(String[] args)
+	```
+	public class Client{
 
-    {
+	    public static void main(String[] args)
 
-        Subject sub = new ProxySubject();
+	    {
 
-        sub.request();
+	        Subject sub = new ProxySubject();
 
-    }
+	        sub.request();
 
-}
-```
+	    }
+
+	}
+	```
+
 用户在使用过程中，无法看到真实的对象，只能和代理打交道，通过代理来执行响应的请求，请求由代理接收，然后代理中有真实的处理该用户请求的响应事务的引用，在通过代理来调用真实对象的事务。整个过程中，client看不到真实的需要请求的对象。
 
 然后是正真的服务类RealSubject，这个类的作用是提供给用户所需要的真正的服务。RealSubject.java的代码如下：
 
-```
-public class RealSubject extends Subject
+	```
+	public class RealSubject extends Subject
 
-{
+	{
 
-    public RealSubject(){}
+	    public RealSubject(){}
 
-    public void request()
+	    public void request()
 
-    {
+	    {
 
-        System.out.println("From real subject.");
+	        System.out.println("From real subject.");
 
-    }
+	    }
 
-}
-```
+	}
+	```
 
 ProxySubject是代理类，这个类中含有一个真实的被代理对象的引用，即realSubject。
 
-```
-public class ProxySubject extends Subject{
+	```
+	public class ProxySubject extends Subject{
 
-    private RealSubject realSubject;
+	    private RealSubject realSubject;
 
-    public ProxySubject(){}
+	    public ProxySubject(){}
 
-    public void request(){
+	    public void request(){
 
-        preRequest();
+	        preRequest();
 
-        if (realSubject == null){    realSubject = new RealSubject(); }
+	        if (realSubject == null){    realSubject = new RealSubject(); }
 
-        	realSubject.request();
+	        	realSubject.request();
 
-        	postRequest(); 
-        }
+	        	postRequest(); 
+	        }
 
-    private void preRequest(){
-    	// something youwant to do before requesting
-    }
+	    private void preRequest(){
+	    	// something youwant to do before requesting
+	    }
 
-    private void postRequest(){     
-    	// something you want to do afterrequesting
-    }
+	    private void postRequest(){     
+	    	// something you want to do afterrequesting
+	    }
 
-}
-```
+	}
+	```
+
 那么代理对象能做什么呢？通过代码我们能够很容易的看到：
 
 首先，realSubject.request()能够通过使用对真实对象的引用来调用真实对象的方法完成需要真实对象完成的功能。
@@ -1929,41 +1952,43 @@ l AOP
 以下以具体的例子来讲解动态代理，与一般的代理模式类似，动态代理中也有代理类，即这里的DynamicProxy。该代理类的内部属性为Object类，实际使用时通过该类的构造函数DynamicSubject(Object obj)对其赋值；此外，在该类还实现了invoke方法，该方法中的 method.invoke(sub,args);其实就是调用被代理对象的将要被执行的方法，方法参数sub是实际的被代理对象， args为执行被代理对象相应操作所需的参数。 通过动态代理类，我们可以在调用之前或之后执行一些相关操作。
 
 DynamicProxy的相关代码如下所示：
-```
-public classDynamicSubject implements InvocationHandler{
 
-   private Object sub;
+	```
+	public classDynamicSubject implements InvocationHandler{
 
-   public DynamicSubject(){}
+	   private Object sub;
 
-   public DynamicSubject(Object obj){ sub =obj; }
+	   public DynamicSubject(){}
 
-   public Object invoke(Object proxy, Methodmethod, Object[] args) throws Throwable{
-      System.out.println("before calling" + method);
+	   public DynamicSubject(Object obj){ sub =obj; }
 
-      method.invoke(sub, args);
+	   public Object invoke(Object proxy, Methodmethod, Object[] args) throws Throwable{
+	      System.out.println("before calling" + method);
 
-      System.out.println("after calling" + method);
+	      method.invoke(sub, args);
 
-      return null;
+	      System.out.println("after calling" + method);
 
-   }}
-```
+	      return null;
+
+	   }}
+	```
 
 Client是需要请求操作的用户，调用者的核心的实现代码：
-```
-public static voidmain(String[] args) throws Throwable{ 
-	  RealSubject rs = new RealSubject();// 在这里指定被代理类
 
-      InvocationHandler ds =new DynamicSubject(rs);
+	```
+	public static voidmain(String[] args) throws Throwable{ 
+		  RealSubject rs = new RealSubject();// 在这里指定被代理类
 
-      Class<?> cls =rs.getClass();
+	      InvocationHandler ds =new DynamicSubject(rs);
 
-      Subject subject =(Subject)Proxy.newProxyInstance(cls.getClassLoader(),cls.getInterfaces(),ds);
+	      Class<?> cls =rs.getClass();
 
-      subject.request();   
-}
-```
+	      Subject subject =(Subject)Proxy.newProxyInstance(cls.getClassLoader(),cls.getInterfaces(),ds);
+
+	      subject.request();   
+	}
+	```
 
 源代码中调用最后一句：subject.request()的时候会自动调用Proxy.newProxy Instance(clazz.getClassLoader(),clazz.getInterfaces(),handler);调用handler又自动转到ProxySubject中，又自调用invoke方法中的method.invoke(object,args)。在这时候完成代理的衔接。
 
@@ -1998,33 +2023,33 @@ public static voidmain(String[] args) throws Throwable{ 
 
 同时在WEB-INF目录下的web.xml文件中添加如下代码：
 
-```
-<listener>
-	<listener-class>
-    	org.springframework.web.context.ContextLoaderListener
-    </listener-class>
-</listener>
+	```
+	<listener>
+		<listener-class>
+	    	org.springframework.web.context.ContextLoaderListener
+	    </listener-class>
+	</listener>
 
-<servlet>
+	<servlet>
 
-   <servlet-name>dispatcher</servlet-name>
+	   <servlet-name>dispatcher</servlet-name>
 
-   <servlet-class>
-   		org.springframework.web.servlet.DispatcherServlet
-   </servlet-class>
+	   <servlet-class>
+	   		org.springframework.web.servlet.DispatcherServlet
+	   </servlet-class>
 
-   <load-on-startup>1</load-on-startup>
+	   <load-on-startup>1</load-on-startup>
 
-</servlet>
+	</servlet>
 
-<servlet-mapping>
+	<servlet-mapping>
 
-   <servlet-name>dispatcher</servlet-name>
+	   <servlet-name>dispatcher</servlet-name>
 
-   <url-pattern>*.form</url-pattern>
+	   <url-pattern>*.form</url-pattern>
 
-</servlet-mapping>
-```
+	</servlet-mapping>
+	```
 
 从代码中可以很清晰地看出这段代码的作用，建立监听器，将web容器的控制权移交给Spring接管。至此，整个web容器就由Spring接管了。
 
@@ -2043,29 +2068,30 @@ org.springframework.web.context.ContextLoaderListener，它是spring的启动类
 
 具体代码如下：Spring中的applicationContext.xml中
 
-关于Action的配置如下；
+关于Action的配置如下:
 
-```
-<bean id="loginAction" class="linzhi.action.SigninAction">
-    <property name="signinService" ref="signinService"/>
-</bean>
 
-<bean id="logoutActin" class="linzhi.action.SignoutAction"/>
+	```
+	<bean id="loginAction" class="linzhi.action.SigninAction">
+	    <property name="signinService" ref="signinService"/>
+	</bean>
 
-<bean id="checkGradeJsp_Spring" class="linzhi.action.checkGradeJspAction">
-    <property name="managerService" ref="managerService"/>
-</bean>
+	<bean id="logoutActin" class="linzhi.action.SignoutAction"/>
 
-<bean id="chooseClassJsp_Spring" class="linzhi.action.GetClassSchedule">
-    <property name="managerService" ref="managerService"/>
-</bean>
+	<bean id="checkGradeJsp_Spring" class="linzhi.action.checkGradeJspAction">
+	    <property name="managerService" ref="managerService"/>
+	</bean>
 
-<bean id="courseTips_Spring" class="linzhi.action.CourseTips"/>
+	<bean id="chooseClassJsp_Spring" class="linzhi.action.GetClassSchedule">
+	    <property name="managerService" ref="managerService"/>
+	</bean>
 
-<bean id="className_Spring" class="linzhi.action.ClassName">
-    <property name="managerService" ref="managerService"/>
-</bean>
-```
+	<bean id="courseTips_Spring" class="linzhi.action.CourseTips"/>
+
+	<bean id="className_Spring" class="linzhi.action.ClassName">
+	    <property name="managerService" ref="managerService"/>
+	</bean>
+	```
 
 
 对比前面章节在没有Spring框架时的区别在于我们不需要在Struts中重新指定JavaBean，不需要重新生成JavaBean，而是由Spring负责实例化对应的Java类，我们只需在action里面声明这个action所需要的服务接口是什么。
@@ -2078,15 +2104,16 @@ org.springframework.web.context.ContextLoaderListener，它是spring的启动类
 
 在Spring和Struts的整合中，虽然Struts的内容有所改变，但却大部分功能性的是有所保留的，包括Action对应的跳转，包括在Struts中设置的拦截器。然而，在Spring和Hibernate的整合中，Hibernate的命运就没这么好了，整个Hibernate.cfg.xml的内容均被迁移到ApplicationContext.xml中，甚至为了节省空间和不浪费表情，可以直接把Hibernate.cfg.xml删除。删除之后，那么对应底层的连接该怎么配置，已经放在哪儿呢？放在applicationContext.xml中。具体如下：
 
-```
-  <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
-destroy-method="close">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/linzhios4"/>
-        <property name="username" value="root"/>
-        <property name="password" value="root"/>
-    </bean>
-```
+
+	```
+	  <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
+	destroy-method="close">
+	        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+	        <property name="url" value="jdbc:mysql://localhost:3306/linzhios4"/>
+	        <property name="username" value="root"/>
+	        <property name="password" value="root"/>
+	    </bean>
+	```
 
 在这里配置基本的配置信息，取代掉Hibernate.cfg.xml的中的基本配置信息，
 
@@ -2099,20 +2126,20 @@ destroy-method="close";
 关于Hibernate的其他配置信息，在配置SessionFactory的时候在hibernateProperties中配置，配置信息如下：
 
 
-```
-<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-    <property name="dataSource" ref="dataSource"/>
-    <property name="mappingResources">
-        <list><value>linzhi/bean/Course.hbm.xml</value></list>
-    </property>
-    <property name="hibernateProperties">
-        <props><propkey="hibernate.dialect">org.hibernate.dialect.MySQL57InnoDBDialect</prop>
-     <prop key="hibernate.show_sql">true</prop>
-            <prop key="hibernate.format_sql">true</prop>
-   </props> 
-</property>
-</bean>
-```
+	```
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+	    <property name="dataSource" ref="dataSource"/>
+	    <property name="mappingResources">
+	        <list><value>linzhi/bean/Course.hbm.xml</value></list>
+	    </property>
+	    <property name="hibernateProperties">
+	        <props><propkey="hibernate.dialect">org.hibernate.dialect.MySQL57InnoDBDialect</prop>
+	     <prop key="hibernate.show_sql">true</prop>
+	            <prop key="hibernate.format_sql">true</prop>
+	   </props> 
+	</property>
+	</bean>
+	```
 
 hibernate.show_sql，hibernate.format_sql这两个设置的属性，同Hibernate.cfg.xml中设置的类似，用于在每次进行操作时，在控制器终端上显示SQL语句，在开发过程中建议开启，在完成之后，则没有必要开启着[19]。
 
@@ -2140,28 +2167,29 @@ Spring对于事务的实现是通过AOP是方式解决的。基本流程如下�
 Spring的事务类 ：HibernateTransactionManager。如果用Spring对某个类的某个方法或某几个方法增加事务的话。按照如下步骤：
 
 
-1.         声明好HibernateTransactionManager 这样的bean
+1.声明好HibernateTransactionManager 这样的bean
 
-2.         然后利用这个bean去增强我们的需要使用事务的目标类
-
-
+2.然后利用这个bean去增强我们的需要使用事务的目标类
 
 
-```
-<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-    <propertyname="sessionFactory"ref="sessionFactory"/></bean>
-<bean id="managerServiceTarget"class="linzhi.service.impl.ManagerServiceImpl">
-    <propertyname="scoreManagerDAO" ref="scoreMangagerDAO"/>
-</bean>
-```
+
+
+	```
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+	    <propertyname="sessionFactory"ref="sessionFactory"/></bean>
+	<bean id="managerServiceTarget"class="linzhi.service.impl.ManagerServiceImpl">
+	    <propertyname="scoreManagerDAO" ref="scoreMangagerDAO"/>
+	</bean>
+	```
 
 这段代码所做的事情是，将ManagerServiceImpl设置为需要事务增强的目标对象。即是在说：这就是目标对象，就是为它生成代理。
 
 再然后，代码中的出现了一个名叫TransactionProxyFactoryBean的类，即
 
-```
-class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
-```
+
+	```
+	class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+	```
 
 TransactionProxyFactoryBean相当于是我在前面实例中所使用的Proxy这个代理类。而且根据我们前面的例子，很显然因为它作为代理类，所以它需要有真实对象的引用，这个体现在`<property name="target"ref="managerServiceTarget"/>`。这行代码表明这个Proxy作为代理，它代理的是managerServiceTarget这个javaBean。
 
@@ -2338,17 +2366,19 @@ Singleton，是GOF 23种经典的设计模式之一。在Spring中，所有未�
 所谓数据库连接池（Connection pool），以我的理解，在容器启动的时候，数据库的连接池自动开启数个或者数十个Session，也可以理解为连接（在Hibernate中叫Session，在JDBC中叫连接更合适），然后静置。当有用户请求需要开启连接时，可以直接使用连接池里的连接，而不必开启新的连接。这样可以节省创建连接的时间和CPU开销，提高性能，当这次的查询操作执行完毕时，将连接回收到连接池，而不需要销毁掉。当下一次用户请求需要再次使用连接时，再次从连接池中取出连接来用，用完了再放回来。如果用户的访问量很大，而数据池中的连接数量不足以提供所有用户的连接请求的时候，此时再重新新建连接，并将创建好的连接用来给用户使用。总之，使用连接池，就不必每次都在查询或保存或者更新的时候建立连接了。
 
 对于数据库的连接池，在配置文件中可以设置最小连接数量和最大连接数量。对于Hibernate内置的C3P0 的配置方式如下，在Hibernate.cfg.xml中配置C3P0代码如下：
-```
-<property name="hibernate.c3p0.min_size">10</property><!--最少的连接数量-->
 
-<property name="hibernate.c3p0.max_size">40</property>
 
-<property name="hibernate.c3p0.timeout">200</property><!--超时时间-->
+	```
+	<property name="hibernate.c3p0.min_size">10</property><!--最少的连接数量-->
 
-<property name="hibernate.c3p0.max_statements">30</property><!---->
+	<property name="hibernate.c3p0.max_size">40</property>
 
-<property name="hibernate.c3p0.idle_test_period">100</property>
-```
+	<property name="hibernate.c3p0.timeout">200</property><!--超时时间-->
+
+	<property name="hibernate.c3p0.max_statements">30</property><!---->
+
+	<property name="hibernate.c3p0.idle_test_period">100</property>
+	```
 
 连接池对于应用程序而言，是透明的。当配置好了连接池之后，之后就不用在理会了，后面在处理其他问题的时候完全可以不需要考虑连接池存在与否，因为存在与否都不会影响到程序的运行逻辑。
 
@@ -2360,26 +2390,27 @@ Singleton，是GOF 23种经典的设计模式之一。在Spring中，所有未�
 
 1.managerService
 
-```
-<bean id="managerService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" scope="singleton">
-```
+	```
+	<bean id="managerService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" scope="singleton">
+	```
 
 2.scoreManagerDAO
 
-```
-<bean id="scoreMangagerDAO" class="linzhi.DAO.impl.ScoreManagerDAOImpl" scope="singleton">
-	<property name="sessionFactory" ref="sessionFactory"/>
-</bean>
-```
+	```
+	<bean id="scoreMangagerDAO" class="linzhi.DAO.impl.ScoreManagerDAOImpl" scope="singleton">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	```
 
 
 
 3.userDAO
-```
-<bean id="userDAO" class="linzhi.DAO.impl.UserDAOImpl" scope="singleton">
-    <property name="sessionFactory" ref="sessionFactory"/>
-</bean>
-```
+
+	```
+	<bean id="userDAO" class="linzhi.DAO.impl.UserDAOImpl" scope="singleton">
+	    <property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	```
 
 
 ## 6.3 登录页面的输入验证
@@ -2412,62 +2443,63 @@ Singleton，是GOF 23种经典的设计模式之一。在Spring中，所有未�
 图6.2  有缓存系统的选课过程的顺序图
 
 具体代码如下：
-```
-managerService.updateSCInfo(email,className, classTimeNum, classType);
 
-ClassDetail classDetail = new ClassDetail();
+	```
+	managerService.updateSCInfo(email,className, classTimeNum, classType);
 
-classDetail.setClassName(className);
+	ClassDetail classDetail = new ClassDetail();
 
-classDetail.setClassTimeNum(classTimeNum);
+	classDetail.setClassName(className);
 
-classDetail.setClassType(classType);
+	classDetail.setClassTimeNum(classTimeNum);
 
-/*
+	classDetail.setClassType(classType);
 
-先遍历一遍，检查在classInfo列表中有没有对应的classInfo.classDetails.classTimeNum== classTime有的话，先删除，然后在在添加，或者用set方法替代掉没有的话直接添加对象classDetail
-*/
+	/*
 
-for (int i = 0; i < classInfoList.size();i++) {
-    int classTimeNumBuf = classInfoList.get(i).getClassTimeNum();
+	先遍历一遍，检查在classInfo列表中有没有对应的classInfo.classDetails.classTimeNum== classTime有的话，先删除，然后在在添加，或者用set方法替代掉没有的话直接添加对象classDetail
+	*/
 
-    if (classTimeNum == classTimeNumBuf){
+	for (int i = 0; i < classInfoList.size();i++) {
+	    int classTimeNumBuf = classInfoList.get(i).getClassTimeNum();
 
-        classInfoList.remove(i);
+	    if (classTimeNum == classTimeNumBuf){
 
-    }
+	        classInfoList.remove(i);
 
-}
+	    }
 
-classInfoList.add(classDetail);
-```
+	}
+
+	classInfoList.add(classDetail);
+	```
 
 通过classInfoList.add()将新添加的课程信息添加到classInfoList 中，classInfoList是设置在Session中用于缓存课程信息的buffer区。在chooseClass页面显示的时候，之前从Session中去取得相应的数据而不需要重新去数据库中获取。
 
 chooseClass页面的代码：
 
-```
+	```
 
-var BtnID = <%=session.getAttribute("classTimeNum")%>;
+	var BtnID = <%=session.getAttribute("classTimeNum")%>;
 
-var className = "<%=session.getAttribute("className")%>";
+	var className = "<%=session.getAttribute("className")%>";
 
-if(BtnID != null && className != "null") {
+	if(BtnID != null && className != "null") {
 
-    var $unit =$(".column:not('.eight.column.row'):eq(" + BtnID + ")");
-    $unit.replaceWith("<div class='column'   id='flagChoosen'>"+"<a href='#'class='open-basic-ifr'>" +"<button class='uiblue basic button' id=" + BtnID + ">" + className +"</button></a>" +"</div>");
+	    var $unit =$(".column:not('.eight.column.row'):eq(" + BtnID + ")");
+	    $unit.replaceWith("<div class='column'   id='flagChoosen'>"+"<a href='#'class='open-basic-ifr'>" +"<button class='uiblue basic button' id=" + BtnID + ">" + className +"</button></a>" +"</div>");
 
-}
-```
+	}
+	```
 
 
 上述代码可能有点复杂，再解释一下，其实这是JavaScript中的一段代码，更准确的说是一段JQuery 代码，用来批量更新button中的数据（总不能对那么几十个button一个一个更新吧）。
 
-```
-var BtnID = <%=session.getAttribute("classTimeNum")%>;
+	```
+	var BtnID = <%=session.getAttribute("classTimeNum")%>;
 
-var className = "<%=session.getAttribute("className")%>";
-```
+	var className = "<%=session.getAttribute("className")%>";
+	```
 
 这两句代码是为了将Session中的classTime和className取出来，放入到JavaScript的变量中，功能上是为了获取到classTime和className。我们知道Session是JSP中的内置对象，也就是说，在这里是JSP代码和JavaScript代码的相互嵌套使用。
 
@@ -2477,12 +2509,12 @@ var className = "<%=session.getAttribute("className")%>";
 
 配置二级缓存，在ApplicationContext.xml中的hibernateProperties中配置：
 
-```
-<prop key="cache.use_second_level_cache">true</prop>
-<propkey="hibernate.cache.provider_class">
-org.hibernate.cache.ehcache.StrategyRegistrationProviderImpl
-</prop>
-```
+	```
+	<prop key="cache.use_second_level_cache">true</prop>
+	<propkey="hibernate.cache.provider_class">
+	org.hibernate.cache.ehcache.StrategyRegistrationProviderImpl
+	</prop>
+	```
 
 然后再给对应的实体类设置缓存策略，Hibernate支持的缓存策略有：
 
@@ -2494,23 +2526,23 @@ org.hibernate.cache.ehcache.StrategyRegistrationProviderImpl
 
 （4）read-only：只读，当数据确定不会被改变时，我们可以使用这种缓存策略。设置缓存策略是在对应实体类所对应的映射文件（即hbm文件）中进行限制，例如：
 
-```
-<class name="linzhi.bean.Student" table="Student">
-<cache usage="read-write"/>
-```
+	```
+	<class name="linzhi.bean.Student" table="Student">
+	<cache usage="read-write"/>
+	```
 
 还需要配置ehcache.xml文件：
 
-```
-<diskStore path="java.io.tmpdir"/>
+	```
+	<diskStore path="java.io.tmpdir"/>
 
-<cache name="sampleCache1" 
-	   maxElementsInMemory="10000"
-       eternal="false"
-       timeToIdleSeconds="300"
-       timeToLiveSeconds="600"
-       overflowToDisk="ture"/>
-```
+	<cache name="sampleCache1" 
+		   maxElementsInMemory="10000"
+	       eternal="false"
+	       timeToIdleSeconds="300"
+	       timeToLiveSeconds="600"
+	       overflowToDisk="ture"/>
+	```
 
 这段代码的意思：指明缓存中最多可以放10000个对象(maxElementsInMemory
 
@@ -2554,9 +2586,9 @@ PreparedStatement等方法仅仅是降低概率，并算不上根本上防止。
 
 虽然从本质上说，对于SQL注入问题是不能完全根除的，但是这是数据库方面的一些注意事项，通过规范SQL的书写中的不规范写法，也都是会很大程度上降低SQL注入的风险的。举个简单的栗子：
 
-```
-String query="select u.password from User u where u.username='"+username+"'";
-```
+	```
+	String query="select u.password from User u where u.username='"+username+"'";
+	```
 
 这种SQL语句就是典型的很容易被注入的。
 
@@ -2566,10 +2598,10 @@ String query="select u.password from User u where u.username='"+username+"'";
 
 对于这类问题的解决，在Hibernate中可以由以下的代码代替上述操作：
 
-```
+	```
 
-Query query =session.createQuery("select stu.password from Student stu where stu.email=?").setString(0,email);
-```
+	Query query =session.createQuery("select stu.password from Student stu where stu.email=?").setString(0,email);
+	```
 
 从而完成正确的功能，并且防止了SQL注入的危险。
 
@@ -2597,9 +2629,9 @@ Query query =session.createQuery("select stu.password from Student stu where stu
 
 还有一个问题，既然所有的有用的页面都保存在了WEB-INF目录下，那么系统在登录的时候怎么才鞥访问到的问题。这个主要是通过放在web文件夹下，WEB-INF文件夹外的index.jsp来辅助完成的。其实这个index.jsp中只有一行代码：
 
-```
-<jsp:forward page="/WEB-INF/signin.jsp"/>
-```
+	```
+	<jsp:forward page="/WEB-INF/signin.jsp"/>
+	```
 
 在启动服务器容器后，当需要访问这个服务器容器中这个端口的服务器程序时，用户在地址栏输入localhost:8080说明访问本LinzhiOS系统，进而系统直接将其定向到index页面，这个系统default的。而定向到这个localhost:8080/index.jsp之后，解析这个JSP页面，执行这里的forward代码，这段代码的意思是直接跳转到"/WEB-INF/signin.jsp"/，即直接跳转到登录页面。由此解决了所有信息放在了WEB-INF中，而无法访问到的问题。
 
@@ -2619,23 +2651,30 @@ Query query =session.createQuery("select stu.password from Student stu where stu
 
 本论文基于对Struts2，Hibernate，Spring框架的学习，进而运用这些技术完成了设计实现了学生信息管理系统（LinzhiOS）：运用Struts2对LinzhiOS系统在实现前端控制，通过使用Hibernate将数据库的操作简化为使用面向对象的方式来操作，通过Spring框架对LinzhiOS学生信息管理系统用Hibernate和Struts2整合，完成整个系统的基础功能的搭建。基本完成了本系统的基础性的功能。然后在论文的后两章节从系统安全性和系统优化等角度对系统进行了进一步的完善和优化。到了这里整个系统的功能就基本完成了。
 
-（1）能够提供给终端用户（学生）通过网络选课，查询成绩等功能，能够为用户提供简洁但不失美感的呈现页面。
 
-（2）能提供用户多终端多平台（HTML5页面，提供PC浏览器端，移动设备的浏览器等）兼容的一致性的用户体验。
+	```
+	（1）能够提供给终端用户（学生）通过网络选课，查询成绩等功能，能够为用户提供简洁但不失美感的呈现页面。
 
-（3）提供合理的UI交互的动画效果，提供正确实时的响应用户请求，对用户操作给你正确及时的响应（主要针对选课）。
+	（2）能提供用户多终端多平台（HTML5页面，提供PC浏览器端，移动设备的浏览器等）兼容的一致性的用户体验。
 
-（4）服务器端，对用户请求，对于符合其权限范围之内，予以正确实时的响应，并友好的呈现在用户面前。
+	（3）提供合理的UI交互的动画效果，提供正确实时的响应用户请求，对用户操作给你正确及时的响应（主要针对选课）。
 
-本系统的开发过程中也遇到了很多问题。
+	（4）服务器端，对用户请求，对于符合其权限范围之内，予以正确实时的响应，并友好的呈现在用户面前。
+
+	本系统的开发过程中也遇到了很多问题。
+	```
 
 有些是在开始之前能够预见到的，比如对Strtus2，Hiberante，Spring等技术因为熟悉度的原因而遇到的一些本可避免的问题，对于Struts2，Hibernate，Spring框架理解不透彻而导致的问题，归根到底，书读少了。
 
+
 另外，其实有更多的问题是，是系统开发过程中遇到的问题，在每次开发之前心中或多或少都会有设计思路，按照已有的设计思路来写代码，但是写到一半甚至写到最后才发现，这种方案走不通，于是需要全部重新推倒重新设计，重新写代码，比如像刚开始，在对Hibernate中进行查询时，总会联想到用关系型数据库的SQL语句来写代码，然后事实上HQL虽然和SQL有相似，但是还是有很大的差别的，这种情况下只能吸取教训，重新思考……
+
 
 以上的问题，或多或少都能通过各种资料和网上查询资料获得一定程度（虽然不可能是完全的）的启发。还有一类问题，则只能靠自己的来解决。有这么一类问题，是只有我这个系统的才特有的问题，这样的问题，只能通过自己来解决。比如说，比较典型的是关于选课模块中课表的实现方法，这里之所以想使用这种方式，而不是传统的类似方正的学生信息管理系统的实现，原因是这样的系统实现对于用户友好度更好，而且用户能够更清晰的知道怎么使用，以及，能够更直接的运用该系统。把简洁留给用户，把复杂留给自己。这么做可以使系统简化，但是却增加了开发难度，对于每个课程放在格子的那一个地方这个设计过程就比较麻烦。一开始我设计了几个复杂的数据模型试图解决这个问题，比如设计横纵坐标的方式，比如设计时间参数的方式等等，但是效果都不理想，经过多次尝试，最终通过一种简介的数学模型解决了这一问题，特别感受到数学之美的奇妙。让我感受颇深的是吴军博士在《数学之美》中的一段话：“数学常常给人一种深奥和复杂的感觉，但是它的本质常常是很简单而直接的。英国哲学家培根在论美德时讲‘美德如同华贵的宝石，在朴素的衬托下最显华丽。’数学 的妙处也恰恰在于一个好的方法，常常是最简单明了的方法。”在处理这个选课系统的课表问题时，也印证了吴军在《数学之美》的书中所讲的简单即是美的观点。一个优雅的设计在一定程度上一定是最简洁而且清晰的，大到搜索引擎的设计，小到一个选课系统的选课模块的排列等方面的问题。
 
+
 另一个感悟是来自于性能优化部分时的感悟：业界流传很广的一句话：“一切问题都可以通过使用中间层来解决。” 对于系统看似是一个整体的过程，其实仔细分析，一定能将其进行更细腻的分层。就像流水线操作一样，一个完整过程总可以将其划分为流水操作。分层的目的，则是尽可能的提高资源的利用率以及性能。例如，在做选课系统的过程中，就是通过对显示课表数据的过程从一个事务的数据库查询将其分层为在前端进行数据缓存，在后台才执行选课过程，从而减少了一次IO时间，进而提高了系统的性能。
+
 
 通过处理完这些问题，到了这一步系统的设计实现就算完了吗？还没有，还有需要做的事情还有很多：一些在现有系统之上的一些bugs，制作了几个简单的测试，并未全面的对系统进行测试，所以可能定还有很多bugs是需要慢慢排查的，此其一。另外功能的扩展，对于其他角色的功能上的扩展，比如说教师模块，管理员模块等。第三，性能优化和安全防护永远是永无止境的。以及，离开了用户量级来说系统都是不负责任的行为，随着系统承载的用户量级的提升，系统的稳定性和承载力将是一个很有考验的工作，这些都是现阶段尚未完成的工作。对于整个系统，可以从深度和广度两个角度来划分，广度上探讨的是功能的横向扩充，功能模块的增加，深度上探讨的是现阶段的系统的基础上，在某些其他方面需要完善的内容，现阶段尚未完成的工作具体参见表8-1所示。
 
@@ -2643,10 +2682,13 @@ Query query =session.createQuery("select stu.password from Student stu where stu
 
 
 
+
 **广度上 :**现在的系统，仅仅是完成了部分学生操作的子模块，还有管理员模块，还有教师模块都还没有写完。这些模块的完善工作相对来说在底层的扩展接口的前提下相对比较容易继续搭建。
 
 - 还可以在原有系统的基础上扩充两个新的通信模块，用于实现message的时间流信息通信。
 - 在教师模块里面，可以进一步改进选课页面为教师课程地点和机房选择的扩展模块。
+
+
 
 **深度上 :** 性能优化是件永无止境的事情，尽一切可能的从体系架构上和设计上压榨服务器性能。
 
@@ -2661,6 +2703,7 @@ Query query =session.createQuery("select stu.password from Student stu where stu
  
 
  
+
 
 
 
