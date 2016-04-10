@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Web前端 JavaScript Notes"
+title: "Web前端 JavaScript Notes [字符串|数组|DOM操作]"
 ---
 
 
@@ -12,8 +12,8 @@ title: "Web前端 JavaScript Notes"
 
 
 
-
-### 字符串
+<hr />
+## 字符串
 
 返回指定的字符串首次出现的位置
 
@@ -66,7 +66,7 @@ var mystr="Hello World!"
 
 
 
-## 字符串分割split()
+### 字符串分割split()
 
 知识讲解：
 split() 方法将字符串分割为字符串数组，并返回此数组。
@@ -319,7 +319,7 @@ sort()方法使数组中的元素按照一定的顺序排列。
 myArray.sort(sortMethod);
 
 
-注意: 该函数要比较两个值，然后返回一个用于说明这两个值的相对顺序的数字。比较函数应该具有两个参数 a 和 b，其返回值如下： 
+注意: 该函数要比较两个值，然后返回一个用于说明这两个值的相对顺序的数字。比较函数应该具有两个参数 a 和 b，其返回值如下：
 
 - 若返回值<=-1，则表示 A 在排序后的序列中出现在 B 之前。
 
@@ -330,18 +330,18 @@ myArray.sort(sortMethod);
 
     ​```
     <script type="text/javascript">
-      var myarr1 = new Array("Hello","John","love","JavaScript"); 
+      var myarr1 = new Array("Hello","John","love","JavaScript");
       var myarr2 = new Array("80","16","50","6","100","1");
       document.write(myarr1.sort()+"<br>");
       document.write(myarr2.sort());
     </script>
-    
+
     //运行结果：
     Hello,JavaScript,John,love
     1,100,16,50,6,80
-    
-    
-    
+
+
+
     ​```
 
 注意:上面的代码没有按照数值的大小对数字进行排序。
@@ -359,16 +359,16 @@ myArray.sort(sortMethod);
       document.write(myarr + "<br>");
       document.write(myarr.sort(sortNum));
     </script>
-    
+
     //运行结果：
     80,16,50,6,100,1
     1,6,16,50,80,100
-    
+
     ​```
-    
-    
-    
-    
+
+
+
+
 
 <hr />
 <hr />
@@ -379,25 +379,25 @@ myArray.sort(sortMethod);
 
 
 ```
-   <!DOCTYPE  HTML>
+  <!DOCTYPE  HTML>
 	<html >
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>系好安全带,准备启航</title>
-	
+	<title></title>
+
 	<script type="text/javascript">
-	
+
 	  //通过javascript的日期对象来得到当前的日期，并输出。
-	
+
 	  var date = new Date();  // 实例化日期对象  
-	  var timeStr = '';//日期 
+	  var timeStr = '';//日期
 	  timeStr = date.getFullYear() + "年" ;  
 	  timeStr += date.getMonth() + 1 +"月";  
 	  timeStr += date.getDate()+"日";  
-	  var day  = date.getDay(); //星期 
+	  var day  = date.getDay(); //星期
 	  var week = '';
 	  switch(day){
-	
+
 	case  0 :
 	week  = '星期一';
 	break;
@@ -418,30 +418,30 @@ myArray.sort(sortMethod);
 	break;
 	case  6 :
 	week  = '星期天';
-	break; 
+	break;
 	}
 	  timeStr += " "+week;
 	  //打印出日期
 	  document.write(timeStr);
-	  
+
 	  //成绩是一长窜的字符串不好处理，找规律后分割放到数组里更好操作哦
 	  var sorceStr = "小明:87; 小花:81; 小红:97; 小天:76;小张:74;小小:94;小西:90;小伍:76;小迪:64;小曼:76";
-	
+
 	  var arr  = sorceStr.split(';');//按 ; 符号进行数组分割
 	  var sum = 0;
 	  var av= 0;
 	  for( var i =0;i<arr.length;i++ ){
-		var index = arr[i].indexOf(':'); //根据 ： 符号确定数字开始的位置 
+		var index = arr[i].indexOf(':'); //根据 ： 符号确定数字开始的位置
 		sum += parseInt(  arr[i].substr(index+1,2)  );  // parseInt() 字符串类型转成整型
 	   }
 
 
 		av = sum/arr.length;
 		av = Math.floor(av);  // 取整
-	
+
 	   //从数组中将成绩撮出来，然后求和取整，并输出。
 	   document.write("--班级总分为："+av);
-	
+
 	</script>
 	</head>
 	<body>
@@ -486,7 +486,7 @@ setInterval(代码,交互时间);
 
 
 
-
+```html
      <!DOCTYPE HTML>
      <html>
      <head>
@@ -509,7 +509,8 @@ setInterval(代码,交互时间);
 
 ```
 
-```
+
+```html
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -789,22 +790,22 @@ navigator.userAgent
 
 ```
 
-function validB(){ 
-  var u_agent = navigator.userAgent; 
-  var B_name="Failed to identify the browser"; 
-  if(u_agent.indexOf("Firefox")>-1){ 
-  	B_name="Firefox"; 
-  }else if(u_agent.indexOf("Chrome")>-1){ 
-	  B_name="Chrome"; 
+function validB(){
+  var u_agent = navigator.userAgent;
+  var B_name="Failed to identify the browser";
+  if(u_agent.indexOf("Firefox")>-1){
+  	B_name="Firefox";
+  }else if(u_agent.indexOf("Chrome")>-1){
+	  B_name="Chrome";
   }else 	
-    if(u_agent.indexOf("MSIE")>-1&&u_agent.indexOf("Trident")>-1){ 
+    if(u_agent.indexOf("MSIE")>-1&&u_agent.indexOf("Trident")>-1){
     B_name="IE(8-10)";  
   }
 
 	document.write("B_name:"+B_name+"<br>");
-	document.write("u_agent:"+u_agent+"<br>"); 
+	document.write("u_agent:"+u_agent+"<br>");
 
-} 
+}
 
 ```
 
@@ -882,7 +883,7 @@ HTML文档可以说由节点构成的集合，DOM节点有:
   <input type="checkbox" name="hobby" id="hobby3">  游泳
   <input type="checkbox" name="hobby" id="hobby4">  阅读
   <input type="checkbox" name="hobby" id="hobby5">  打球
-  <input type="checkbox" name="hobby" id="hobby6">  跑步 
+  <input type="checkbox" name="hobby" id="hobby6">  跑步
   <input type="button" value = "全选" id="button1">
   <input type="button" value = "全不选" id="button1">
 ```
@@ -1073,7 +1074,7 @@ for(var i=0;i<x.length;i++){
 语法：
 	node.firstChild
 
-说明：与elementNode.childNodes[0]是同样的效果。 
+说明：与elementNode.childNodes[0]是同样的效果。
 ```
 
 
@@ -1084,7 +1085,7 @@ for(var i=0;i<x.length;i++){
 语法：
 	node.lastChild
 
-说明：与elementNode.childNodes[elementNode.childNodes.length-1]是同样的效果。 
+说明：与elementNode.childNodes[elementNode.childNodes.length-1]是同样的效果。
 ```
 
 
@@ -1116,7 +1117,7 @@ for(var i=0;i<x.length;i++){
 ```
 <div id="text">
   <p id="con"> parentNode 获取指点节点的父节点</p>
-</div> 
+</div>
 <script type="text/javascript">
   var mynode= document.getElementById("con");
   document.write(mynode.parentNode.nodeName);
@@ -1129,7 +1130,7 @@ elementNode.parentNode.parentNode
 看看下面的代码:
 <div id="text">  
   <p>parentNode<span id="con"> 获取指点节点的父节点</span></p>
-</div> 
+</div>
 
 <script type="text/javascript">
   var mynode= document.getElementById("con");
@@ -1170,7 +1171,7 @@ DIV
 <body>
 <ul id="con">
 <li id="lesson1">javascript
-  <ul> 
+  <ul>
 
 ​```
   <li id="tcon"> 基础语法</li>
@@ -1184,7 +1185,7 @@ DIV
 </li>
 <li id="lesson2">das</li>
 <li id="lesson3">dadf</li>
-<li id="lesson4">HTML/CSS 
+<li id="lesson4">HTML/CSS
   <ul>
 
 ​```
@@ -1194,17 +1195,18 @@ DIV
 <li>表格</li>  
 ​```
 
-  </ul> 
+  </ul>
 </li></ul>  
 <script  type="text/javascript">    
-   var mylist = document.getElementById("tcon"); 
+   var mylist = document.getElementById("tcon");
 
 ​
 // document.write(mylist.parentNode.lastChild.nodeName);
-document.write(mylist.parentNode.parentNode.parentNode.lastChild.innerHTML);
+document.write(
+  mylist.parentNode.parentNode.parentNode.lastChild.innerHTML);
 ​
 
-</script> 
+</script>
 
 </body>
 </html>
@@ -1246,34 +1248,36 @@ newnode：指定追加的节点。
 1.在代码编辑器中，script标签内，为ul添加一个li。
 2.设置li内容为PHP。
 
-​```html
-<!DOCTYPE HTML>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>无标题文档</title>
-</head>
-<body>
 
-<ul id="test">
-  <li>JavaScript</li>
-  <li>HTML</li>
-</ul> 
+  ​```html
 
-<script type="text/javascript">
+  <!DOCTYPE HTML>
+  <html>
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>无标题文档</title>
+  </head>
+  <body>
 
-  var otest = document.getElementById("test");  
-  var newli=document.createElement("li");
-  newli.innerHTML="PHP";
-  otest.appendChild(newli);
+  <ul id="test">
+    <li>JavaScript</li>
+    <li>HTML</li>
+  </ul>
 
-</script> 
+  <script type="text/javascript">
 
-</body>
-</html>
+    var otest = document.getElementById("test");  
+    var newli=document.createElement("li");
+    newli.innerHTML="PHP";
+    otest.appendChild(newli);
+
+  </script>
+
+  </body>
+  </html>
 
 
-```
+  ```
 
 
 
@@ -1302,7 +1306,7 @@ node: 指定此节点前插入节点。
 </head>
 <body>
 
-<ul id="test"><li>JavaScript</li><li>HTML</li></ul> 
+<ul id="test"><li>JavaScript</li><li>HTML</li></ul>
 
 <script type="text/javascript">
 
@@ -1314,7 +1318,7 @@ node: 指定此节点前插入节点。
 	//<!--这里添加的inserBefore()-->
   otest.insertBefore(newli,otest.childNodes[0]);
 
-</script> 
+</script>
 
 </body>
 </html>
@@ -1400,11 +1404,11 @@ function clearText() {
 ### 替换元素节点replaceChild()
 
 
-replaceChild 实现子节点(对象)的替换。返回被替换对象的引用。 
+replaceChild 实现子节点(对象)的替换。返回被替换对象的引用。
 语法：
-node.replaceChild (newnode,oldnew ) 
+node.replaceChild (newnode,oldnew )
 参数：
-newnode : 必需，用于替换 oldnew 的对象。 
+newnode : 必需，用于替换 oldnew 的对象。
 oldnew : 必需，被 newnode 替换的对象。
 
 
@@ -1428,7 +1432,7 @@ oldnew : 必需，被 newnode 替换的对象。
       var newnode=document.createElement("i");
       newnode.innerHTML=oldnode.innerHTML;
       oldnode.parentNode.replaceChild(newnode,oldnode);
-	   
+
    }    
 ​```
 
@@ -1465,7 +1469,7 @@ tagName：字符串值，这个字符串用来指明创建元素的类型。
 
 ```html
 <script type="text/javascript">
-   var body = document.body; 
+   var body = document.body;
    var input = document.createElement("input");  
    input.type = "button";  
    input.value = "创建一个按钮";  
@@ -1522,7 +1526,7 @@ function createa(url,text)
 	// 调用函数创建链接
 	createa("http://www.imooc.com","慕课网");
 }
-</script> 
+</script>
 </body>
 </html>
 ```
@@ -1576,7 +1580,7 @@ data : 字符串值，可规定此节点的文本。
     var textNode=document.createTextNode("I love JavaScript!");
     element.appendChild(textNode);
     document.body.appendChild(element);
-</script> 
+</script>
 
 </body>
 </html>
@@ -1681,7 +1685,7 @@ scrollHeight和scrollWidth还可获取Dom元素中内容实际占用的高度和
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 </head>
 <body>
@@ -1725,20 +1729,20 @@ offsetHeight = clientHeight + 滚动条 + 边框。
     var h= document.documentElement.offsetHeight|| document.body.offsetHeight;
     <!DOCTYPE HTML>
     <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     </head>
     <body>
      <script type="text/javascript">
-    
+
     var w= document.documentElement.offsetWidth|| document.body.offsetWidth;
-    
+
     var h= document.documentElement.offsetHeight|| document.body.offsetHeight;
-    
+
     document.write(w);
     </script>
     </body>
     </html>
-    
+
 
 ### 网页卷去的距离与偏移量
 
