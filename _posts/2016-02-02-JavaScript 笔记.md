@@ -6,7 +6,6 @@ title: "Web前端 JavaScript Notes [字符串|数组|DOM操作]"
 
 
 
-<hr />
 # JavaScript Note
 
 
@@ -107,7 +106,7 @@ w,w,w,.,i
 
 
 
-###提取字符串substring()
+### 提取字符串substring()
 
 substring() 方法用于提取字符串中介于两个指定下标之间的字符。
 语法:
