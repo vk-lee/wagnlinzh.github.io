@@ -1248,35 +1248,32 @@ newnode：指定追加的节点。
 2.设置li内容为PHP。
 
 
-  ​```html
+    ​```html
+    <!DOCTYPE HTML>
+    <html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>无标题文档</title>
+    </head>
+    <body>
 
-  <!DOCTYPE HTML>
-  <html>
-  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>无标题文档</title>
-  </head>
-  <body>
+    <ul id="test">
+      <li>JavaScript</li>
+      <li>HTML</li>
+    </ul>
 
-  <ul id="test">
-    <li>JavaScript</li>
-    <li>HTML</li>
-  </ul>
+    <script type="text/javascript">
 
-  <script type="text/javascript">
+      var otest = document.getElementById("test");  
+      var newli=document.createElement("li");
+      newli.innerHTML="PHP";
+      otest.appendChild(newli);
 
-    var otest = document.getElementById("test");  
-    var newli=document.createElement("li");
-    newli.innerHTML="PHP";
-    otest.appendChild(newli);
+    </script>
 
-  </script>
-
-  </body>
-  </html>
-
-
-  ```
+    </body>
+    </html>
+    ```
 
 
 
