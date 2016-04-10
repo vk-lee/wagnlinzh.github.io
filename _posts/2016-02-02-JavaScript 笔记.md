@@ -321,7 +321,7 @@ myArray.sort(sortMethod);
 
 注意: 该函数要比较两个值，然后返回一个用于说明这两个值的相对顺序的数字。比较函数应该具有两个参数 a 和 b，其返回值如下： 
 
-  - 若返回值<=-1，则表示 A 在排序后的序列中出现在 B 之前。
+- 若返回值<=-1，则表示 A 在排序后的序列中出现在 B 之前。
 
   - 若返回值>-1 && <1，则表示 A 和 B 具有相同的排序顺序。
   - 若返回值>=1，则表示 A 在排序后的序列中出现在 B 之后。
@@ -339,9 +339,9 @@ myArray.sort(sortMethod);
     //运行结果：
     Hello,JavaScript,John,love
     1,100,16,50,6,80
-
-
-
+    
+    
+    
     ​```
 
 注意:上面的代码没有按照数值的大小对数字进行排序。
@@ -365,12 +365,12 @@ myArray.sort(sortMethod);
     1,6,16,50,80,100
     
     ​```
+    
+    
+    
+    
 
-
-
-
-
-
+<hr />
 <hr />
 
 
@@ -507,6 +507,7 @@ setInterval(代码,交互时间);
     </body>
     </html>
 
+```
 
 ```
 <!DOCTYPE HTML>
@@ -1245,7 +1246,7 @@ newnode：指定追加的节点。
 1.在代码编辑器中，script标签内，为ul添加一个li。
 2.设置li内容为PHP。
 
-```html
+​```html
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -1610,10 +1611,12 @@ Document对象的body属性对应HTML文档的<body>标签
 
 
 在不同浏览器都实用的 JavaScript 方案：
+
 ```javascript
 var w= document.documentElement.clientWidth|| document.body.clientWidth;
 var h= document.documentElement.clientHeight|| document.body.clientHeight;
 ```
+
 任务
 在script标签内，补充右边编辑器代码，获取浏览器当前窗口大小。
 
@@ -1654,10 +1657,13 @@ document.write(h);
 ### 网页尺寸scrollHeight
 
 scrollHeight和scrollWidth，获取网页内容高度和宽度。
+
 一、针对IE、Opera:
 scrollHeight 是网页内容实际高度，可以小于 clientHeight。
+
 二、针对NS、FF:
 scrollHeight 是网页内容高度，不过最小值是 clientHeight。也就是说网页内容实际高度小于 clientHeight 时，scrollHeight 返回 clientHeight 。
+
 三、浏览器兼容性
 
 ```
@@ -1732,8 +1738,7 @@ offsetHeight = clientHeight + 滚动条 + 边框。
     </script>
     </body>
     </html>
-
-
+    
 
 ### 网页卷去的距离与偏移量
 
