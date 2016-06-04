@@ -16,3 +16,8 @@ highlighter: rouge
 # relative_permalinks: true 
 paginate: 10
 exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
+
+
+#https
+url: https://www.wanglinzhizhi.me
+enforce_ssl: www.wanglinzhizhi.me
