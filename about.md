@@ -15,10 +15,10 @@ Email: wanglinzhizhi[at]hotmail.com
 个人网站： http://www.wanglinzhizhi.me
 
 <hr />
-### 求职意向
+### Work At
 
 
-互联网 前端工程师 深圳/北京
+互联网 前端工程师 北京  易车@海淀
 
 <hr />
 ### 教育经历
@@ -80,17 +80,17 @@ LinzhiOS系统的前端和后台的设计与开发  **项目负责人**
 
  **技能点：**
 
- - **HTML**  80%
- - **CSS** 80%
- - **JavaScript** 70%
- - **jQuery** 70%
- - **bootstrap** 70%
- - **Grunt** 50%
- - **ORM/Hibernate** 70%
- - **Spring Framework** 70%
- - **Struts** 75%
- - **Java Web** 80%
- - **数据结构** , **算法** , **网络** , **OS** 基础 85%
+- **HTML**  80%
+- **CSS** 80%
+- **JavaScript** 70%
+- **jQuery** 70%
+- **bootstrap** 70%
+- **Grunt** 50%
+- **ORM/Hibernate** 70%
+- **Spring Framework** 70%
+- **Struts** 75%
+- **Java Web** 80%
+- **数据结构** , **算法** , **网络** , **OS** 基础 85%
 
 <hr />
 ### 自我评价
