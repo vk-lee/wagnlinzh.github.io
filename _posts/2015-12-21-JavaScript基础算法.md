@@ -58,7 +58,6 @@ console.log(JSON.stringify(getQueryString(url)));
 
 <hr />
 
-###  2
 
 为Array原型中添加一个去重的操作
 
@@ -174,7 +173,7 @@ myarr.sort(sortNmu);
 
 <hr />
 
-###　sum
+### sum
 
 求sum(),参数的长度无限制
 
@@ -208,7 +207,7 @@ function sum() {
 
 <hr />
 
-###　正则匹配
+### 正则匹配
 
 ```
 /^(\w+[_|\.|\_]?)*(\w)+@(\w+[_|\.|\_])*(\w)+\.[a-zA-z]{2,4}$/.test("wanglinzhizhi[at]hotmail.com");
