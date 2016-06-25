@@ -1,5 +1,5 @@
 ---
-layou: post
+layout: post
 title: "JavaScript 基础算法"
 ---
 
@@ -28,7 +28,7 @@ function queryString(url){
 
 
 		var queryObj = {};
-		
+
 		var itemArr,name,value;
 		for(var i=0,len=items.length;i<len;i++){
 
@@ -40,11 +40,11 @@ function queryString(url){
 				queryObj[name] = value;										//设置对象的属性
 			}
 		}
-		 
+
 		return queryObj;
-		
+
 	}
-	
+
 }
 var url = 'http://baidu.com?a=100&c=1034';
 console.log(JSON.stringify(getQueryString(url)));
@@ -126,7 +126,7 @@ Array.prototype.uniqiue=function(arr){
 
 ### Fibonacci
 
-真是在那儿都遇到它.(这其实已经跟JS无关了). 之前的在一篇文章中提到过它的作用(当时比较的是二分查找和fib查找之间的性能比较.) 代码不贴了,可以在那篇文章中找到.两点需要注意: 
+真是在那儿都遇到它.(这其实已经跟JS无关了). 之前的在一篇文章中提到过它的作用(当时比较的是二分查找和fib查找之间的性能比较.) 代码不贴了,可以在那篇文章中找到.两点需要注意:
 
 1. 打死都不要用递归, 是典型的2^n类型. 会吃光你所有的性能. 无论你的机器性能有多强
 2. 用迭代代替递归. 用三个参数进行叠加就可以了.(甚至两个). 也不要用数组, 三个临时变量或者两个临时变量就够了.(^_^)
@@ -223,4 +223,3 @@ function sum() {
 <hr />
 
 ### loading.....
-
