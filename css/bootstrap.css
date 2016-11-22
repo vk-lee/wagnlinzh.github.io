@@ -268,7 +268,11 @@ th {
   font-family: 'Glyphicons Halflings';
 
   src: url('../fonts/glyphicons-halflings-regular.eot');
-  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/glyphicons-halflings-regular.woff2') format('woff2'), 
+       url('../fonts/glyphicons-halflings-regular.woff') format('woff'), 
+       url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), 
+       url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 .glyphicon {
   position: relative;
@@ -1086,7 +1090,7 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Glyphicons Halflings',"Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.42857143;
   color: #333;
@@ -1526,7 +1530,7 @@ code,
 kbd,
 pre,
 samp {
-  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family:'Glyphicons Halflings', Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 code {
   padding: 2px 4px;
@@ -5844,7 +5848,7 @@ button.close {
   position: absolute;
   z-index: 1070;
   display: block;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Glyphicons Halflings',"Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 12px;
   font-weight: normal;
   line-height: 1.4;
@@ -5951,7 +5955,7 @@ button.close {
   display: none;
   max-width: 276px;
   padding: 1px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Glyphicons Halflings',"Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   font-weight: normal;
   line-height: 1.42857143;
