@@ -4,6 +4,7 @@ email: wanglinzhizhi@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   游走在上下文无关文法间
 baseurl: "" # the subpath of your site, e.g. /blog/ 
+
 github_username:  wagnlinzh
 
 
@@ -18,6 +19,6 @@ paginate: 10
 exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
 
 
-# #https
-# url: https://www.wanglinzhizhi.me
-# enforce_ssl: www.wanglinzhizhi.me
+#https
+url: https://www.wanglinzhizhi.me
+enforce_ssl: www.wanglinzhizhi.me
