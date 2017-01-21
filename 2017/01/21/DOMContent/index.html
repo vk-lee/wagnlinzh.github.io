@@ -38,7 +38,7 @@
     <meta name="apple-mobile-web-app-title" content="wanglinzhizhi">
     
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://yichewx.com">
+    <meta property="og:url" content="http://www.wanglinzhizhi.me">
     <meta property="og:type" content="blog">
     <meta property="og:title" content="JS、CSS以及img对DOMContentLoaded事件的影响 | wanglinzhizhi">
     <meta property="og:description" content="游走在上下文无关文法间">
@@ -300,25 +300,34 @@
 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
     
     
+    <!-- Leancloud Views -->
+    <a class="post_share-link" href="#">
+        <li class="mdl-menu__item">
+            <span id="/2017/01/21/DOMContent/" class="leancloud-views_num" data-flag-title="JS、CSS以及img对DOMContentLoaded事件的影响">
+     &nbsp;浏览量
+</span>
+        </li>
+    </a>
+    
     
     
     
     <!-- Share Twitter -->
-    <a class="post_share-link" href="https://twitter.com/intent/tweet?text=JS、CSS以及img对DOMContentLoaded事件的影响&url=http://yichewx.com//2017/01/21/DOMContent/index.html&via=wanglinzhizhi" target="_blank">
+    <a class="post_share-link" href="https://twitter.com/intent/tweet?text=JS、CSS以及img对DOMContentLoaded事件的影响&url=http://www.wanglinzhizhi.me//2017/01/21/DOMContent/index.html&via=wanglinzhizhi" target="_blank">
         <li class="mdl-menu__item">
             分享到 Twitter
         </li>
     </a>
     
     <!-- Share Google+ -->
-    <a class="post_share-link" href="https://plus.google.com/share?url=http://yichewx.com//2017/01/21/DOMContent/index.html" target="_blank">
+    <a class="post_share-link" href="https://plus.google.com/share?url=http://www.wanglinzhizhi.me//2017/01/21/DOMContent/index.html" target="_blank">
         <li class="mdl-menu__item">
             分享到 Google+
         </li>
     </a>
     
     <!-- Share Weibo -->
-    <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=JS、CSS以及img对DOMContentLoaded事件的影响&url=http://yichewx.com//2017/01/21/DOMContent/index.html&pic=&searchPic=false&style=simple" target="_blank">
+    <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=JS、CSS以及img对DOMContentLoaded事件的影响&url=http://www.wanglinzhizhi.me//2017/01/21/DOMContent/index.html&pic=&searchPic=false&style=simple" target="_blank">
         <li class="mdl-menu__item">
             分享到微博
         </li>
@@ -349,7 +358,7 @@
 <p><a href="http://cdn.alloyteam.com/wp-content/uploads/2014/03/71fca778-a249-11e3-8824-2aae4440c857.png" target="_blank" rel="external"><img src="http://cdn.alloyteam.com/wp-content/uploads/2014/03/71fca778-a249-11e3-8824-2aae4440c857.png" alt="71fca778-a249-11e3-8824-2aae4440c857"></a><br>图一</p>
 <p>如果页面中没有script标签，DOMContentLoaded事件并没有等待CSS文件、图片加载完成。</p>
 <p>Chrome开发者工具的Timeline面板可以帮我们记录下浏览器的一举一动。图一中红色小方框中的蓝线，表示DOMContentLoaded事件，它右边的红线和绿线分别表示load事件和First paint，鼠标hover在这些线露出灰色方框下面的一小部分时就会出现带有说明文字的tips（这交互够反人类的对吧！）。</p>
-<h3 id="实验2：DOMContentLoaded事件需要等待JS执行完才触发"><a href="#实验2：DOMContentLoaded事件需要等待JS执行完才触发" class="headerlink" title="实验2：DOMContentLoaded事件需要等待JS执行完才触发"></a>实验2：DOMContentLoaded事件需要等待JS执行完才触发</h3><p>index.html:<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"zh-CN"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span><span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></div><div class="line">        console.timeStamp('Inline script before link in head');</div><div class="line">        window.addEventListener('DOMContentLoaded', function()&#123;</div><div class="line">            console.timeStamp('DOMContentLoaded event');</div><div class="line">        &#125;);</div><div class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">type</span>=<span class="string">"text/css"</span> <span class="attr">href</span>=<span class="string">"./css/main.css"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></div><div class="line">        console.timeStamp('Inline script after link in head');</div><div class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Content<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"./img/chrome-girl.jpg"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"./js/main.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h3 id="实验2：DOMContentLoaded事件需要等待JS执行完才触发"><a href="#实验2：DOMContentLoaded事件需要等待JS执行完才触发" class="headerlink" title="实验2：DOMContentLoaded事件需要等待JS执行完才触发"></a>实验2：DOMContentLoaded事件需要等待JS执行完才触发</h3><p>index.html:<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"zh-CN"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span><span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line">        <span class="built_in">console</span>.timeStamp(<span class="string">'Inline script before link in head'</span>);</div><div class="line">        <span class="built_in">window</span>.addEventListener(<span class="string">'DOMContentLoaded'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">            <span class="built_in">console</span>.timeStamp(<span class="string">'DOMContentLoaded event'</span>);</div><div class="line">        &#125;);</div><div class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">type</span>=<span class="string">"text/css"</span> <span class="attr">href</span>=<span class="string">"./css/main.css"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line">        <span class="built_in">console</span>.timeStamp(<span class="string">'Inline script after link in head'</span>);</div><div class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Content<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"./img/chrome-girl.jpg"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"./js/main.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure></p>
 <p>main.js:</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="built_in">console</span>.timeStamp(<span class="string">'External script after link in body'</span>);</div></pre></td></tr></table></figure>
 <p><a href="http://cdn.alloyteam.com/wp-content/uploads/2014/03/dcf399e8-a252-11e3-92c1-c3dbad820909.png" target="_blank" rel="external"><img src="http://cdn.alloyteam.com/wp-content/uploads/2014/03/dcf399e8-a252-11e3-92c1-c3dbad820909.png" alt="dcf399e8-a252-11e3-92c1-c3dbad820909"></a></p>
@@ -407,7 +416,7 @@
     
     <!-- Prev Nav -->
     
-        <a href="/2017/01/21/CSS动画简介 阮一峰/" id="post_nav-newer" class="prev-content">
+        <a href="/2017/01/21/Git 提交原则/" id="post_nav-newer" class="prev-content">
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
                 <i class="material-icons">arrow_back</i>
             </button>
@@ -421,7 +430,7 @@
 
     <!-- Next Nav -->
     
-        <a href="/2017/01/21/Git 提交原则/" id="post_nav-older" class="next-content">
+        <a href="/2017/01/21/Git使用简明/" id="post_nav-older" class="next-content">
             旧篇
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
@@ -709,6 +718,91 @@ It will not impact the appearance and can give developers a lot of support :)
 	<script src="/js/smoothscroll.js"></script>
 
 
+
+    <!-- Leancloud -->
+	<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+	<script>
+		AV.initialize("EObBAbqpQfNFLuV5SjbVgoxq-gzGzoHsz", "qPdmjfSU3DDmPPH9ui0cUW4z");
+	</script>
+    <script>
+	function showTime(Counter) {
+		var query = new AV.Query(Counter);
+		$(".leancloud-views_num").each(function() {
+			var url = $(this).attr("id").trim();
+			query.equalTo("url", url);
+			query.find({
+				success: function(results) {
+					if (results.length == 0) {
+						var content = '0 ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+						return;
+					}
+					for (var i = 0; i < results.length; i++) {
+						var object = results[i];
+						var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					}
+				},
+				error: function(object, error) {
+					console.log("Error: " + error.code + " " + error.message);
+				}
+			});
+
+		});
+	}
+
+	function addCount(Counter) {
+		var Counter = AV.Object.extend("Counter");
+		url = $(".leancloud-views_num").attr('id').trim();
+		title = $(".leancloud-views_num").attr('data-flag-title').trim();
+		var query = new AV.Query(Counter);
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length > 0) {
+					var counter = results[0];
+					counter.fetchWhenSave(true);
+					counter.increment("time");
+					counter.save(null, {
+						success: function(counter) {
+							var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+							$(document.getElementById(url)).text(content);
+						},
+						error: function(counter, error) {
+							console.log('Failed to save Visitor num, with error message: ' + error.message);
+						}
+					});
+				} else {
+					var newcounter = new Counter();
+					newcounter.set("title", title);
+					newcounter.set("url", url);
+					newcounter.set("time", 1);
+					newcounter.save(null, {
+						success: function(newcounter) {
+							console.log("newcounter.get('time')="+newcounter.get('time'));
+							var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+							$(document.getElementById(url)).text(content);
+						},
+						error: function(newcounter, error) {
+							console.log('Failed to create');
+						}
+					});
+				}
+			},
+			error: function(error) {
+				console.log('Error:' + error.code + " " + error.message);
+			}
+		});
+	}
+	$(function() {
+		var Counter = AV.Object.extend("Counter");
+		if ($('.leancloud-views_num').length == 1) {
+			addCount(Counter);
+		} else if ($('.post-title-link').length > 1) {
+			showTime(Counter);
+		}
+	}); 
+</script>
 
 
 

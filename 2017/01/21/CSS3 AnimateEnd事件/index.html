@@ -38,7 +38,7 @@
     <meta name="apple-mobile-web-app-title" content="wanglinzhizhi">
     
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://yichewx.com">
+    <meta property="og:url" content="http://www.wanglinzhizhi.me">
     <meta property="og:type" content="blog">
     <meta property="og:title" content="CSS3 AnimateEnd 事件 | wanglinzhizhi">
     <meta property="og:description" content="游走在上下文无关文法间">
@@ -300,25 +300,34 @@
 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
     
     
+    <!-- Leancloud Views -->
+    <a class="post_share-link" href="#">
+        <li class="mdl-menu__item">
+            <span id="/2017/01/21/CSS3 AnimateEnd事件/" class="leancloud-views_num" data-flag-title="CSS3 AnimateEnd 事件">
+     &nbsp;浏览量
+</span>
+        </li>
+    </a>
+    
     
     
     
     <!-- Share Twitter -->
-    <a class="post_share-link" href="https://twitter.com/intent/tweet?text=CSS3 AnimateEnd 事件&url=http://yichewx.com//2017/01/21/CSS3 AnimateEnd事件/index.html&via=wanglinzhizhi" target="_blank">
+    <a class="post_share-link" href="https://twitter.com/intent/tweet?text=CSS3 AnimateEnd 事件&url=http://www.wanglinzhizhi.me//2017/01/21/CSS3 AnimateEnd事件/index.html&via=wanglinzhizhi" target="_blank">
         <li class="mdl-menu__item">
             分享到 Twitter
         </li>
     </a>
     
     <!-- Share Google+ -->
-    <a class="post_share-link" href="https://plus.google.com/share?url=http://yichewx.com//2017/01/21/CSS3 AnimateEnd事件/index.html" target="_blank">
+    <a class="post_share-link" href="https://plus.google.com/share?url=http://www.wanglinzhizhi.me//2017/01/21/CSS3 AnimateEnd事件/index.html" target="_blank">
         <li class="mdl-menu__item">
             分享到 Google+
         </li>
     </a>
     
     <!-- Share Weibo -->
-    <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=CSS3 AnimateEnd 事件&url=http://yichewx.com//2017/01/21/CSS3 AnimateEnd事件/index.html&pic=&searchPic=false&style=simple" target="_blank">
+    <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=CSS3 AnimateEnd 事件&url=http://www.wanglinzhizhi.me//2017/01/21/CSS3 AnimateEnd事件/index.html&pic=&searchPic=false&style=simple" target="_blank">
         <li class="mdl-menu__item">
             分享到微博
         </li>
@@ -330,7 +339,7 @@
                 <!-- Post Content -->
                 <div id="post-content" class="markdown-Github mdl-color-text--grey-700 mdl-card__supporting-text fade out">
 	
-		<h2 id="CSS3-AnimateEnd-事件"><a href="#CSS3-AnimateEnd-事件" class="headerlink" title="CSS3 AnimateEnd 事件"></a>CSS3 AnimateEnd 事件</h2><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"> </span></div><div class="line">#myD&#123;</div><div class="line">    margin: 25px;</div><div class="line">    width: 550px;</div><div class="line">    height: 100px;</div><div class="line">    background: orange;</div><div class="line">    position: relative;</div><div class="line">    font-size: 20px;</div><div class="line">&#125;</div><div class="line">/* Chrome, Safari, Opera */</div><div class="line">@-webkit-keyframes mymove &#123;</div><div class="line">    from &#123;top: 0px;&#125;</div><div class="line">    to &#123;top: 200px;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@keyframes mymove &#123;</div><div class="line">    from &#123;top: 0px;&#125;</div><div class="line">    to &#123;top: 200px;&#125;</div><div class="line">&#125;</div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>使用addEventListener()方法给div元素添加"animationstart事件、animationiteration事件、animationend事件<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"myD"</span> <span class="attr">onclick</span>=<span class="string">"myFc()"</span>&gt;</span>点击这里开始播放动画<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line">  </div><div class="line">  </div><div class="line">  </div><div class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></div><div class="line">var x = document.getElementById("myD");</div><div class="line">// 使用JavaScript播放动画</div><div class="line">function myFc() &#123;</div><div class="line">    x.style.WebkitAnimation = "mymove 4s 2"; // 用于Chrome、 Safari、 Opera浏览器</div><div class="line">    x.style.animation = "mymove 4s 2";       // 标准语法</div><div class="line">    &#125;</div><div class="line">// Chrome、 Safari、 Opera</div><div class="line">x.addEventListener("webkitAnimationStart", myStartFunction);</div><div class="line">x.addEventListener("webkitAnimationIteration", myRepeatFunction);</div><div class="line">x.addEventListener("webkitAnimationEnd", myEndFunction);</div><div class="line">// 标准语法</div><div class="line">x.addEventListener("animationstart", myStartFunction);</div><div class="line">x.addEventListener("animationiteration", myRepeatFunction);</div><div class="line">x.addEventListener("animationend", myEndFunction);</div><div class="line">function myStartFunction() &#123;</div><div class="line">    this.innerHTML = "触发了animationstart事件 - 开始播放动画";</div><div class="line">    this.style.backgroundColor = "pink";</div><div class="line">&#125;</div><div class="line">function myRepeatFunction() &#123;</div><div class="line">    this.innerHTML = "触发了animationiteration事件 -动画重复播放了！";</div><div class="line">    this.style.backgroundColor = "lightblue";</div><div class="line">&#125;</div><div class="line">function myEndFunction() &#123;</div><div class="line">    this.innerHTML = "触发了animationend event occured -动画播放完毕";</div><div class="line">    this.style.backgroundColor = "lightgray";</div><div class="line">&#125;</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">  </div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+		<h2 id="CSS3-AnimateEnd-事件"><a href="#CSS3-AnimateEnd-事件" class="headerlink" title="CSS3 AnimateEnd 事件"></a>CSS3 AnimateEnd 事件</h2><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"> </span></div><div class="line"><span class="selector-id">#myD</span>&#123;</div><div class="line">    <span class="attribute">margin</span>: <span class="number">25px</span>;</div><div class="line">    <span class="attribute">width</span>: <span class="number">550px</span>;</div><div class="line">    <span class="attribute">height</span>: <span class="number">100px</span>;</div><div class="line">    <span class="attribute">background</span>: orange;</div><div class="line">    <span class="attribute">position</span>: relative;</div><div class="line">    <span class="attribute">font-size</span>: <span class="number">20px</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">/* Chrome, Safari, Opera */</span></div><div class="line">@-<span class="keyword">webkit</span>-<span class="keyword">keyframes</span> mymove &#123;</div><div class="line">    <span class="selector-tag">from</span> &#123;<span class="attribute">top</span>: <span class="number">0px</span>;&#125;</div><div class="line">    <span class="selector-tag">to</span> &#123;<span class="attribute">top</span>: <span class="number">200px</span>;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@<span class="keyword">keyframes</span> mymove &#123;</div><div class="line">    <span class="selector-tag">from</span> &#123;<span class="attribute">top</span>: <span class="number">0px</span>;&#125;</div><div class="line">    <span class="selector-tag">to</span> &#123;<span class="attribute">top</span>: <span class="number">200px</span>;&#125;</div><div class="line">&#125;</div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>使用addEventListener()方法给div元素添加"animationstart事件、animationiteration事件、animationend事件<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"myD"</span> <span class="attr">onclick</span>=<span class="string">"myFc()"</span>&gt;</span>点击这里开始播放动画<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line">  </div><div class="line">  </div><div class="line">  </div><div class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line"><span class="keyword">var</span> x = <span class="built_in">document</span>.getElementById(<span class="string">"myD"</span>);</div><div class="line"><span class="comment">// 使用JavaScript播放动画</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">myFc</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    x.style.WebkitAnimation = <span class="string">"mymove 4s 2"</span>; <span class="comment">// 用于Chrome、 Safari、 Opera浏览器</span></div><div class="line">    x.style.animation = <span class="string">"mymove 4s 2"</span>;       <span class="comment">// 标准语法</span></div><div class="line">    &#125;</div><div class="line"><span class="comment">// Chrome、 Safari、 Opera</span></div><div class="line">x.addEventListener(<span class="string">"webkitAnimationStart"</span>, myStartFunction);</div><div class="line">x.addEventListener(<span class="string">"webkitAnimationIteration"</span>, myRepeatFunction);</div><div class="line">x.addEventListener(<span class="string">"webkitAnimationEnd"</span>, myEndFunction);</div><div class="line"><span class="comment">// 标准语法</span></div><div class="line">x.addEventListener(<span class="string">"animationstart"</span>, myStartFunction);</div><div class="line">x.addEventListener(<span class="string">"animationiteration"</span>, myRepeatFunction);</div><div class="line">x.addEventListener(<span class="string">"animationend"</span>, myEndFunction);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">myStartFunction</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.innerHTML = <span class="string">"触发了animationstart事件 - 开始播放动画"</span>;</div><div class="line">    <span class="keyword">this</span>.style.backgroundColor = <span class="string">"pink"</span>;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">myRepeatFunction</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.innerHTML = <span class="string">"触发了animationiteration事件 -动画重复播放了！"</span>;</div><div class="line">    <span class="keyword">this</span>.style.backgroundColor = <span class="string">"lightblue"</span>;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">myEndFunction</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.innerHTML = <span class="string">"触发了animationend event occured -动画播放完毕"</span>;</div><div class="line">    <span class="keyword">this</span>.style.backgroundColor = <span class="string">"lightgray"</span>;</div><div class="line">&#125;</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">  </div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
 
 	
 	
@@ -655,6 +664,91 @@ It will not impact the appearance and can give developers a lot of support :)
 	<script src="/js/smoothscroll.js"></script>
 
 
+
+    <!-- Leancloud -->
+	<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+	<script>
+		AV.initialize("EObBAbqpQfNFLuV5SjbVgoxq-gzGzoHsz", "qPdmjfSU3DDmPPH9ui0cUW4z");
+	</script>
+    <script>
+	function showTime(Counter) {
+		var query = new AV.Query(Counter);
+		$(".leancloud-views_num").each(function() {
+			var url = $(this).attr("id").trim();
+			query.equalTo("url", url);
+			query.find({
+				success: function(results) {
+					if (results.length == 0) {
+						var content = '0 ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+						return;
+					}
+					for (var i = 0; i < results.length; i++) {
+						var object = results[i];
+						var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					}
+				},
+				error: function(object, error) {
+					console.log("Error: " + error.code + " " + error.message);
+				}
+			});
+
+		});
+	}
+
+	function addCount(Counter) {
+		var Counter = AV.Object.extend("Counter");
+		url = $(".leancloud-views_num").attr('id').trim();
+		title = $(".leancloud-views_num").attr('data-flag-title').trim();
+		var query = new AV.Query(Counter);
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length > 0) {
+					var counter = results[0];
+					counter.fetchWhenSave(true);
+					counter.increment("time");
+					counter.save(null, {
+						success: function(counter) {
+							var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+							$(document.getElementById(url)).text(content);
+						},
+						error: function(counter, error) {
+							console.log('Failed to save Visitor num, with error message: ' + error.message);
+						}
+					});
+				} else {
+					var newcounter = new Counter();
+					newcounter.set("title", title);
+					newcounter.set("url", url);
+					newcounter.set("time", 1);
+					newcounter.save(null, {
+						success: function(newcounter) {
+							console.log("newcounter.get('time')="+newcounter.get('time'));
+							var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+							$(document.getElementById(url)).text(content);
+						},
+						error: function(newcounter, error) {
+							console.log('Failed to create');
+						}
+					});
+				}
+			},
+			error: function(error) {
+				console.log('Error:' + error.code + " " + error.message);
+			}
+		});
+	}
+	$(function() {
+		var Counter = AV.Object.extend("Counter");
+		if ($('.leancloud-views_num').length == 1) {
+			addCount(Counter);
+		} else if ($('.post-title-link').length > 1) {
+			showTime(Counter);
+		}
+	}); 
+</script>
 
 
 
