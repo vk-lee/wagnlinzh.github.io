@@ -16,79 +16,27 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Web 研发模式演变 玉伯</title>
-    <link href="http://www.wanglinzhizhi.me/2017/01/21/Web%20%E7%A0%94%E5%8F%91%E6%A8%A1%E5%BC%8F%E6%BC%94%E5%8F%98/"/>
-    <id>http://www.wanglinzhizhi.me/2017/01/21/Web 研发模式演变/</id>
+    <title>webkit 滚动条自定义</title>
+    <link href="http://www.wanglinzhizhi.me/2017/01/21/webkit%20%E6%BB%9A%E5%8A%A8%E6%9D%A1%20%E8%87%AA%E5%AE%9A%E4%B9%89/"/>
+    <id>http://www.wanglinzhizhi.me/2017/01/21/webkit 滚动条 自定义/</id>
     <published>2017-01-21T10:51:18.000Z</published>
     <updated>2017-01-21T10:51:18.000Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="Web-研发模式演变"><a href="#Web-研发模式演变" class="headerlink" title="Web 研发模式演变"></a>Web 研发模式演变</h1><p><a href="https://camo.githubusercontent.com/2ac8d073ba00bde4270a3c0530490255392ca162/687474703a2f2f696d672e68622e616963646e2e636f6d2f6366323535396466303137396666346431666630336463346465663961386334666661376435346531626134662d695355784373" target="_blank" rel="external"><img src="https://camo.githubusercontent.com/2ac8d073ba00bde4270a3c0530490255392ca162/687474703a2f2f696d672e68622e616963646e2e636f6d2f6366323535396466303137396666346431666630336463346465663961386334666661376435346531626134662d695355784373" alt="img"></a></p>
-<p>前不久徐飞写了一篇很好的文章：<a href="http://goo.gl/DKNX6z" target="_blank" rel="external">Web 应用的组件化开发</a>。本文尝试从历史发展角度，说说各种研发模式的优劣。</p>
-<h2 id="一、简单明快的早期时代"><a href="#一、简单明快的早期时代" class="headerlink" title="一、简单明快的早期时代"></a>一、简单明快的早期时代</h2><p><a href="https://camo.githubusercontent.com/90850e93b917cd3c958dff1c7d0197f819167343/687474703a2f2f696d672e68622e616963646e2e636f6d2f63333639616163633864613338616638653432326664323935313438633537643162353831376666666335362d4f636250646c5f6677363538" target="_blank" rel="external"><img src="https://camo.githubusercontent.com/90850e93b917cd3c958dff1c7d0197f819167343/687474703a2f2f696d672e68622e616963646e2e636f6d2f63333639616163633864613338616638653432326664323935313438633537643162353831376666666335362d4f636250646c5f6677363538" alt="1"></a></p>
-<p>可称之为 Web 1.0 时代，非常适合创业型小项目，不分前后端，经常 3-5 人搞定所有开发。页面由 JSP、PHP 等工程师在服务端生成，浏览器负责展现。基本上是服务端给什么浏览器就展现什么，展现的控制在 Web Server 层。</p>
-<p>这种模式的好处是：简单明快，本地起一个 Tomcat 或 Apache 就能开发，调试什么的都还好，只要业务不太复杂。</p>
-<p>然而业务总会变复杂，这是好事情，否则很可能就意味着创业失败了。业务的复杂会让 Service 越来越多，参与开发的人员也很可能从几个人快速扩招到几十人。在这种情况下，会遇到一些典型问题：</p>
-<p>1、<strong>Service 越来越多，调用关系变复杂，前端搭建本地环境不再是一件简单的事。</strong> 考虑团队协作，往往会考虑搭建集中式的开发服务器来解决。这种解决方案对编译型的后端开发来说也许还好，但对前端开发来说并不友好。天哪，我只是想调整下按钮样式，却要本地开发、代码上传、验证生效等好几个步骤。也许习惯了也还好，但开发服务器总是不那么稳定，出问题时往往需要依赖后端开发搞定。看似仅仅是前端开发难以本地化，但这对研发效率的影响其实蛮大。</p>
-<p>2、<strong>JSP 等代码的可维护性越来越差。</strong>JSP 非常强大，可以内嵌 Java 代码。这种强大使得前后端的职责不清晰，JSP 变成了一个灰色地带。经常为了赶项目，为了各种紧急需求，会在 JSP 里揉杂大量业务代码。积攒到一定阶段时，往往会带来大量维护成本。</p>
-<p>这个时期，为了提高可维护性，可以通过下面的方式实现前端的组件化：</p>
-<p><a href="https://camo.githubusercontent.com/bbbf666300ccea8dc4f5deb3f22773195555d3ac/687474703a2f2f696d672e68622e616963646e2e636f6d2f3835393365623736663966353163613735333933333234333131303933623731356235373637316531313466342d6e61677936445f6677363538" target="_blank" rel="external"><img src="https://camo.githubusercontent.com/bbbf666300ccea8dc4f5deb3f22773195555d3ac/687474703a2f2f696d672e68622e616963646e2e636f6d2f3835393365623736663966353163613735333933333234333131303933623731356235373637316531313466342d6e61677936445f6677363538" alt="2"></a></p>
-<p>理论上，如果大家都能按照最佳实践去书写代码，那么无论是 JSP 还是 PHP，可维护性都不会差。<strong>但可维护性更多是工程含义，有时候需要通过限制带来自由，需要某种约定，使得即便是新手也不会写出太糟糕的代码。</strong></p>
-<p><strong>如何让前后端分工更合理高效，如何提高代码的可维护性，在 Web 开发中很重要。</strong>下面我们继续来看，技术架构的演变如何解决这两个问题。</p>
-<h2 id="二、后端为主的-MVC-时代"><a href="#二、后端为主的-MVC-时代" class="headerlink" title="二、后端为主的 MVC 时代"></a>二、后端为主的 MVC 时代</h2><p>为了降低复杂度，以后端为出发点，有了 Web Server 层的架构升级，比如 Structs、Spring MVC 等，这是后端的 MVC 时代。</p>
-<p><a href="https://camo.githubusercontent.com/b9e16b0b3ff3361a481badaca7d408e8fa6b404f/687474703a2f2f696d672e68622e616963646e2e636f6d2f3961366266353237646162626462396237393563353862306237616636633761313864653963653331316136312d3975697578545f6677363538" target="_blank" rel="external"><img src="https://camo.githubusercontent.com/b9e16b0b3ff3361a481badaca7d408e8fa6b404f/687474703a2f2f696d672e68622e616963646e2e636f6d2f3961366266353237646162626462396237393563353862306237616636633761313864653963653331316136312d3975697578545f6677363538" alt="3"></a></p>
-<p>代码可维护性得到明显好转，MVC 是个非常好的协作模式，从架构层面让开发者懂得什么代码应该写在什么地方。为了让 View 层更简单干脆，还可以选择 Velocity、Freemaker 等模板，使得模板里写不了 Java 代码。看起来是功能变弱了，但正是这种限制使得前后端分工更清晰。然而依旧并不是那么清晰，这个阶段的典型问题是：</p>
-<p>1、<strong>前端开发重度依赖开发环境。</strong> 这种架构下，前后端协作有两种模式：一种是前端写 demo，写好后，让后端去套模板。淘宝早期包括现在依旧有大量业务线是这种模式。好处很明显，demo 可以本地开发，很高效。不足是还需要后端套模板，有可能套错，套完后还需要前端确定，来回沟通调整的成本比较大。另一种协作模式是前端负责浏览器端的所有开发和服务器端的 View 层模板开发，支付宝是这种模式。好处是 UI 相关的代码都是前端去写就好，后端不用太关注，不足就是前端开发重度绑定后端环境，环境成为影响前端开发效率的重要因素。</p>
-<p>2、<strong>前后端职责依旧纠缠不清。</strong>Velocity 模板还是蛮强大的，变量、逻辑、宏等特性，依旧可以通过拿到的上下文变量来实现各种业务逻辑。这样，只要前端弱势一点，往往就会被后端要求在模板层写出不少业务代码。还有一个很大的灰色地带是 Controller，<strong>页面路由等功能本应该是前端最关注的，但却是由后端来实现</strong>。 Controller 本身与 Model 往往也会纠缠不清，看了让人咬牙的代码经常会出现在 Controller 层。这些问题不能全归结于程序员的素养，否则 JSP 就够了。</p>
-<p><strong>经常会有人吐槽 Java，但 Java 在工程化开发方面真的做了大量思考和架构尝试。Java 蛮符合马云的一句话：让平凡人做非凡事</strong>。</p>
-<h2 id="三、Ajax-带来的-SPA-时代"><a href="#三、Ajax-带来的-SPA-时代" class="headerlink" title="三、Ajax 带来的 SPA 时代"></a>三、Ajax 带来的 SPA 时代</h2><p>历史滚滚往前，2004 年 Gmail 像风一样的女子来到人间，很快 2005 年 Ajax 正式提出，加上 CDN 开始大量用于静态资源存储，于是出现了 JavaScript 王者归来的 SPA （Single Page Application 单页面应用）时代。</p>
-<p><a href="https://camo.githubusercontent.com/d0098546c9fa01b443c16ff1953c90aa9056955b/687474703a2f2f696d672e68622e616963646e2e636f6d2f3932393766646337336438336632373764343439633932313933613361663432386464633064343431316366392d6e31445936465f6677363538" target="_blank" rel="external"><img src="https://camo.githubusercontent.com/d0098546c9fa01b443c16ff1953c90aa9056955b/687474703a2f2f696d672e68622e616963646e2e636f6d2f3932393766646337336438336632373764343439633932313933613361663432386464633064343431316366392d6e31445936465f6677363538" alt="4"></a></p>
-<p>这种模式下，前后端的分工非常清晰，前后端的关键协作点是 Ajax 接口。看起来是如此美妙，但回过头来看看的话，这与 JSP 时代区别不大。 <strong>复杂度从服务端的 JSP 里移到了浏览器的 JavaScript，浏览器端变得很复杂</strong> 。 类似 Spring MVC，这个时代开始出现浏览器端的分层架构：</p>
-<p><a href="https://camo.githubusercontent.com/f064bc7a5b06ea9a39cf039a5dec0ca6675141ff/687474703a2f2f696d672e68622e616963646e2e636f6d2f3135383839323134336263363430333364323264643865643765373533366537316530373063346131336335372d6850673150635f6677363538" target="_blank" rel="external"><img src="https://camo.githubusercontent.com/f064bc7a5b06ea9a39cf039a5dec0ca6675141ff/687474703a2f2f696d672e68622e616963646e2e636f6d2f3135383839323134336263363430333364323264643865643765373533366537316530373063346131336335372d6850673150635f6677363538" alt="5"></a></p>
-<p>对于 SPA 应用，有几个很重要的挑战：</p>
-<p>1、<strong>前后端接口的约定。</strong>如果后端的接口一塌糊涂，如果后端的业务模型不够稳定，那么前端开发会很痛苦。这一块在业界有 API Blueprint 等方案来约定和沉淀接口，在阿里，不少团队也有类似尝试，通过接口规则、接口平台等方式来做。有了和后端一起沉淀的接口规则，还可以用来模拟数据，使得前后端可以在约定接口后实现高效并行开发。相信这一块会越做越好。</p>
-<p>2、<strong>前端开发的复杂度控制。</strong>SPA 应用大多以<strong>功能交互型</strong>为主，JavaScript 代码过十万行很正常。大量 JS 代码的组织，与 View 层的绑定等，都不是容易的事情。典型的解决方案是业界的 Backbone，但 Backbone 做的事还很有限，依旧存在大量空白区域需要挑战。</p>
-<p>SPA 让前端看到了一丝绿色，但依旧是在荒漠中行走。</p>
-<h2 id="四、前端为主的-MV-时代"><a href="#四、前端为主的-MV-时代" class="headerlink" title="四、前端为主的 MV* 时代"></a>四、前端为主的 MV* 时代</h2><p>为了降低前端开发复杂度，除了 Backbone，还有大量框架涌现，比如 EmberJS、KnockoutJS、AngularJS 等等。这些框架总的原则是先按类型分层，比如 Templates、Controllers、Models，然后再在层内做切分，如下图：</p>
-<p><a href="https://camo.githubusercontent.com/2ab0e0e247dfae7b74760b7d57056a680204874d/687474703a2f2f696d672e68622e616963646e2e636f6d2f3536663463656530653663376166363165323464626633316534626531376631343264353930326331313039612d42637852696d5f6677363538" target="_blank" rel="external"><img src="https://camo.githubusercontent.com/2ab0e0e247dfae7b74760b7d57056a680204874d/687474703a2f2f696d672e68622e616963646e2e636f6d2f3536663463656530653663376166363165323464626633316534626531376631343264353930326331313039612d42637852696d5f6677363538" alt="6"></a></p>
-<p>好处很明显：</p>
-<p>1、<strong>前后端职责很清晰。</strong>前端工作在浏览器端，后端工作在服务端。 <strong>清晰的分工，可以让开发并行</strong>，测试数据的模拟不难，前端可以本地开发。后端则可以专注于业务逻辑的处理，输出 RESTful 等接口。</p>
-<p>2、<strong>前端开发的复杂度可控。</strong>前端代码很重，但合理的分层，让前端代码能各司其职。这一块蛮有意思的，简单如模板特性的选择，就有很多很多讲究。并非越强大越好，限制什么，留下哪些自由，代码应该如何组织，所有这一切设计，得花一本的厚度去说明。</p>
-<p>3、<strong>部署相对独立</strong>，产品体验可以快速改进。</p>
-<p>但依旧有不足之处：</p>
-<p>1、代码不能复用。比如后端依旧需要对数据做各种校验，校验逻辑无法复用浏览器端的代码。如果可以复用，那么后端的数据校验可以相对简单化。<br>2、全异步，对 SEO 不利。往往还需要服务端做同步渲染的降级方案。<br>3、性能并非最佳，特别是移动互联网环境下。<br>4、SPA 不能满足所有需求，依旧存在大量多页面应用。URL Design 需要后端配合，前端无法完全掌控。</p>
-<h2 id="五、Node-带来的全栈时代"><a href="#五、Node-带来的全栈时代" class="headerlink" title="五、Node 带来的全栈时代"></a>五、Node 带来的全栈时代</h2><p>前端为主的 MV* 模式解决了很多很多问题，但如上所述，依旧存在不少不足之处。随着 Node.js 的兴起，JavaScript 开始有能力运行在服务端。这意味着可以有一种新的研发模式：</p>
-<p><a href="https://camo.githubusercontent.com/ed895cf7561cb3ec07ef74aa2dea573b57dbe219/687474703a2f2f696d672e68622e616963646e2e636f6d2f3430303931653637316230626465653236653531366163303530633663616563383038383562386131326238372d374a676646685f6677363538" target="_blank" rel="external"><img src="https://camo.githubusercontent.com/ed895cf7561cb3ec07ef74aa2dea573b57dbe219/687474703a2f2f696d672e68622e616963646e2e636f6d2f3430303931653637316230626465653236653531366163303530633663616563383038383562386131326238372d374a676646685f6677363538" alt="7"></a></p>
-<p>在这种研发模式下，前后端的职责很清晰。对前端来说，两个 UI 层各司其职：</p>
-<p>1、Front-end UI layer 处理浏览器层的展现逻辑。通过 CSS 渲染样式，通过 JavaScript 添加交互功能，HTML 的生成也可以放在这层，具体看应用场景。</p>
-<p>2、Back-end UI layer 处理路由、模板、数据获取、cookie 等。通过路由，前端终于可以自主把控 URL Design，这样无论是单页面应用还是多页面应用，前端都可以自由调控。后端也终于可以摆脱对展现的强关注，转而可以专心于业务逻辑层的开发。</p>
-<p><strong>通过 Node，Web Server 层也是 JavaScript 代码，这意味着部分代码可前后复用，需要 SEO 的场景可以在服务端同步渲染，由于异步请求太多导致的性能问题也可以通过服务端来缓解</strong>。 前一种模式的不足，通过这种模式几乎都能完美解决掉。</p>
-<p>与 JSP 模式相比，全栈模式看起来是一种回归，也的确是一种向原始开发模式的回归，不过是一种螺旋上升式的回归。</p>
-<p>基于 Node 的全栈模式，依旧面临很多挑战：</p>
-<p>1、需要前端对服务端编程有更进一步的认识。比如 network/tcp、PE 等知识的掌握。<br>2、Node 层与 Java 层的高效通信。Node 模式下，都在服务器端，RESTful HTTP 通信未必高效，通过 SOAP 等方式通信更高效。一切需要在验证中前行。<br>3、对部署、运维层面的熟练了解，需要更多知识点和实操经验。<br>4、大量历史遗留问题如何过渡。这可能是最大最大的阻力。</p>
-<h2 id="六、小结"><a href="#六、小结" class="headerlink" title="六、小结"></a>六、小结</h2><p>回顾历史总是让人感慨，展望未来则让人兴奋。上面讲到的研发模式，除了最后一种还在探索期，其他各种在各大公司都已有大量实践。几点小结：</p>
-<p>1、模式没有好坏高下之分，只有合不合适。<br>2、Ajax 给前端开发带来了一次质的飞跃，Node 很可能是第二次。<br>3、SoC（关注度分离） 是一条伟大的原则。上面种种模式，都是让前后端的职责更清晰，分工更合理高效。<br>4、<strong>还有个原则，让合适的人做合适的事</strong>。 比如 Web Server 层的 UI Layer 开发，前端是更合适的人选。</p>
-<p><strong>历史有时候会打转，咋一看以为是回去了，实际上是螺旋转了一圈，站在了一个新的起点。</strong></p>
-<p>（完）</p>
-<p>题图：演化真不容易呀。</p>
-<p><a href="https://github.com/lifesinger/blog/issues/184" target="_blank" rel="external">https://github.com/lifesinger/blog/issues/184</a></p>
+    <content type="html"><![CDATA[<h2 id="webkit-滚动条自定义"><a href="#webkit-滚动条自定义" class="headerlink" title="webkit 滚动条自定义"></a>webkit 滚动条自定义</h2><figure class="highlight css"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar</span> &#123;</div><div class="line">    <span class="attribute">width</span>: <span class="number">10px</span><span class="meta">!important</span>;</div><div class="line">    <span class="attribute">height</span>: <span class="number">10px</span><span class="meta">!important</span>;</div><div class="line">    <span class="attribute">-webkit-appearance</span>: none;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-thumb</span> &#123;</div><div class="line">    <span class="attribute">height</span>: <span class="number">5px</span>;</div><div class="line">    <span class="attribute">border</span>: <span class="number">1px</span> solid transparent;</div><div class="line">    <span class="attribute">border-top</span>: none;</div><div class="line">    <span class="attribute">border-bottom</span>: none;</div><div class="line">    <span class="attribute">-webkit-border-radius</span>: <span class="number">6px</span>;</div><div class="line">    <span class="attribute">background-color</span>: <span class="built_in">rgba</span>(0,0,0,.3);</div><div class="line">    <span class="attribute">background-clip</span>: padding-box;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h1 id=&quot;Web-研发模式演变&quot;&gt;&lt;a href=&quot;#Web-研发模式演变&quot; class=&quot;headerlink&quot; title=&quot;Web 研发模式演变&quot;&gt;&lt;/a&gt;Web 研发模式演变&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https://camo.githubuserconten
+      &lt;h2 id=&quot;webkit-滚动条自定义&quot;&gt;&lt;a href=&quot;#webkit-滚动条自定义&quot; class=&quot;headerlink&quot; title=&quot;webkit 滚动条自定义&quot;&gt;&lt;/a&gt;webkit 滚动条自定义&lt;/h2&gt;&lt;figure class=&quot;highlight css&quot;
     
     </summary>
     
-      <category term="架构" scheme="http://www.wanglinzhizhi.me/categories/%E6%9E%B6%E6%9E%84/"/>
+      <category term="CSS3" scheme="http://www.wanglinzhizhi.me/categories/CSS3/"/>
     
     
-      <category term="移动Web" scheme="http://www.wanglinzhizhi.me/tags/%E7%A7%BB%E5%8A%A8Web/"/>
+      <category term="CSS" scheme="http://www.wanglinzhizhi.me/tags/CSS/"/>
     
-      <category term="Web" scheme="http://www.wanglinzhizhi.me/tags/Web/"/>
-    
-      <category term="Web架构" scheme="http://www.wanglinzhizhi.me/tags/Web%E6%9E%B6%E6%9E%84/"/>
-    
-      <category term="SPA" scheme="http://www.wanglinzhizhi.me/tags/SPA/"/>
+      <category term="Webkit" scheme="http://www.wanglinzhizhi.me/tags/Webkit/"/>
     
   </entry>
   
@@ -709,6 +657,62 @@
   </entry>
   
   <entry>
+    <title>IE浏览器的检验</title>
+    <link href="http://www.wanglinzhizhi.me/2017/01/21/IE%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E6%A3%80%E9%AA%8C/"/>
+    <id>http://www.wanglinzhizhi.me/2017/01/21/IE浏览器的检验/</id>
+    <published>2017-01-21T10:51:18.000Z</published>
+    <updated>2017-01-21T10:51:18.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="IE浏览器的检验"><a href="#IE浏览器的检验" class="headerlink" title="IE浏览器的检验"></a>IE浏览器的检验</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line">&lt;script&gt;</div><div class="line">          $(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line"></div><div class="line">          <span class="keyword">var</span> isIE78910=<span class="regexp">/mise/i</span>.test(navigator.userAgent.toLowerCase());</div><div class="line">          <span class="keyword">var</span> isIE11=<span class="regexp">/trident/i</span>.test(navigator.userAgent.toLowerCase());</div><div class="line">          <span class="keyword">var</span> isIE=(isIE78910 || isIE11);</div><div class="line">  </div><div class="line">          <span class="keyword">if</span>(isIE)&#123;</div><div class="line">             <span class="comment">//todo</span></div><div class="line">          &#125;</div><div class="line">          &#125;)();</div><div class="line">      <span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></div></pre></td></tr></table></figure>
+<h2 id="IE8-以及以下的版本检测"><a href="#IE8-以及以下的版本检测" class="headerlink" title="IE8 以及以下的版本检测"></a>IE8 以及以下的版本检测</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> islowIE8=<span class="literal">false</span>;</div><div class="line"><span class="keyword">var</span> isIE=<span class="regexp">/mise/i</span>.test(navigator.userAgent.toLowerCase());</div><div class="line"><span class="keyword">if</span> (isIE) &#123;</div><div class="line">true<span class="keyword">var</span> ieVersion=<span class="regexp">/msie ([\d.]+)/</span>.navigator.userAgent.toLowerCase();</div><div class="line">trueieVersion = <span class="built_in">parseInt</span>(ieVersion);</div><div class="line">trueislowIE8= (ieVersion&gt;<span class="number">8</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (islowIE8)&#123; 	<span class="comment">//&lt;=ie8的情况</span></div><div class="line">true<span class="comment">//todo..</span></div><div class="line">&#125;<span class="keyword">else</span>&#123;		 	<span class="comment">//其他情况</span></div><div class="line">true<span class="comment">//todo..</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;IE浏览器的检验&quot;&gt;&lt;a href=&quot;#IE浏览器的检验&quot; class=&quot;headerlink&quot; title=&quot;IE浏览器的检验&quot;&gt;&lt;/a&gt;IE浏览器的检验&lt;/h2&gt;&lt;figure class=&quot;highlight javascript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;
+    
+    </summary>
+    
+      <category term="web" scheme="http://www.wanglinzhizhi.me/categories/web/"/>
+    
+    
+      <category term="web" scheme="http://www.wanglinzhizhi.me/tags/web/"/>
+    
+      <category term="浏览器" scheme="http://www.wanglinzhizhi.me/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/"/>
+    
+      <category term="IE" scheme="http://www.wanglinzhizhi.me/tags/IE/"/>
+    
+      <category term="正则" scheme="http://www.wanglinzhizhi.me/tags/%E6%AD%A3%E5%88%99/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Google Material UI 动画的贝叶斯曲线</title>
+    <link href="http://www.wanglinzhizhi.me/2017/01/21/Google%20Material%20UI%20%E5%8A%A8%E7%94%BB%E7%9A%84%E8%B4%9D%E5%8F%B6%E6%96%AF%E6%9B%B2%E7%BA%BF/"/>
+    <id>http://www.wanglinzhizhi.me/2017/01/21/Google Material UI 动画的贝叶斯曲线/</id>
+    <published>2017-01-21T10:51:18.000Z</published>
+    <updated>2017-01-21T10:51:18.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Google-Material-UI-动画的贝叶斯曲线"><a href="#Google-Material-UI-动画的贝叶斯曲线" class="headerlink" title="Google Material UI 动画的贝叶斯曲线"></a>Google Material UI 动画的贝叶斯曲线</h2><figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">animation</span>: <span class="selector-class">.2s</span> <span class="selector-tag">XXX</span>  <span class="selector-tag">cubic-bezier</span>(<span class="selector-class">.4</span>,0,<span class="selector-class">.2</span>,1);</div></pre></td></tr></table></figure>
+<p>XXX是自定义的 动画.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Google-Material-UI-动画的贝叶斯曲线&quot;&gt;&lt;a href=&quot;#Google-Material-UI-动画的贝叶斯曲线&quot; class=&quot;headerlink&quot; title=&quot;Google Material UI 动画的贝叶斯曲线&quot;&gt;&lt;/a&gt;Googl
+    
+    </summary>
+    
+      <category term="CSS" scheme="http://www.wanglinzhizhi.me/categories/CSS/"/>
+    
+    
+      <category term="CSS" scheme="http://www.wanglinzhizhi.me/tags/CSS/"/>
+    
+      <category term="贝叶斯运动曲线" scheme="http://www.wanglinzhizhi.me/tags/%E8%B4%9D%E5%8F%B6%E6%96%AF%E8%BF%90%E5%8A%A8%E6%9B%B2%E7%BA%BF/"/>
+    
+  </entry>
+  
+  <entry>
     <title>深入理解学习Git工作流</title>
     <link href="http://www.wanglinzhizhi.me/2017/01/21/GitFlow/"/>
     <id>http://www.wanglinzhizhi.me/2017/01/21/GitFlow/</id>
@@ -1113,62 +1117,6 @@
       <category term="Git" scheme="http://www.wanglinzhizhi.me/tags/Git/"/>
     
       <category term="Gitflow" scheme="http://www.wanglinzhizhi.me/tags/Gitflow/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Google Material UI 动画的贝叶斯曲线</title>
-    <link href="http://www.wanglinzhizhi.me/2017/01/21/Google%20Material%20UI%20%E5%8A%A8%E7%94%BB%E7%9A%84%E8%B4%9D%E5%8F%B6%E6%96%AF%E6%9B%B2%E7%BA%BF/"/>
-    <id>http://www.wanglinzhizhi.me/2017/01/21/Google Material UI 动画的贝叶斯曲线/</id>
-    <published>2017-01-21T10:51:18.000Z</published>
-    <updated>2017-01-21T10:51:18.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="Google-Material-UI-动画的贝叶斯曲线"><a href="#Google-Material-UI-动画的贝叶斯曲线" class="headerlink" title="Google Material UI 动画的贝叶斯曲线"></a>Google Material UI 动画的贝叶斯曲线</h2><figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">animation</span>: <span class="selector-class">.2s</span> <span class="selector-tag">XXX</span>  <span class="selector-tag">cubic-bezier</span>(<span class="selector-class">.4</span>,0,<span class="selector-class">.2</span>,1);</div></pre></td></tr></table></figure>
-<p>XXX是自定义的 动画.</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;Google-Material-UI-动画的贝叶斯曲线&quot;&gt;&lt;a href=&quot;#Google-Material-UI-动画的贝叶斯曲线&quot; class=&quot;headerlink&quot; title=&quot;Google Material UI 动画的贝叶斯曲线&quot;&gt;&lt;/a&gt;Googl
-    
-    </summary>
-    
-      <category term="CSS" scheme="http://www.wanglinzhizhi.me/categories/CSS/"/>
-    
-    
-      <category term="CSS" scheme="http://www.wanglinzhizhi.me/tags/CSS/"/>
-    
-      <category term="贝叶斯运动曲线" scheme="http://www.wanglinzhizhi.me/tags/%E8%B4%9D%E5%8F%B6%E6%96%AF%E8%BF%90%E5%8A%A8%E6%9B%B2%E7%BA%BF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>IE浏览器的检验</title>
-    <link href="http://www.wanglinzhizhi.me/2017/01/21/IE%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E6%A3%80%E9%AA%8C/"/>
-    <id>http://www.wanglinzhizhi.me/2017/01/21/IE浏览器的检验/</id>
-    <published>2017-01-21T10:51:18.000Z</published>
-    <updated>2017-01-21T10:51:18.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="IE浏览器的检验"><a href="#IE浏览器的检验" class="headerlink" title="IE浏览器的检验"></a>IE浏览器的检验</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line">&lt;script&gt;</div><div class="line">          $(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line"></div><div class="line">          <span class="keyword">var</span> isIE78910=<span class="regexp">/mise/i</span>.test(navigator.userAgent.toLowerCase());</div><div class="line">          <span class="keyword">var</span> isIE11=<span class="regexp">/trident/i</span>.test(navigator.userAgent.toLowerCase());</div><div class="line">          <span class="keyword">var</span> isIE=(isIE78910 || isIE11);</div><div class="line">  </div><div class="line">          <span class="keyword">if</span>(isIE)&#123;</div><div class="line">             <span class="comment">//todo</span></div><div class="line">          &#125;</div><div class="line">          &#125;)();</div><div class="line">      <span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></div></pre></td></tr></table></figure>
-<h2 id="IE8-以及以下的版本检测"><a href="#IE8-以及以下的版本检测" class="headerlink" title="IE8 以及以下的版本检测"></a>IE8 以及以下的版本检测</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> islowIE8=<span class="literal">false</span>;</div><div class="line"><span class="keyword">var</span> isIE=<span class="regexp">/mise/i</span>.test(navigator.userAgent.toLowerCase());</div><div class="line"><span class="keyword">if</span> (isIE) &#123;</div><div class="line">true<span class="keyword">var</span> ieVersion=<span class="regexp">/msie ([\d.]+)/</span>.navigator.userAgent.toLowerCase();</div><div class="line">trueieVersion = <span class="built_in">parseInt</span>(ieVersion);</div><div class="line">trueislowIE8= (ieVersion&gt;<span class="number">8</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (islowIE8)&#123; 	<span class="comment">//&lt;=ie8的情况</span></div><div class="line">true<span class="comment">//todo..</span></div><div class="line">&#125;<span class="keyword">else</span>&#123;		 	<span class="comment">//其他情况</span></div><div class="line">true<span class="comment">//todo..</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;IE浏览器的检验&quot;&gt;&lt;a href=&quot;#IE浏览器的检验&quot; class=&quot;headerlink&quot; title=&quot;IE浏览器的检验&quot;&gt;&lt;/a&gt;IE浏览器的检验&lt;/h2&gt;&lt;figure class=&quot;highlight javascript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;
-    
-    </summary>
-    
-      <category term="web" scheme="http://www.wanglinzhizhi.me/categories/web/"/>
-    
-    
-      <category term="web" scheme="http://www.wanglinzhizhi.me/tags/web/"/>
-    
-      <category term="浏览器" scheme="http://www.wanglinzhizhi.me/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/"/>
-    
-      <category term="IE" scheme="http://www.wanglinzhizhi.me/tags/IE/"/>
-    
-      <category term="正则" scheme="http://www.wanglinzhizhi.me/tags/%E6%AD%A3%E5%88%99/"/>
     
   </entry>
   
@@ -1815,31 +1763,106 @@
   </entry>
   
   <entry>
-    <title>关于safari 浏览器 input圆角的解决方案</title>
-    <link href="http://www.wanglinzhizhi.me/2017/01/21/apple%20safari%20input%20%E6%8C%89%E9%92%AE%E7%9A%84%E5%9C%86%E8%A7%92%E9%97%AE%E9%A2%98/"/>
-    <id>http://www.wanglinzhizhi.me/2017/01/21/apple safari input 按钮的圆角问题/</id>
+    <title>Web 3D技术 的案例分析与探索 (1)</title>
+    <link href="http://www.wanglinzhizhi.me/2017/01/21/Web%203D%E6%8A%80%E6%9C%AF%20%E7%9A%84%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%E4%B8%8E%E6%8E%A2%E7%B4%A2%20(1)/"/>
+    <id>http://www.wanglinzhizhi.me/2017/01/21/Web 3D技术 的案例分析与探索 (1)/</id>
     <published>2017-01-21T10:51:18.000Z</published>
     <updated>2017-01-21T10:51:18.000Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="关于safari-浏览器-input圆角的解决方案"><a href="#关于safari-浏览器-input圆角的解决方案" class="headerlink" title="关于safari 浏览器 input圆角的解决方案"></a>关于safari 浏览器 input圆角的解决方案</h2><p>去除iOS  safari 浏览器的input的圆角问题 去掉默认样式</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">-webkit-appearance</span>: <span class="selector-tag">none</span>;</div></pre></td></tr></table></figure>
-<p>by wanglizhizhi</p>
+    <content type="html"><![CDATA[<h2 id="Web-3D技术-的案例分析与探索-1"><a href="#Web-3D技术-的案例分析与探索-1" class="headerlink" title="Web 3D技术 的案例分析与探索 (1)"></a>Web 3D技术 的案例分析与探索 (1)</h2><p>案例:  <a href="http://admin.bitauto.com/EditorTest/wanglin/wic-tencent/finial/" target="_blank" rel="external">探秘腾讯</a></p>
+<p>我们对其进行了解析, 初步分为5个部分 .</p>
+<p>分别为 </p>
+<ul>
+<li><p>预加载模块 -&gt; <a href="http://admin.bitauto.com/EditorTest/wanglin/wic-tencent/part1-imgolad/part1.html" target="_blank" rel="external">part1</a></p>
+</li>
+<li><p>星空背景模块 -&gt; <a href="http://admin.bitauto.com/EditorTest/wanglin/wic-tencent/part2/part2.html" target="_blank" rel="external">part2</a></p>
+</li>
+<li><p>手势解除锁定模块- &gt;<a href="http://admin.bitauto.com/EditorTest/wanglin/wic-tencent/part3/part3.html" target="_blank" rel="external">part3</a> </p>
+</li>
+<li><p>惯性运动的3D 模型 -&gt; <a href="http://admin.bitauto.com/EditorTest/wanglin/wic-tencent/part5/fake/index.html" target="_blank" rel="external">part4</a></p>
+</li>
+<li><p>重力感应(陀螺仪) 的3D模型  </p>
+<p>​</p>
+<p>​</p>
+<p>​</p>
+<p>重力感应版</p>
+<p><img src="https://www.yichewx.com/gogs/wanglinzhizhi/wic-tencent/raw/master/readme/QR.png" alt=""></p>
+</li>
+</ul>
+<p><code>预加载</code> 和<code>移动星空</code>  ,以及<code>手势解锁</code> 都是很不错的交互, 也很值得学习吸收, 这里主要研究 <code>Web 3D</code>  相关技术,故略去.</p>
+<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>现在的web 端 3D 技术 我们简单的粗浅的划分可以分为2类.</p>
+<ul>
+<li>伪3D技术 ,通过2维的平面的图,(例如 全景图), 视觉误差等方法实现的 可以乱真的效果的图.</li>
+<li>真3D模型. 通过3D 模型, 提供各个视角的真实的3D物体.</li>
+</ul>
+<p>腾讯  <a href="http://admin.bitauto.com/EditorTest/wanglin/wic-tencent/finial/" target="_blank" rel="external">探秘腾讯</a>  案例中使用的是全景图的方式 ,包括淘宝的<a href="">造物节</a>,以及天猫双11的 <a href="http://invite.jeejoy.com/index.html" target="_blank" rel="external">宇宙邀请函</a> 也都属于第一种(所不同的是全景图的制作方式). </p>
+<h3 id="3D-Web-技术有以下可选技术栈："><a href="#3D-Web-技术有以下可选技术栈：" class="headerlink" title="3D Web 技术有以下可选技术栈："></a>3D Web 技术有以下可选技术栈：</h3><ul>
+<li><p>CSS3（本文所提及的方式）</p>
+</li>
+<li><p>Three.js </p>
+</li>
+<li><p>krpano（为全景而生，低级浏览器则回退到 Flash）</p>
+</li>
+<li><p>A-frame</p>
+<p>​</p>
+<p>当然，也许还有其他的:)</p>
+<p>​</p>
+<p>恩,以上几个方向也是我们现在正在进军研究方向.</p>
+<p>​</p>
+<p>:)</p>
+</li>
+</ul>
+<h2 id="关于实现"><a href="#关于实现" class="headerlink" title="关于实现"></a>关于实现</h2><p>看图说话, </p>
+<p><img src="https://www.yichewx.com/gogs/wanglinzhizhi/wic-tencent/raw/master/readme/cube.png" alt=""></p>
+<p>我们构造出这么个模型,3D 的六面体. 我们加上<code>惯性运动</code> 之后, 这个六面体就可以随着 <code>手指(/或鼠标)的滑动</code>  / <code>鼠标滑动</code> , 像这样 <a href="http://admin.bitauto.com/EditorTest/wanglin/wic-tencent/part5/fake/index.html" target="_blank" rel="external">CUBE</a>  . </p>
+<p>恩,这貌似和我们需要的3D 效果,和 那种辽阔感没多大关系.  恩,加几个参数</p>
+<ul>
+<li><p>我们需要把我们的魔方放大10-100倍,</p>
+</li>
+<li><p>然后想想一下我们在魔方内部, 六个面不是色彩颜色,而是完整的图片背景(比如宇宙背景).</p>
+<p>​</p>
+</li>
+</ul>
+<p>所以我么看到的就是 这样: <a href="http://admin.bitauto.com/EditorTest/wanglin/wic-tencent/part4/" target="_blank" rel="external">星空</a></p>
+<p>done :)</p>
+<p>实现的另一部分 : UI </p>
+<h3 id="关于UI层的实现"><a href="#关于UI层的实现" class="headerlink" title="关于UI层的实现"></a>关于UI层的实现</h3><p> 我们会思考,这样的场景搭建 会需要极高的ＵＩ设计成本，需要专业的设备来构造这样的３Ｄ立体空间的环境吗？ </p>
+<p>答案是: 不会.</p>
+<p>针对 腾讯案例 来说明, 通过解析, 可以发现,可以拆解重新组装一下之后是这样</p>
+<p>如图:</p>
+<p><img src="https://www.yichewx.com/gogs/wanglinzhizhi/wic-tencent/raw/master/readme/xingkong.jpg" alt=""></p>
+<p>恩,就是一张可以展开成6面的<strong>平面图</strong> ,  没有特殊角度拉伸,没有特殊形变的单纯的平面图 .  只不过 大小 为….6721x1136. 仅此而已. 在设计成本上,并没有任何附加. 这是魔方实现方法的 优点之一.</p>
+<p>那么,我们需要做的是, 想象力:)</p>
+<p>从设计角度来看,我们的画布从以前的640x11366, 到3D空间环境中的 8000x8000 甚至更大.</p>
+<p> 如何运用和调度空间以及如何闭合空间是重点. </p>
+<p>腾讯给出的答案是<code>广度上 的扩充</code> , 阿里的 造物节是<code>广度 的扩充</code> , 宇宙邀请函是 <code>深度上 纵向</code> 的深入. 都很很有想象力的思路. </p>
+<p>提一个正确的问题 </p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line">当画布空间扩展到8000<span class="selector-tag">x8000</span> 的时候 , 怎么挥霍空间?</div><div class="line"></div><div class="line"><span class="selector-pseudo">:)</span></div></pre></td></tr></table></figure>
+<p>以上是基于立方体模型的实现(我们可以成为魔方),  至于基于 <code>Three.Js</code> ,<code>WebGL</code>  甚至 <code>Web VR</code> 等其他技术栈的实现方法, 敬请期待我们 组 小伙伴们的 研究成果.  :)</p>
+<p>Git: <a href="https://www.yichewx.com/gogs/wanglinzhizhi/wic-tencent" target="_blank" rel="external">https://www.yichewx.com/gogs/wanglinzhizhi/wic-tencent</a></p>
+<p>by wanglinzhizhi</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>作为系列的第一篇, 一个拉风的结语是必须的</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Hello, new world</div><div class="line"></div><div class="line">:)</div></pre></td></tr></table></figure>
+<p>前端开发部 </p>
+<p>by wanglinzhizhi</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;关于safari-浏览器-input圆角的解决方案&quot;&gt;&lt;a href=&quot;#关于safari-浏览器-input圆角的解决方案&quot; class=&quot;headerlink&quot; title=&quot;关于safari 浏览器 input圆角的解决方案&quot;&gt;&lt;/a&gt;关于safari 浏览
+      &lt;h2 id=&quot;Web-3D技术-的案例分析与探索-1&quot;&gt;&lt;a href=&quot;#Web-3D技术-的案例分析与探索-1&quot; class=&quot;headerlink&quot; title=&quot;Web 3D技术 的案例分析与探索 (1)&quot;&gt;&lt;/a&gt;Web 3D技术 的案例分析与探索 (1)&lt;/h2&gt;&lt;
     
     </summary>
     
-      <category term="CSS" scheme="http://www.wanglinzhizhi.me/categories/CSS/"/>
+      <category term="web" scheme="http://www.wanglinzhizhi.me/categories/web/"/>
     
     
-      <category term="CSS3" scheme="http://www.wanglinzhizhi.me/tags/CSS3/"/>
+      <category term="Web 3D" scheme="http://www.wanglinzhizhi.me/tags/Web-3D/"/>
     
       <category term="移动Web" scheme="http://www.wanglinzhizhi.me/tags/%E7%A7%BB%E5%8A%A8Web/"/>
     
-      <category term="iOS" scheme="http://www.wanglinzhizhi.me/tags/iOS/"/>
+      <category term="wanglinzhizhi" scheme="http://www.wanglinzhizhi.me/tags/wanglinzhizhi/"/>
+    
+      <category term="CSS3引擎" scheme="http://www.wanglinzhizhi.me/tags/CSS3%E5%BC%95%E6%93%8E/"/>
     
   </entry>
   
