@@ -1,0 +1,1531 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>wanglinzhizhi</title>
+  <subtitle>Hi, wanglinzhizhi</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yichewx.com/"/>
+  <updated>2016-12-13T01:49:30.000Z</updated>
+  <id>http://yichewx.com/</id>
+  
+  <author>
+    <name>wanglinzhizhi</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>QQ浏览器X5内核问题汇总</title>
+    <link href="http://yichewx.com/2016/12/13/cc/QQ%E6%B5%8F%E8%A7%88%E5%99%A8X5%E5%86%85%E6%A0%B8%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/"/>
+    <id>http://yichewx.com/2016/12/13/cc/QQ浏览器X5内核问题汇总/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="QQ浏览器X5内核问题汇总"><a href="#QQ浏览器X5内核问题汇总" class="headerlink" title="QQ浏览器X5内核问题汇总"></a>QQ浏览器X5内核问题汇总</h2><p>23 September 2015</p>
+<p>重要更新，X5内核即将更新为Blink内核，到时候下面的这些问题将全部被修复。</p>
+<p>X5内核开发团队也给开发者们提供了不少指引，推荐关注： <a href="http://x5.tencent.com/guide?id=2001" target="_blank" rel="external">http://x5.tencent.com/guide?id=2001</a></p>
+<p>@2016-04-05</p>
+<p><br><br><br><br><br></p>
+<p>## </p>
+<p>常常被人问及微信中使用的X5内核的问题，其实我也不是很清楚，只知道它是基于android 4.2的webkit，版本号是webkit 534。今天正好从X5团队拿到了一份问题汇总，梳理下发出来，给各位开发者以参考——不排除明天会删除这篇文章的可能。</p>
+<p><br></p>
+<p>1.Android WebView常见问题及解决方案汇总：</p>
+<p><a href="http://blog.csdn.net/t12x3456/article/details/13769731" target="_blank" rel="external">http://blog.csdn.net/t12x3456/article/details/13769731</a></p>
+<p><br></p>
+<p>2.请问各位碰到过X5浏览器内，局部滑动使用iscroll卡顿的问题么？</p>
+<p>回答：是使用 iscroll.js 这个JS去滚动么？如果只是为了产生滚动，建议使用 overflow 属性来，目前有一种滚动优化在线上版本效率不是太好，通过JS去改变CSS的属性产生滚动</p>
+<p><br></p>
+<p>3.调用：<code>-webkit-filter: blur(10px);filter: blur(10px);</code>在Android下 背景图没有blur掉，只是被单纯的放大而已</p>
+<p>回答：<code>-webkit-filter</code>目前还不支持，可以先用图片替换的方式 后续版本会支持这个属性</p>
+<p><br></p>
+<p>4.shadowBlur是阴影效果吧，我们是想实现图片毛玻璃</p>
+<p>回答： <a href="http://blog.csdn.net/jia20003/article/details/9195915" target="_blank" rel="external">http://blog.csdn.net/jia20003/article/details/9195915</a> 这个有用么</p>
+<p><br></p>
+<p>5.LBS相关，定位频繁失败</p>
+<p>第一步，首先确认定位失败是个别站点原因还是所有站点定位都失败。如果是所有站点定位都不成功，很有可能是内核问题，转内核相关同学跟进调查定位逻辑是否有缺陷；如果是某个站点才会出现的问题，继续第二步排查，从站点源码着手。</p>
+<p>第二步，找到站点请求定位的js代码段，检查获取定位信息函数的options字段，很有可能是 options 中 timeout 字段设置的超时太短导致，建议前端开发将该字段时间设置长一些（建议10s以上）或者不设置该字段。如果js没有设置 timeout 字段的情况下仍然定位不成功，则转内核同学调查内核流程。</p>
+<p>ps：H5获取LBS信息的js接口</p>
+<p>回答：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">navigator.geolocation.getCurrentPosition(showPosition,showError,&#123;  </div><div class="line">    enableHighAccuracy:false，</div><div class="line">    timeout:10*1000,</div><div class="line">    maximumAge:0</div><div class="line">&#125;);</div><div class="line"></div><div class="line">navigator.geolocation.watchPosition(watchPosition,showError,options);</div></pre></td></tr></table></figure>
+<p>showPosition：定位成功时回调；<br>showError：定位出错时回调；<br>options：可选的地理定位请求特征<br>enableHightAccuracy：可选，是否开启高精度模式，参数默认值为 false<br>timeout：可选，单位为ms，浏览器需要在该时间段内完成定位，否则定位失败，默认值为 - - infinity，无穷大。如果该值设置较小，会有很高的定位失败率。<br>maximumAge：可选，单位ms，重新计算位置的时间间隔。默认为0，即每次时时计算位置信息。</p>
+<p><br></p>
+<p>6.打开视频播放，后退视频仍然在播放</p>
+<p>回答：部分机型，浏览页面时打开视频播放，点击返回，页面上的视频仍然在播放。解决办法是捕获后退事件，主动调用 onHideCustomView() 方法，并且在该方法里将 onShowCustomView 里关联的view解除关联</p>
+<p><br></p>
+<p>7.请问一下微信浏览器的cookie清理机制是怎么样的？</p>
+<p>回答：X5内核是不会清除的。</p>
+<p><br></p>
+<p>8.打开WWW页面，缩放显示的问题</p>
+<p>回答： 使用webview打开www页面，如果页面被放大显示，确定websettings有没有设置，<code>webSettings.setUseWideViewPort（true</code>），默认为false，www页面不会被缩放显示的。手机QQ浏览器默认为true，显示www页面更美观</p>
+<p><br></p>
+<p>9.关于滚动时候动画的问题</p>
+<p>回答：</p>
+<p>页面滑动过程中动画不会被触发 页面滑动过程中动画会被停止 这个是X5内核为了做滚动优化而做的限制</p>
+<p><br></p>
+<p>10.关于connection type定义的问题</p>
+<p>回答：X5执行的标准比较老，NetworkInfo_API</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">enum ConnectionType &#123;  </div><div class="line">UNKNOWN = 0,  </div><div class="line">ETHERNET = 1,  </div><div class="line">WIFI = 2,  </div><div class="line">CELL_2G = 3,  </div><div class="line">CELL_3G = 4,  </div><div class="line">CELL_4G = 5,  </div><div class="line">NONE = 6,  </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p><br></p>
+<p>11.出现网络正常，但是页面打不开的情况</p>
+<p>回答：关于设置里面的云加速试下是否可以打开。</p>
+<p><br></p>
+<p>12.js阻塞和css阻塞的不同</p>
+<p>回答：css是阻塞渲染过程，js阻塞解析过程！对于用户来说，没什么区别，都是空白的 js的执行时，如果js中有读写css的属性的代码，并且下载队列中有待加载的css，js执行会被阻塞掉。</p>
+<p><br></p>
+<p>13.cookie的4k限制</p>
+<p>回答：浏览器端cookie的数量可能会超过4k，有http请求时，内核只取前4k的cookie数据！</p>
+<p><br></p>
+<p>14.Js Defer与把js放到html底部的区别</p>
+<p>回答：js defer：先加载，ondownload 后执行。和js放到html底部类似。不同的就是html预扫描到会先加载</p>
+<p><br></p>
+<p>15.首屏显示后，为什么又会重排版</p>
+<p>回答：浏览器的排版宽度受上层ui设置的webview宽度影响。如果webview没设置或者是设置成0，浏览器内核会用默认的排版宽度320px进行排版。此时若webview的宽度值被正常设置，计算出来的排版宽度不是320px（一般是360px），这样浏览器就要用360px宽度，对页面进行重排。</p>
+<p><br></p>
+<p>16.canvas的数量是不是有限制</p>
+<p>回答：</p>
+<ul>
+<li>小于1G的内存， canvas的内存不能超过100M</li>
+<li>1G到2G的内存， canvas的内存不能超过300M</li>
+<li>大于2G的内存 canvas的内存不能超过500M</li>
+<li>为了防止内存占用过多，硬件加速的CANVAS最多支持5个</li>
+</ul>
+<p>小于等于1G内存手机，由于内存没办法精确统计，当达到75M以上，CANVAS数量最多支持20个</p>
+<p>上面说的canvas内存，仅仅是说canvas 长宽计算出来的内存，不包括canavs使用的图片等资源内存</p>
+<p><br></p>
+<p>17.x5浏览器CSS3有些不支持,同样的样式，在chrome里能起到效果，在X5就没用。并且js性能也差的多,微信还内置X5，用起来太不爽</p>
+<p>回答：是否方便具体说下是什么样的性能问题和css样式缺陷影响到您？我们这边可以跟进查看下原因。</p>
+<p>X5内核也在不断改进，您的反馈可以帮助我们进一步优化。</p>
+<p>chrome在标准的支持和性能优化方面确实目前走在业界前面，不过android系统的碎片化，android系统webview更是碎片化严重。</p>
+<p>android系统上的web开发可能也需要考虑到不同rom的兼容情况。X5内核致力于为开发者提供统一的web体验，并通过不断的优化，来向业界标准对齐。</p>
+<p>目前我们也在做基于chromium内核的研究工作，后续在标准的支持和性能上会有进一步提高。</p>
+<p><br></p>
+<p>18.请问下x5中js调用android怎么实现？</p>
+<p>回答：跟系统内核下一样，都借助 addjavainterface 实现</p>
+<p><br></p>
+<p>19.请问一下，android手机微信上用的x5支持webgl吗？</p>
+<p>回答：android手机中微信上的X5都是支持webgl的，不过部分机型上还有兼容性问题，由于兼容性问题，webgl之前我们是采用软绘的方式支持,目前切换到了硬绘，但整体来说还是会有兼容性和性能问题,后续这块还会持续更新</p>
+<p><br></p>
+<p>20.如果在某个设备第一次打开应用的时候 没有网络，x5内核可以启动吗？单网络恢复后还要再次认证，还是 不用在认证？</p>
+<p>回答：第一次打开应用是不会拉起X5的 在第二次打开之后 不管有无网络都可以拉起</p>
+<p><br></p>
+<p>21.如果我不安装浏览器，安装微信，x5能调用起来吗?</p>
+<p>回答：不能，只能安装QQ浏览器才能调用</p>
+<p><br></p>
+<p>22.web audio api是否已经支持？</p>
+<p>回答：暂时还不支持</p>
+<p><br></p>
+<p>23.什么时候支持html5的onunload和onbeforeunload事件</p>
+<p>回答：现在是支持html5的 onunload 和 onbeforeunload 事件的</p>
+<p><br></p>
+<p>24.要用X5的内核，必须要用QQ浏览器么？</p>
+<p>回答：目前 SDK 版本是这样的，我们正在预研的版本，手机如果安装了微信或手Q ，其它 app 可以不依赖 QQ浏览器 而共享 x5 内核。</p>
+<p><br></p>
+<p>25.关于svg问题。</p>
+<p>回答：关于SVG的问题：</p>
+<p>关于svg模糊的问题，有2种情况：</p>
+<p>直接访问一个.svg url的页面或者object，embed加入的svg， 出现模糊的问题</p>
+<p>此问题已解决， qq浏览器5.8上已经修复， tbs下个版本也会修复 svg用作background-image, 模糊这个问题是我们目前渲染机制导致不能兼容非标准写法： 在用svg作为background-image的时候， 需要指定background-size， 不然会模糊</p>
+<p>关于svg支持情况： 在5.3之前的qq浏览器不支持svg， 我们会在后台把svg转成一张jpeg图片， 供浏览器显示，5.4及以上版本支持svg，如果遇到被转成图片的问题，需要升级浏览器版本。</p>
+<p><br></p>
+<p>26.请问flexbox近期会支持吗？</p>
+<p>回答：flexbox我们正在做开发支持</p>
+<p><br></p>
+<p>27.x5内核 目前是独立运行的 还是需要安装ＱＱ浏览器？</p>
+<p>回答：sdk是需要QQ浏览器的，微信手Q里的是不需要的</p>
+<p><br></p>
+<p>28.现在X5内核怎么调试？在微信或者手q或者qq浏览器中调试页面</p>
+<p>回答：现在的微信手Q里面的X5还无法通过inspector调试 后期我们会把带有inspector调试的版本挂在开发者后台下载区 敬请期待</p>
+<p><br></p>
+<p>29.请问x5支持webgl的所有接口吗？能在所有版本的android机（4.0+)和ios机(5.0+)上运行webgl吗？</p>
+<p>回答：webgl目前是支持的，不过部分机型上还有兼容性问题</p>
+<p><br></p>
+<p>30.X5上支持哪些扩展？支持多少个纹理单元？</p>
+<p>回答：X5上只能支持：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">WEBGL_lose_context  </div><div class="line">EXT_texture_filter_anisotropic  </div><div class="line">OES_texture_float  </div><div class="line">OES_standard_derivatives  </div><div class="line">OES_vertex_array_object  </div><div class="line">WEBGL_debug_renderer_info  </div><div class="line">WEBGL_debug_shaders  </div><div class="line">WEBKIT_WEBGL_compressed_texture_s3tc</div></pre></td></tr></table></figure>
+<p>而且这些是必须手机GPU有对应的扩展指令才行的。</p>
+<p>关于纹理单元。我们这边没有限制</p>
+<p>上面的扩展，也都是基本每一个对应opengl的一个扩展</p>
+<p>支持多少纹理单元，也是从opengl查询得到的。</p>
+<p>主要应该是看手机GPU支持到啥程度，我们是做个对接。</p>
+<p><br></p>
+<p>31.x5的文件分片功能解决了吗，<code>blob = file.webkitSlice(start, stop)</code>,这样分片出来的blob用不了啊。</p>
+<p>回答：分片问题这边已经定位处理，浏览器会在5.8版本修复</p>
+<p><br></p>
+<p>32.手机qq浏览器是否有调试工具呢？</p>
+<p>回答：有的，Inspector。</p>
+<p><br></p>
+<p>33.请问现在微信调用的手机QQ浏览器支持websocket 吗？</p>
+<p>回答：支持websocket ，暂不支持wss，不支持webrtc</p>
+<p><br></p>
+<p>34.有计划支持webRTC吗？</p>
+<p>回答：这个我们后续会评估的。</p>
+<p><br></p>
+<p>35.我是HTML5游戏开发者，制作中的H5游戏需要有音乐音效。但是我在android机器上使用QQ浏览器出现了如下问题：</p>
+<p>循环播放BGM时，如果同时播放音效，BGM会被强行暂停 多个音效同时播放时，会出现明显的无法忍受的延迟和播放失败 这个问题在同一台机器的微信上同样存在，但是同一台机器的chrome没有这个问题。</p>
+<p>我能想到的最合理的解释是：X5内核同一时间只能播放一个音频通道。</p>
+<p>希望官方能解答我的疑惑和遇到的问题，谢谢。</p>
+<p>PS：</p>
+<ul>
+<li>使用的H5音频库 : SoundJS</li>
+<li>使用的音频格式 : mp3</li>
+<li>使用的Android机型：三星 Note3</li>
+</ul>
+<p>回答：播放音效需要获取声音输出焦点，目前只支持同时播放一个音效 您提的需求我们会讨论评估后期是否能有方案现</p>
+<p><br></p>
+<p>36.播放音效时，为啥会把我后台的BGM播放给暂停掉？</p>
+<p>回答：播放声音时当前音频需要获取 audiofocus ，系统在audiofocus丢失时会通知其它音频播放软件，这个暂停应该是播放软件自身的行为，我们本身并没有暂停后台音频，只是向系统申请了 audiofocus</p>
+<p><br></p>
+<p>37.300ms延迟是指什么？click 和 touch ?</p>
+<p>回答：touch 点击之后，到 click 事件被触发，click 事件有延迟，touch 不存在，用 touchstart 事件替代 click 事件就OK</p>
+<p><br></p>
+<p>38.现在微信内置的浏览器能支持flexbox么，现在有没有什么好办法能够替代呢？做好的网页一放到微信上，大量的flex的页面</p>
+<p>回答：你好flexbox正在开发支持，flexbox在android4.1到4.3系统内核上，也有类似问题，页面是需要兼容的</p>
+<p><br></p>
+<p>39.有没有什么x5内核的论坛或者wiki之类的？可以参考下。</p>
+<p>回答：<a href="http://bbs.browser.qq.com/" target="_blank" rel="external">http://bbs.browser.qq.com/</a> <a href="http://x5.tencent.com/" target="_blank" rel="external">http://x5.tencent.com/</a> 这两个论坛可以关注下</p>
+<p>另外有我们的公众账号 有问题可以随时交流</p>
+<p><br></p>
+<p>40.X5公众号叫什么？</p>
+<p>回答：腾讯X5浏览服务</p>
+<p><br></p>
+<p>41.手q上面的内核应该也是x5的吧？这样直接在手q上面的效果和在微信里面应该是一样的？</p>
+<p>回答：是的手Q微信内的webview都是X5。</p>
+<p><br></p>
+<p>42.x5不支持font-face吗？</p>
+<p>回答：支持</p>
+<p><br></p>
+<p>43.x5 支持flex吗？有兼容性文档吗？</p>
+<p>回答：不支持.<a href="http://1.h5support.sinaapp.com/incoming/cow.html" target="_blank" rel="external">http://1.h5support.sinaapp.com/incoming/cow.html</a></p>
+<p>这个页面是参考caniuse的测试用例得到的测试结果，5.7是对应qq浏览器5.7版本，可以对比下和系统浏览器4.1~.4.4的支持度。有需要的同学可以先参考下，相关的文档建设我们也在逐步完……</p>
+<p><br></p>
+<p>44.iscroll+lazyload在x5浏览器里面卡顿很严重，有人碰到过类似问题么，小米手机 列表内元素200个左右。</p>
+<p>回答：iscroll本身对内核要求比较高，较新的blink版本支持才比较好。可以对比测试下android 4.x 的系统浏览器看看。建议还是在前端做些优化，避免较长的元素，并减少动画效果。<a href="http://www.cnblogs.com/vbluebirdv/archive/2012/11/18/2776300.html" target="_blank" rel="external">http://www.cnblogs.com/vbluebirdv/archive/2012/11/18/2776300.html</a> 可以参考网上一些iscroll调优的文章</p>
+<p><br></p>
+<p>45.微信里面缓存问题，在安卓下和 ios下，刷新机制是不是不一样？</p>
+<p>回答：ios因为有刷新功能，点击之后请求到的都是最新的文件，安卓下，不管怎样请求都不会更新文件</p>
+<p><br></p>
+<p>46.现在微信里面没有假如这个啊？为什么IOS QQ浏览器不识别这个？</p>
+<p>回答：ios内核不是X5， ios 浏览器后续版本也会支持 <a href="http://open.mb.qq.com/doc?id=1201" target="_blank" rel="external">http://open.mb.qq.com/doc?id=1201</a> 目前ios 浏览器仅支持 x5-page-mode</p>
+<p><br></p>
+<p>47.现在白鹭游戏引擎是不是内置在x5里面了？</p>
+<p>回答：内置了白鹭引擎runtime</p>
+<p><br></p>
+<p>48.x5内核不支持 canvas 的 background 属性吗？</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&lt;!doctype html&gt;  </div><div class="line">&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;  </div><div class="line">&lt;head&gt;  </div><div class="line">&lt;meta charset=&quot;utf-8&quot;&gt;  </div><div class="line">&lt;title&gt;canvas test&lt;/title&gt;  </div><div class="line">    &lt;!--&lt;meta HTTP-EQUIV=&quot;pragma&quot; CONTENT=&quot;no-cache&quot;&gt;--&gt;</div><div class="line">    &lt;!--&lt;meta HTTP-EQUIV=&quot;Cache-Control&quot; CONTENT=&quot;no-store, must-revalidate&quot;&gt;--&gt;</div><div class="line">&lt;/head&gt;</div><div class="line"></div><div class="line">&lt;body&gt;  </div><div class="line">&lt;div&gt;  </div><div class="line">    &lt;canvas id=&quot;testCanvas&quot; width=&quot;500&quot; height=&quot;300&quot; style=&quot;background: #00FF00;&quot;&gt;&lt;/canvas&gt;</div><div class="line"></div><div class="line">&lt;!--&lt;canvas id=&quot;testCanvas&quot; width=&quot;1136&quot; height=&quot;640&quot; style=&quot;background:#000&quot;&gt;&lt;/canvas&gt; --&gt;  </div><div class="line">&lt;/div&gt;  </div><div class="line">&lt;/body&gt;  </div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<p>背景颜色显示不出来</p>
+<p>回答：这个是做了优化，当canvas下盖了背景，就没有去绘制背景图片，当初是因为一些手机的GPu在绘制这块，如果存在这种情况绘制非常慢</p>
+<p><br></p>
+<p>49.qq浏览器有没有准备支持asm.js的计划？</p>
+<p>回答：我们也正在筹备相关工作，会对市面上各种游戏引擎进行全面评测并设计合理的架构方案整合。预计下半年可以推出，敬请期待</p>
+<p><br></p>
+<p>50.X5不支持<code>canvas.toDataUrl()</code>的image/jpeg参数，还是转成了默认的png格式请问有什么替换方法吗？</p>
+<p>回答：当前确实还不支持…我们在修复</p>
+<p><br></p>
+<p>51.问一下 ios版的微信里面是用的系统自带的UIWebView还是用的qq浏览器的内核？</p>
+<p>回答：ios版微信里面用的是系统自带的</p>
+<p><br></p>
+<p><br></p>
+<p><br></p>
+<p><br></p>
+<p><a href="https://www.qianduan.net/author/shenfei/" target="_blank" rel="external">神飞</a>爱好前端设计与开发，崇尚一目了然的设计。现居深圳/广州，就职于腾讯微信设计团队。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;QQ浏览器X5内核问题汇总&quot;&gt;&lt;a href=&quot;#QQ浏览器X5内核问题汇总&quot; class=&quot;headerlink&quot; title=&quot;QQ浏览器X5内核问题汇总&quot;&gt;&lt;/a&gt;QQ浏览器X5内核问题汇总&lt;/h2&gt;&lt;p&gt;23 September 2015&lt;/p&gt;
+&lt;p&gt;重
+    
+    </summary>
+    
+      <category term="Web前端" scheme="http://yichewx.com/categories/Web%E5%89%8D%E7%AB%AF/"/>
+    
+    
+      <category term="Web前端" scheme="http://yichewx.com/tags/Web%E5%89%8D%E7%AB%AF/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>-webkit-backface-visibility</title>
+    <link href="http://yichewx.com/2016/12/13/-webkit-backface-visibility/"/>
+    <id>http://yichewx.com/2016/12/13/-webkit-backface-visibility/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="webkit-backface-visibility"><a href="#webkit-backface-visibility" class="headerlink" title="-webkit-backface-visibility"></a>-webkit-backface-visibility</h2><figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">-webkit-backface-visibility</span><span class="selector-pseudo">:hidden</span></div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;webkit-backface-visibility&quot;&gt;&lt;a href=&quot;#webkit-backface-visibility&quot; class=&quot;headerlink&quot; title=&quot;-webkit-backface-visibility&quot;&gt;&lt;/a&gt;-webkit
+    
+    </summary>
+    
+      <category term="web" scheme="http://yichewx.com/categories/web/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>CSS vertical-align 属性</title>
+    <link href="http://yichewx.com/2016/12/13/CSS%20vertical-align%20%E5%9E%82%E7%9B%B4%E6%96%B9%E5%90%91%E5%A4%9A%E8%A1%8C%E6%96%87%E6%9C%AC%E7%9A%84%E5%B1%85%E4%B8%AD%20/"/>
+    <id>http://yichewx.com/2016/12/13/CSS vertical-align 垂直方向多行文本的居中 /</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="CSS-vertical-align-属性"><a href="#CSS-vertical-align-属性" class="headerlink" title="CSS vertical-align 属性"></a>CSS vertical-align 属性</h2><figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">div</span>&#123;</div><div class="line">  </div><div class="line">true<span class="attribute">vertical-align</span>:middle	<span class="comment">/*把此元素放置在父元素的中部。*/</span></div><div class="line">  	display:table-cell;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;CSS-vertical-align-属性&quot;&gt;&lt;a href=&quot;#CSS-vertical-align-属性&quot; class=&quot;headerlink&quot; title=&quot;CSS vertical-align 属性&quot;&gt;&lt;/a&gt;CSS vertical-align 属性&lt;/
+    
+    </summary>
+    
+      <category term="web" scheme="http://yichewx.com/categories/web/"/>
+    
+    
+      <category term="CSS" scheme="http://yichewx.com/tags/CSS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HACK 主站的样式</title>
+    <link href="http://yichewx.com/2016/12/13/HACK%20%E4%B8%BB%E7%AB%99%E6%A0%B7%E5%BC%8F/"/>
+    <id>http://yichewx.com/2016/12/13/HACK 主站样式/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="HACK-主站的样式"><a href="#HACK-主站的样式" class="headerlink" title="HACK 主站的样式"></a>HACK 主站的样式</h2><p>主站的样式,由于和我们使用的单位制不同, 所以在使用rem标准的 时候,会出现问题. 需要hack<code>主站的头尾</code>的样式.</p>
+<h2 id="headerNew"><a href="#headerNew" class="headerlink" title="headerNew"></a>headerNew</h2><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&lt;!--头尾样式--&gt;</div><div class="line">&lt;!--#include file=&quot;/ushtml/0000/myiche2016_cube_headerandfooter-1188.shtml&quot;--&gt;</div><div class="line"></div><div class="line"></div><div class="line">&lt;!--页头通用文件开始 --&gt;</div><div class="line">  &lt;div id=&quot;m_header&quot;&gt;</div><div class="line">        &lt;!-- header start --&gt;</div><div class="line">        &lt;div class=&quot;op-nav&quot;&gt;</div><div class="line">            &lt;a href=&quot;http://m.yiche.com&quot; class=&quot;btn-return&quot;&gt;返回&lt;/a&gt;</div><div class="line">            &lt;div class=&quot;tt-name&quot;&gt;</div><div class="line">              &lt;a href=&quot;http://m.yiche.com/&quot; class=&quot;yiche-logo&quot;&gt;汽车&lt;/a&gt;</div><div class="line">              &lt;h1&gt;专题&lt;/h1&gt;</div><div class="line">          	&lt;/div&gt;</div><div class="line">         &lt;!--#include file=&quot;/include/pd/2016/wap/00001/201607_wap_common_ejdht_Manual.shtml&quot;--&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">        &lt;div class=&quot;op-nav-mark&quot; style=&quot;display:none;&quot;&gt;&lt;/div&gt;</div><div class="line">        &lt;!-- header end --&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;!--页头通用文件结束 --&gt;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">  &lt;!--页尾文件开始 --&gt;</div><div class="line">      &lt;div id=&quot;m_footer&quot;&gt;</div><div class="line">  		&lt;!-- 新页底开始 --&gt;</div><div class="line">  		&lt;!-- footer start --&gt;</div><div class="line">  		&lt;div class=&quot;footer15&quot;&gt;</div><div class="line">  			&lt;!--搜索框--&gt;</div><div class="line">  			&lt;!--#include file=&quot;/ushtml/block/so/mobile/MobileSugBottom_chexing_noBom.shtml&quot;--&gt;</div><div class="line">  			&lt;!--页底内容--&gt;</div><div class="line">  			&lt;!--#include file=&quot;/include/pd/2016/wap/00001/201607_wap_common_footer_Manual.shtml&quot;--&gt;</div><div class="line">  		&lt;/div&gt;</div><div class="line">  		&lt;!-- footer end --&gt;</div><div class="line">  		&lt;!-- 新页底结束 --&gt;</div><div class="line">  		&lt;!--#include file=&quot;/zhuanti/adtopic/include/201511_m.shtml&quot;--&gt;</div><div class="line">  	&lt;/div&gt;</div><div class="line">  	&lt;!--页尾文件结束 --&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"></div><div class="line">/*HACK header new*/</div><div class="line"></div><div class="line">div#m_footer &#123;</div><div class="line">    font-size: 14px  !important</div><div class="line">    line-height: initial  !important;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.menu-pop-n .yiche-login, .menu-pop-n .yiche-logout&#123;</div><div class="line">    font-size: 14px !important;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.op-nav&#123;</div><div class="line">  font-size:  16px !important;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.op-nav .btn-menu-p&#123;</div><div class="line">      font-size: 16px !important;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.op-nav .tt-name&#123;</div><div class="line">  font-size: 17px !important;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.op-nav .tt-name h1&#123;</div><div class="line">  height: 44px !important;</div><div class="line">  line-height: 44px !important;</div><div class="line">  font-size:15px !important;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.menu-nav-n a&#123;</div><div class="line">  font-size: 16px !important;</div><div class="line">truetext-decoration: none !important;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.op-nav .btn-menu-p&#123;</div><div class="line">truetext-decoration: none !important;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.op-nav .btn-menu-p span&#123;</div><div class="line">    font-size: 14px !important;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.footer15 .opt-change&#123;</div><div class="line">    font-size: 14px !important;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.footer15 .foot-contact&#123;</div><div class="line">  font-size: 12px !important;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.footer15 .foot-copyright&#123;</div><div class="line">  font-size: 12px !important;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.footer15 .foot-contact a&#123;</div><div class="line">  font-size: 14px !important;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.m-s-box input[type=&quot;text&quot;], .m-s-box input[type=&quot;search&quot;]&#123;</div><div class="line">  font-size: 15px !important;</div><div class="line">  -webkit-appearance: none !important;</div><div class="line">&#125;</div><div class="line"></div><div class="line">#app_download&#123;display: none;&#125;</div></pre></td></tr></table></figure>
+<p>Tips: 这么写了之后,最好还是放到的测试的那个地址上试一下. 看看有没有什么问题.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;HACK-主站的样式&quot;&gt;&lt;a href=&quot;#HACK-主站的样式&quot; class=&quot;headerlink&quot; title=&quot;HACK 主站的样式&quot;&gt;&lt;/a&gt;HACK 主站的样式&lt;/h2&gt;&lt;p&gt;主站的样式,由于和我们使用的单位制不同, 所以在使用rem标准的 时候,会出
+    
+    </summary>
+    
+      <category term="web" scheme="http://yichewx.com/categories/web/"/>
+    
+    
+      <category term="web" scheme="http://yichewx.com/tags/web/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>IE浏览器的检验</title>
+    <link href="http://yichewx.com/2016/12/13/IE%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E6%A3%80%E9%AA%8C/"/>
+    <id>http://yichewx.com/2016/12/13/IE浏览器的检验/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="IE浏览器的检验"><a href="#IE浏览器的检验" class="headerlink" title="IE浏览器的检验"></a>IE浏览器的检验</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line">&lt;script&gt;</div><div class="line">          $(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line"></div><div class="line">          <span class="keyword">var</span> isIE78910=<span class="regexp">/mise/i</span>.test(navigator.userAgent.toLowerCase());</div><div class="line">          <span class="keyword">var</span> isIE11=<span class="regexp">/trident/i</span>.test(navigator.userAgent.toLowerCase());</div><div class="line">          <span class="keyword">var</span> isIE=(isIE78910 || isIE11);</div><div class="line">  </div><div class="line">          <span class="keyword">if</span>(isIE)&#123;</div><div class="line">             <span class="comment">//todo</span></div><div class="line">          &#125;</div><div class="line">          &#125;)();</div><div class="line">      &lt;/script&gt;</div></pre></td></tr></table></figure>
+<h2 id="IE8-以及以下的版本检测"><a href="#IE8-以及以下的版本检测" class="headerlink" title="IE8 以及以下的版本检测"></a>IE8 以及以下的版本检测</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> islowIE8=<span class="literal">false</span>;</div><div class="line"><span class="keyword">var</span> isIE=<span class="regexp">/mise/i</span>.test(navigator.userAgent.toLowerCase());</div><div class="line"><span class="keyword">if</span> (isIE) &#123;</div><div class="line">true<span class="keyword">var</span> ieVersion=<span class="regexp">/msie ([\d.]+)/</span>.navigator.userAgent.toLowerCase();</div><div class="line">trueieVersion = <span class="built_in">parseInt</span>(ieVersion);</div><div class="line">trueislowIE8= (ieVersion&gt;<span class="number">8</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (islowIE8)&#123; 	<span class="comment">//&lt;=ie8的情况</span></div><div class="line">true<span class="comment">//todo..</span></div><div class="line">&#125;<span class="keyword">else</span>&#123;		 	<span class="comment">//其他情况</span></div><div class="line">true<span class="comment">//todo..</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;IE浏览器的检验&quot;&gt;&lt;a href=&quot;#IE浏览器的检验&quot; class=&quot;headerlink&quot; title=&quot;IE浏览器的检验&quot;&gt;&lt;/a&gt;IE浏览器的检验&lt;/h2&gt;&lt;figure class=&quot;highlight javascript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;
+    
+    </summary>
+    
+      <category term="web" scheme="http://yichewx.com/categories/web/"/>
+    
+    
+      <category term="web" scheme="http://yichewx.com/tags/web/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JavaScript 基础算法</title>
+    <link href="http://yichewx.com/2016/12/13/JS%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/"/>
+    <id>http://yichewx.com/2016/12/13/JS基础算法/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="JavaScript-基础算法"><a href="#JavaScript-基础算法" class="headerlink" title="JavaScript 基础算法"></a>JavaScript 基础算法</h2><hr>
+
+<h3 id="querystring"><a href="#querystring" class="headerlink" title="querystring"></a>querystring</h3><p>解析url</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">queryString</span>(<span class="params">url</span>)</span>&#123;</div><div class="line">true<span class="keyword">if</span>( url.indexOf(<span class="string">'?'</span>) &gt; <span class="number">-1</span> )&#123;</div><div class="line">truetrue<span class="keyword">var</span> arr = url.split(<span class="string">'?'</span>);											<span class="comment">//split 将url分割为两项.以'http://baidu.com?a=b&amp;c=d;'为例,即["http://baidu.com", "a=b&amp;c=d;"]</span></div><div class="line"></div><div class="line">truetrue<span class="keyword">var</span> queryString = arr[<span class="number">1</span>];											<span class="comment">//获取arr[1]即获取到参数部分,即为queryString</span></div><div class="line"></div><div class="line">truetrue<span class="keyword">var</span> items = queryString.length ? queryString.split(<span class="string">'&amp;'</span>) : [];		<span class="comment">//以&amp;为分割,将queryString分割为name,value串数组存放在items中.</span></div><div class="line"></div><div class="line"></div><div class="line">truetrue<span class="keyword">var</span> queryObj = &#123;&#125;;</div><div class="line"></div><div class="line">truetrue<span class="keyword">var</span> itemArr,name,value;</div><div class="line">truetrue<span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,len=items.length;i&lt;len;i++)&#123;</div><div class="line"></div><div class="line">truetruetrueitemArr = items[i].split(<span class="string">'='</span>);</div><div class="line">truetruetruename = <span class="built_in">decodeURIComponent</span>(itemArr[<span class="number">0</span>]);</div><div class="line">truetruetruevalue = <span class="built_in">decodeURIComponent</span>(itemArr[<span class="number">1</span>]);</div><div class="line"></div><div class="line">truetruetrue<span class="keyword">if</span>(name.length)&#123;												<span class="comment">//if是为了防止 name为空的情况</span></div><div class="line">truetruetruetruequeryObj[name] = value;										<span class="comment">//设置对象的属性</span></div><div class="line">truetruetrue&#125;</div><div class="line">truetrue&#125;</div><div class="line"></div><div class="line">truetrue<span class="keyword">return</span> queryObj;</div><div class="line"></div><div class="line">true&#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> url = <span class="string">'http://baidu.com?a=100&amp;c=1034'</span>;</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(getQueryString(url)));</div><div class="line"></div><div class="line"><span class="comment">//其中有个需要注意的地方就是URL里面的querystring都是经过编码了的， 所以在取值的时候要先解码decodeURIComponent()</span></div></pre></td></tr></table></figure>
+<hr>
+
+<h3 id="2"><a href="#2" class="headerlink" title="2"></a>2</h3><p>为Array原型中添加一个去重的操作</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// way1</span></div><div class="line"><span class="built_in">Array</span>.prototype.uniqiue=<span class="function"><span class="keyword">function</span>(<span class="params">arr</span>)</span>&#123;</div><div class="line">  arr.sort();</div><div class="line">  <span class="keyword">var</span> i=<span class="number">1</span>,</div><div class="line">      j=<span class="number">0</span>;</div><div class="line">      length=arr.length;</div><div class="line">      arrTemp=[];</div><div class="line">      arrTemp=arrp[<span class="number">0</span>];</div><div class="line">    <span class="keyword">while</span>(i&lt;length)&#123;</div><div class="line">      <span class="keyword">if</span>(arrTemp[j]==arr[i])&#123;</div><div class="line">        i++;</div><div class="line">      &#125;<span class="keyword">else</span>&#123;</div><div class="line">        arrTemp[++j]=arr[i++];</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> arrTemp;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// way2</span></div><div class="line"><span class="built_in">Array</span>.prototype.uniqiue=<span class="function"><span class="keyword">function</span>(<span class="params">arr</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> arrTemp=[];</div><div class="line">  <span class="keyword">var</span> i=<span class="number">0</span>;</div><div class="line">  <span class="keyword">while</span>(i&lt;arr.length)&#123;</div><div class="line">    buf=arr[i];</div><div class="line">    <span class="keyword">var</span> j=<span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">while</span>(j&lt;arrTemp.length)&#123;</div><div class="line">      <span class="keyword">if</span> (arrTemp[j] == buf) &#123;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">      &#125;</div><div class="line">      j++;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (j==arrTemp.length) &#123;</div><div class="line">      arrTemp.push(buf);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    i++;</div><div class="line"></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">return</span> arrTemp;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这道题是阿里某一年前端的面试题. 其实在现实使用中一般不会做这么大的动作去改变Array对象的原型,因为动作太大,保不齐哪里会不会出什么问题. (一言以蔽之, 所有对全局的操作都需要慎重再慎重.) 这道题的主要考点我觉得有两个,一个是对js原型链的理解.另一个是对数组去重的基本算法的考察.解决这道题的方法有很多种算法, 在思考的过程中要兼顾性能最优.</p>
+<h3 id="Fibonacci"><a href="#Fibonacci" class="headerlink" title="Fibonacci"></a>Fibonacci</h3><p>真是在那儿都遇到它.(这其实已经跟JS无关了). 之前的在一篇文章中提到过它的作用(当时比较的是二分查找和fib查找之间的性能比较.) 代码不贴了,可以在那篇文章中找到.两点需要注意:</p>
+<ol>
+<li>打死都不要用递归, 是典型的2^n类型. 会吃光你所有的性能. 无论你的机器性能有多强</li>
+<li>用迭代代替递归. 用三个参数进行叠加就可以了.(甚至两个). 也不要用数组, 三个临时变量或者两个临时变量就够了.(^_^)</li>
+</ol>
+<p>再提一点, 为什么不建议用数组,而采用三个临时变量呢? 原因在于: 数组是存放在内存的栈中, 你看到栈会觉得已经够快了是吧?是挺快的. 但是呢, 临时变量存放在哪儿呢? 寄存器中. 现在知道这个区别了吗?  这个结论的来源是&lt;深入理解计算机系统&gt;, 有兴趣的同学可以去了解下.</p>
+<h3 id="insertAfter"><a href="#insertAfter" class="headerlink" title="insertAfter"></a>insertAfter</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">insertAfter</span>(<span class="params">newEl,targetNode</span>)</span>&#123;<span class="comment">//在目标节点的后面插入节点</span></div><div class="line">true<span class="keyword">var</span> parentNode=targetNode.parentNode;</div><div class="line">true<span class="keyword">if</span> (parentNode.lashChild==targetNode) &#123;</div><div class="line">truetrueparentNode.appendChild(newEl);</div><div class="line">true&#125;<span class="keyword">else</span>&#123;</div><div class="line">truetrueparentNode.insertBefore(newEl,targetNode.nextSubling);</div><div class="line">true&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>基本DOM操作</p>
+<h3 id="sort"><a href="#sort" class="headerlink" title="sort"></a>sort</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sortNmu</span>(<span class="params">a,b</span>) </span>&#123;</div><div class="line">true<span class="keyword">return</span> a-b;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> myarr=[];</div><div class="line">myarr.sort(sortNmu);</div></pre></td></tr></table></figure>
+<p>会快排么?</p>
+<p>(^_^)</p>
+<p>###　sum</p>
+<p>求sum(),参数的长度无限制</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">// Should equal 15</div><div class="line">sum(1, 2, 3, 4, 5);</div><div class="line">// Should equal 0</div><div class="line">sum(5, null, -5);</div><div class="line">// Should equal 10</div><div class="line">sum('1.0', false, 1, true, 1, 'A', 1, 'B', 1, 'C', 1, 'D', 1,</div><div class="line">  'E', 1, 'F', 1, 'G', 1);</div><div class="line">// Should equal 0.3, not 0.30000000000000004</div><div class="line">sum(0.1, 0.2);</div><div class="line">*/</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> nResult = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, l = <span class="built_in">arguments</span>.length; i &lt; l; i++) &#123;</div><div class="line">        nResult += <span class="built_in">window</span>.parseFloat(<span class="built_in">arguments</span>[i]) || <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> nResult.toFixed(<span class="number">3</span>) * <span class="number">1000</span> / <span class="number">1000</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这好像也是阿里某年的一道笔试题. 这道题我觉得有意思的地方在于对于各种异常输入情况的处理,以及对结果的处理.另外对于js基础部分是对arguments 的了解.</p>
+<p>###　正则匹配</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line">/^(\w+[_|\.|\_]?)*(\w)+@(\w+[_|\.|\_])*(\w)+\.[a-zA-z]&#123;<span class="number">2</span>,<span class="number">4</span>&#125;$/.test(<span class="string">"wanglinzhizhi@hotmail.com"</span>);</div></pre></td></tr></table></figure>
+<h3 id="loading…"><a href="#loading…" class="headerlink" title="loading….."></a>loading…..</h3><p>晚安,地球</p>
+<p>by wanglinzhizhi</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;JavaScript-基础算法&quot;&gt;&lt;a href=&quot;#JavaScript-基础算法&quot; class=&quot;headerlink&quot; title=&quot;JavaScript 基础算法&quot;&gt;&lt;/a&gt;JavaScript 基础算法&lt;/h2&gt;&lt;hr&gt;
+
+&lt;h3 id=&quot;queryst
+    
+    </summary>
+    
+      <category term="算法" scheme="http://yichewx.com/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="js" scheme="http://yichewx.com/tags/js/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Object.keys()</title>
+    <link href="http://yichewx.com/2016/12/13/Object.keys()/"/>
+    <id>http://yichewx.com/2016/12/13/Object.keys()/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Object-keys"><a href="#Object-keys" class="headerlink" title="Object.keys()"></a>Object.keys()</h2><p>假设有个对象obj,并且我们不知道这个obj有哪些属性, 如何获取这些属性名,并输出相对应的属性值.</p>
+<p>A:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Object.keys(obj);</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Object-keys&quot;&gt;&lt;a href=&quot;#Object-keys&quot; class=&quot;headerlink&quot; title=&quot;Object.keys()&quot;&gt;&lt;/a&gt;Object.keys()&lt;/h2&gt;&lt;p&gt;假设有个对象obj,并且我们不知道这个obj有哪些属性, 如
+    
+    </summary>
+    
+      <category term="JS" scheme="http://yichewx.com/categories/JS/"/>
+    
+    
+      <category term="js" scheme="http://yichewx.com/tags/js/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>chrome远端调试</title>
+    <link href="http://yichewx.com/2016/12/13/chrome%E8%BF%9C%E7%AB%AF%E8%B0%83%E8%AF%95/"/>
+    <id>http://yichewx.com/2016/12/13/chrome远端调试/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">微信web开发者工具.exe --remote-debugging-port=9222</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;微信web开发者工具.exe --remote-debugging-port=9222&lt;/div&gt;&lt;/pre&gt;&lt;/t
+    
+    </summary>
+    
+      <category term="web" scheme="http://yichewx.com/categories/web/"/>
+    
+    
+      <category term="web" scheme="http://yichewx.com/tags/web/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://yichewx.com/2016/12/13/hello-world/"/>
+    <id>http://yichewx.com/2016/12/13/hello-world/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>轻击的时候不显示默认的atived状态</title>
+    <link href="http://yichewx.com/2016/12/13/highlight/"/>
+    <id>http://yichewx.com/2016/12/13/highlight/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="轻击的时候不显示默认的atived-状态"><a href="#轻击的时候不显示默认的atived-状态" class="headerlink" title="轻击的时候不显示默认的atived  状态"></a>轻击的时候不显示默认的atived  状态</h2><p>-webkit-tap-highlight-color </p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">-webkit-tap-highlight-color</span>: <span class="selector-tag">rgba</span>(0,0,0,0);</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;轻击的时候不显示默认的atived-状态&quot;&gt;&lt;a href=&quot;#轻击的时候不显示默认的atived-状态&quot; class=&quot;headerlink&quot; title=&quot;轻击的时候不显示默认的atived  状态&quot;&gt;&lt;/a&gt;轻击的时候不显示默认的atived  状态&lt;/h2
+    
+    </summary>
+    
+      <category term="移动web" scheme="http://yichewx.com/categories/%E7%A7%BB%E5%8A%A8web/"/>
+    
+    
+      <category term="CSS3" scheme="http://yichewx.com/tags/CSS3/"/>
+    
+  </entry>
+  
+  <entry>
+    <title> PC 修改表单的highlight </title>
+    <link href="http://yichewx.com/2016/12/13/input%20%E8%A1%A8%E5%8D%95%E7%9B%B8%E5%85%B3/"/>
+    <id>http://yichewx.com/2016/12/13/input 表单相关/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="PC-修改表单的highlight"><a href="#PC-修改表单的highlight" class="headerlink" title="PC 修改表单的highlight"></a>PC 修改表单的highlight</h2><figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">input</span><span class="selector-attr">[type="text"]</span> &#123;</div><div class="line">    <span class="attribute">border-radius</span>: <span class="number">20px</span>;</div><div class="line">    <span class="attribute">border</span>:<span class="number">1px</span> solid;</div><div class="line">    <span class="attribute">outline</span>: none;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="selector-tag">input</span><span class="selector-class">.input-add</span><span class="selector-pseudo">:active</span> &#123;</div><div class="line">    <span class="attribute">border-radius</span>: <span class="number">20px</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-tag">input</span><span class="selector-class">.input-add</span><span class="selector-pseudo">:focus</span> &#123;</div><div class="line">    <span class="attribute">border-radius</span>: <span class="number">20px</span>;</div><div class="line">    <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#3F51B5</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-tag">input</span><span class="selector-class">.input-add</span> &#123;</div><div class="line">    <span class="attribute">border</span>: <span class="number">1px</span> solid red;</div><div class="line">    <span class="attribute">border-radius</span>: <span class="number">20px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">outline</span><span class="selector-pseudo">:none</span></div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;PC-修改表单的highlight&quot;&gt;&lt;a href=&quot;#PC-修改表单的highlight&quot; class=&quot;headerlink&quot; title=&quot;PC 修改表单的highlight&quot;&gt;&lt;/a&gt;PC 修改表单的highlight&lt;/h2&gt;&lt;figure class
+    
+    </summary>
+    
+      <category term="web" scheme="http://yichewx.com/categories/web/"/>
+    
+    
+      <category term="CSS" scheme="http://yichewx.com/tags/CSS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>js 常用工具</title>
+    <link href="http://yichewx.com/2016/12/13/js%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/"/>
+    <id>http://yichewx.com/2016/12/13/js常用工具/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="JS-常用工具"><a href="#JS-常用工具" class="headerlink" title="JS 常用工具"></a>JS 常用工具</h2><h3 id="json-格式监测工具"><a href="#json-格式监测工具" class="headerlink" title="json 格式监测工具"></a>json 格式监测工具</h3><p><a href="http://jsonlint.com/" target="_blank" rel="external">http://jsonlint.com/</a>  </p>
+<h3 id="jshint"><a href="#jshint" class="headerlink" title="jshint"></a>jshint</h3><p><a href="http://jshint.com/" target="_blank" rel="external">http://jshint.com/</a></p>
+<p>大名鼎鼎的jshint  同类型的,还有jslint ,当然可以作为插件安装到vscode atom等编辑器.</p>
+<h3 id="jsbin"><a href="#jsbin" class="headerlink" title="jsbin"></a>jsbin</h3><p><a href="http://jsbin.com/riyitapoho/1/" target="_blank" rel="external">http://jsbin.com/riyitapoho/1/</a></p>
+<p>js在线调试工具</p>
+<h3 id="postman"><a href="#postman" class="headerlink" title="postman"></a>postman</h3><p>ajax 必备神器 谷歌插件 </p>
+<p><img src="img/postman.png" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;JS-常用工具&quot;&gt;&lt;a href=&quot;#JS-常用工具&quot; class=&quot;headerlink&quot; title=&quot;JS 常用工具&quot;&gt;&lt;/a&gt;JS 常用工具&lt;/h2&gt;&lt;h3 id=&quot;json-格式监测工具&quot;&gt;&lt;a href=&quot;#json-格式监测工具&quot; class=&quot;he
+    
+    </summary>
+    
+      <category term="js" scheme="http://yichewx.com/categories/js/"/>
+    
+    
+      <category term="js" scheme="http://yichewx.com/tags/js/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>webkit 滚动条自定义</title>
+    <link href="http://yichewx.com/2016/12/13/webkit%20%E6%BB%9A%E5%8A%A8%E6%9D%A1%20%E8%87%AA%E5%AE%9A%E4%B9%89/"/>
+    <id>http://yichewx.com/2016/12/13/webkit 滚动条 自定义/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="webkit-滚动条自定义"><a href="#webkit-滚动条自定义" class="headerlink" title="webkit 滚动条自定义"></a>webkit 滚动条自定义</h2><figure class="highlight css"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar</span> &#123;</div><div class="line">    <span class="attribute">width</span>: <span class="number">10px</span><span class="meta">!important</span>;</div><div class="line">    <span class="attribute">height</span>: <span class="number">10px</span><span class="meta">!important</span>;</div><div class="line">    <span class="attribute">-webkit-appearance</span>: none;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-thumb</span> &#123;</div><div class="line">    <span class="attribute">height</span>: <span class="number">5px</span>;</div><div class="line">    <span class="attribute">border</span>: <span class="number">1px</span> solid transparent;</div><div class="line">    <span class="attribute">border-top</span>: none;</div><div class="line">    <span class="attribute">border-bottom</span>: none;</div><div class="line">    <span class="attribute">-webkit-border-radius</span>: <span class="number">6px</span>;</div><div class="line">    <span class="attribute">background-color</span>: <span class="built_in">rgba</span>(0,0,0,.3);</div><div class="line">    <span class="attribute">background-clip</span>: padding-box;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;webkit-滚动条自定义&quot;&gt;&lt;a href=&quot;#webkit-滚动条自定义&quot; class=&quot;headerlink&quot; title=&quot;webkit 滚动条自定义&quot;&gt;&lt;/a&gt;webkit 滚动条自定义&lt;/h2&gt;&lt;figure class=&quot;highlight css&quot;
+    
+    </summary>
+    
+      <category term="web" scheme="http://yichewx.com/categories/web/"/>
+    
+    
+      <category term="CSS3" scheme="http://yichewx.com/tags/CSS3/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>中国真的有很多穷人吗？</title>
+    <link href="http://yichewx.com/2016/12/13/%E4%B8%AD%E5%9B%BD%E7%9C%9F%E7%9A%84%E6%9C%89%E5%BE%88%E5%A4%9A%E7%A9%B7%E4%BA%BA%E5%90%97/"/>
+    <id>http://yichewx.com/2016/12/13/中国真的有很多穷人吗/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="中国真的有很多穷人吗？"><a href="#中国真的有很多穷人吗？" class="headerlink" title="中国真的有很多穷人吗？"></a>中国真的有很多穷人吗？</h3><blockquote>
+<p>   Note:我纠结了很久要不要把这篇文章转载到我的blog里面,这是知乎上看到的一篇文章,看到之后很触动.纠<br>    结的原因是这样也不打声招呼就转载别人的文章好像不太好,但另一方面,人匿名,你这样去打招呼关于这篇文<br>    章我想转载可以吗?你还是人吗?! (而且,知乎上我一直是在玩单机版,也不打好意思去打扰人家.)另外一个原因<br>    就是不想把一些并非具有自己属性的东西放在自己的blog里,但考虑再三还是放在这里了.其实是想给自己做<br>    个提醒,提醒自己真的很穷啊.哈哈,生活真的很艰难啊.</p>
+<p>当然如果有不能转载的消息,立刻删除.(显然是我想太多,火星上 , 怎么可能还有别人….).如侵权,<br>立刻删除.</p>
+</blockquote>
+<hr>
+
+<blockquote>
+<p>著作权归作者所有。<br>商业转载请联系作者获得授权，非商业转载请注明出处。<br>作者：匿名用户<br>链接：<a href="https://www.zhihu.com/question/30277318/answer/48152465" target="_blank" rel="external">https://www.zhihu.com/question/30277318/answer/48152465</a><br>来源：知乎</p>
+</blockquote>
+<p>###中国真的有很多穷人吗？</p>
+<p>匿名用户</p>
+<p>最终无相见、Liu Leon、张弘拓 等 44833 人赞同</p>
+<p>沿着这个主题，说说我自己的故事吧。</p>
+<p>也浅谈我的财富观。</p>
+<p>2011年，博士毕业，和妻子，同时在一所二线城市大学工作。</p>
+<p>收入就不说了，全国统一市场价。</p>
+<p>两家基本生活条件，都属于三线小城市的富裕家庭。</p>
+<p>我父母，文革期间招工，进的企业。国有企业双职工，父母年轻时，有做生意，有承包小工厂，是85年就是万元户。</p>
+<p>岳父岳母，在电力系统工作，岳父是80年代武大毕业，总工程师，年薪在2000年前后10W。</p>
+<p>退二线后，在距离家不远的民营电厂做厂长，算是经理人。</p>
+<p>说了这么多，只能证明“不穷”。</p>
+<p>2011年10月，岳父给妻子打了个电话，先是寒暄，聊天，说是想我们了。</p>
+<p>妻子就觉得不对劲，接着问出来了，说是当天要做手术了。</p>
+<p>没有任何先兆。。。</p>
+<p>觉得癌症距离我们好遥远。。。</p>
+<p>我们立即赶往老家省会医院。</p>
+<p>确诊，是肝癌+胆囊癌+胰腺癌。</p>
+<p>几个关键器官，都发现癌细胞。</p>
+<p>我们觉得，癌症距离我们好遥远。。。</p>
+<p>没想到发生在自己身边。</p>
+<p>我的第一想法，就是“钱”。</p>
+<p>老人自己有些钱，但是那是养老的钱，并且妻子哥哥收入当时不高，有2次婚姻，3个孩子。</p>
+<p>妻子和我商量，要尽最大努力，在经济上支撑。</p>
+<p>说说我的工作：</p>
+<p>2011年。</p>
+<p>平时工资，学校里大概每年8W。</p>
+<p>逮着机会，就出去讲课，到自考、成教，每节课60。每年能多挣2W。</p>
+<p>很多人觉得老师出去走穴，肯定挣很多钱，事实上，不是这样的。</p>
+<p>名师确实可以。但普通老师，只能如此生活。</p>
+<p>拼命找之前的朋友、师兄、师长，找机会，做项目。每年能多挣5W。</p>
+<p>我大概每年能拿到手 15W。</p>
+<p>妻子得个空，就去照看岳父，每年学校工资约有5W。</p>
+<p>我们两个人，在2011年，年收入大概20W。</p>
+<p>现在说说20W，咋花的。</p>
+<p>岳父一上手术台，我们立即拿出来5W。</p>
+<p>跟踪治疗，1个月去观察、化疗1次，每次去医院，至少拿1W。每个月生活营养费用，5千。</p>
+<p>2011年到年底，给老人大概拿了8万。</p>
+<p>平时去医院路费、住宿费、送礼，不说了。</p>
+<p>两个人的生活费，还要准备买房子。。。</p>
+<p>我母亲非常支持我们，时时补贴。</p>
+<p>2012年开始，熬的项目好一些了，当年经济政策刺激很厉害。</p>
+<p>师兄的公司，居然接到一个大广告项目。</p>
+<p>我的收入也上去了，当年项目分成，30W。</p>
+<p>人在压力下的潜力，很可怕，学校网评教师，我排名第3。加上年终奖励，在学校拿了13W。</p>
+<p>妻子开始出去讲课、培训，每年能拿10W。</p>
+<p>岳父这一年，身体还是老样子，当时精神很好。</p>
+<p>我们总共给老人大概拿了15W。</p>
+<p>妻子怀孕的时候，还在讲台上讲课。呵呵，挺着大肚子。</p>
+<p>我们开始买房。</p>
+<p>压力下的人生，是痛苦并努力着。</p>
+<p>当时我们想，既然项目前景不错，生活质量还可以，老人的病情不可能好转，但基本维持费用，我们可以承担，担心手里的钱自己掌控不了，又没有投资渠道，就开始买房。</p>
+<p>一套自住，首付25万，总价67万。</p>
+<p>一套写字楼，首付50万，总价95万。</p>
+<p>找亲戚、朋友，又借了20万，把这些钱凑齐。</p>
+<p>我们当时的想法，很明确，如果岳父病情恶化，需要大钱，房子立即卖掉。</p>
+<p>这一年，最快乐的事情，是孩子出世。</p>
+<p>岳父在有生之年，见到外孙女。</p>
+<p>2013年，国家经济政策开始收紧。</p>
+<p>在学校，还是老样子，和妻子年收入约14W。</p>
+<p>跟着师兄做项目，当年挣了大概20W。</p>
+<p>妻子出去讲课，慢慢有了基础，大概年收入5W。</p>
+<p>当时非常辛苦，妻子没坐月子，就接着上课。</p>
+<p>给岳父，大概拿了10万。</p>
+<p>2013年7月，岳父去世。</p>
+<p>从发现多种癌症并发晚期，到去世，总共存活18个月，过了2012、2013两个春节，</p>
+<p>在当地医疗系统，是个奇迹。</p>
+<p>有硕士生跟踪数据，做论文研究。</p>
+<p>2013年8月，学校刚好有短期交流，去澳洲，好好放松了2个礼拜。</p>
+<p>妻子打电话说，看我爸爸多疼你，知道你这几年辛苦，在他走后，让你出去休息一下。</p>
+<p>简单总结一下：</p>
+<ol>
+<li>人间真有地狱，就是医院。能想到的地狱酷刑，医院都有。</li>
+</ol>
+<ol>
+<li><p>因病返贫、因贫致死的太多了。我见过在医院里夫妻反目、父子成仇的。</p>
+<pre><code>癌症的很多特药和进口药物，是不报销的。
+
+很多手术中费用也是不报销的。
+
+化疗使用的药物，和调节修养的药物，大多数是不报销的。
+
+岳父总共花了100W左右的医疗费用，大概只报销了不到35万。
+
+剩余的60多万，我们拿了30多万，亲戚看望病人拿了约10万，岳父自己的钱拿了10几万。
+</code></pre></li>
+</ol>
+<ol>
+<li>钱真好。</li>
+</ol>
+<p>岳父去世后，我开始反思自己的人生。</p>
+<p>我想，我有必要开始全心全意地做一件属于自己的事情了。</p>
+<p>和师兄商量了一下，他说，你可以全身过来跟着，我们一起做。</p>
+<p>学校这边，当时成果做的不错，有个晋升的机会。</p>
+<p>我觉得，我想到个更大的世界。</p>
+<p>家人也赞同，经过这次生死劫难，每个人都觉得，原来我们的小康之家，这么容易被破坏。。。</p>
+<p>原来，我们这么穷。。。</p>
+<p>2014年3月份，正式辞职。从高校直接辞职。。。</p>
+<p>担心学脉断了，导师介绍了个好朋友，我接着做”在职博士后“，科研压力小、没有教学任务。</p>
+<p>在公司，担任执行总经理。当时说好的是，年薪底薪30W。</p>
+<p>我们买了第3套房子。</p>
+<p>呵呵，故事接着来了。</p>
+<p>2014年3月份，我到新公司报到的第2天。</p>
+<p>妈妈告诉我一个事情，说是我爸爸从2013年年底开始，几乎每天下午低烧，连续2个月了，爸爸一直以为是感冒，没给妈妈说过。。。</p>
+<p>经过岳父的事情，我当时很冷静，肯定是癌症或者其它重疾。</p>
+<p>到医院检查，做了PETS，没发现癌细胞。。。。</p>
+<p>大家松了一口气。。。</p>
+<p>骨髓穿刺，做了2次。</p>
+<p>查出来了，是重度功能障碍性贫血，血小板几乎为O，血癌。。。</p>
+<p>每天治疗费用 ，平均1W。</p>
+<p>爸爸在医院存活了35天。</p>
+<p>2014年农历三月初九去世。</p>
+<p>其实，苦难的人生距离我们很近。</p>
+<p>讲几个正能量的故事吧。</p>
+<p>1、我爸爸兄弟3个，他最小。还有一个姐姐。感情很好</p>
+<p>感情很好。兄弟3个，总共10个孩子。大伯家5个，二伯家3个，我们家2个，我有个亲姐姐。</p>
+<p>爸爸住院用钱太急了，即使是卖房子，也需要时间。</p>
+<p>妈妈给堂兄、堂姐打了个电话，每个孩子都直接打过来2万。</p>
+<p>20万当天就凑够了。</p>
+<p>2、我有个发小，外企高管。</p>
+<p>从小在我家一起吃爸爸做的饭菜，直接打过来10万，</p>
+<p>说，这个钱，是给爸爸看病的，不用还。</p>
+<p>不够，下周再打10万。</p>
+<p>3、爸爸的几个好朋友，不敢给妈妈打电话，</p>
+<p>怕刺激妈妈。</p>
+<p>只要打电话，就给我要卡号，说我大哥看病的钱，孩子你不用管。</p>
+<p>4、爸爸是个普通人，每天都有亲人、朋友，去医院探视。</p>
+<p>PS：探视对病人病情最不好，容易交叉感染。</p>
+<p>当时也顾不了这么多了。</p>
+<p>爸爸走的太急了。。。。</p>
+<p>急到我们所有人，都措手不及。</p>
+<p>我们当时所有人，都那么”忙“。</p>
+<p>5、姐姐。姐姐在爸爸住院的当天，生孩子。</p>
+<p>爸爸去世那天，出月子。</p>
+<p>我给姐姐一打电话，她就哭。。。</p>
+<p>我说，如果爸能挺过这一关，我们俩，要做好骨髓捐献的准备。</p>
+<p>姐姐说：捐我的！</p>
+<p>姐夫很孝顺，得空就去医院。</p>
+<p>6、我们家，被彻底地打碎了。</p>
+<p>我外婆，只有妈妈一个孩子，一直和我们一起生活。</p>
+<p>快90岁了，在爸爸住院期间，只能自己一个人在老家。姐姐得空在月子期间，就去陪她。</p>
+<p>妈妈陪爸爸，一直在医院。</p>
+<p>孩子1岁半，放在外婆家。</p>
+<p>老婆在学校。</p>
+<p>我在新地方。</p>
+<p>我们家，6口人，分到了5个地方。</p>
+<p>爸爸去世后，家里只有我1个男人，4个女人，4代人。</p>
+<p>总结一下吧：</p>
+<p> 1、疾病如果查出来是绝症，理性一些。</p>
+<p>我和妻，明确了一个事情，如果是我们两个在未来人生道路，发生了这样的事情，就不再治疗了。</p>
+<p> 2、有些医生，真黑。</p>
+<p>爸爸去世的当天，神智不清了，医生还给开了8000多的进口抗生素。</p>
+<p>中间的故事，我不再说了。</p>
+<p>爸爸去世后的第6天，我和妻去医院结算、报销，堂兄陪着。</p>
+<p>堂兄在老家省会最好的大学，大我2岁，正教。</p>
+<p>突然握着拳头，讲，我去干那个医生去！</p>
+<p>妻也准备好角斗的立场。</p>
+<p>我苦笑着，拦下了他们</p>
+<p> 3、多生孩子吧。</p>
+<p>人能保证自己年轻时能干，但谁也不能保证自己老了，不得病。</p>
+<p>我们老领导妻子，癌症，老领导自己每天除了上班就去医院陪护。</p>
+<p>老有所养，不是个腐朽的传统，</p>
+<p>而是一种生活的方式。</p>
+<p>岳父的病情上，如果没有大舅哥，我不可能能在外边安心赚钱。</p>
+<p>爸爸的病情上，如果没有姐夫、没有一群堂兄弟、没有一群好朋友，我撑不下来。</p>
+<p>爸爸走后，我大病一场，每天喝酒。每天都喝。</p>
+<p>每天都喝。</p>
+<p> 4、如果能爱身边的人多一些，就尽量多爱吧。</p>
+<p>不管是亲人，还是朋友。</p>
+<p>人生这么短，哪里那么多的仇恨。</p>
+<p>我现在还在拼命挣钱，和钱，没任何仇恨。</p>
+<p>我不知道用较为纯粹的事实陈述，能否阐明在中国国情下我的穷富观？</p>
+<p>==============================================================</p>
+<p>昨天（2015年5月18日）下午写的，晚上一打开，没想到这么多亲爱的朋友回复，给我鼓励，非常感谢。有朋友说，真正的有钱人，就是进医院，心不慌的主儿。我现在真的这么认为。</p>
+<p>说说我的切肤感受，比较乱：</p>
+<p>1、为什么这么痛？</p>
+<p>两个父亲都死了。</p>
+<p>我和父亲、妻爸的感情很好，都很好。他们两位也能经常小聚。</p>
+<p>岳父2011年手术后，我和妻把他接到我家住了一段。</p>
+<p>妻爸的身体太虚弱，我们又太忙，每天都是爸爸给他做饭。</p>
+<p>两个老人，都没活过62岁。都是拼命工作了一辈子，才拿到退休金不到2年。</p>
+<p>妻和我，都是80后。</p>
+<p>20多岁，父母可以享受天伦之乐的时候，遭遇过痛失亲人，</p>
+<p>这种痛苦，是把心一片一片切碎的感觉。</p>
+<p>有时候，我们半夜突然会有一个人起床，坐在床边，默默地哭。</p>
+<p>我爸爸说，孩子是自己的“掘墓人”，幸运的是，自己还有个“掘墓人”。</p>
+<p>2、如何迅速地从自己身体状况和亲人身体状况中发现非常状态？</p>
+<p>低烧，长期低烧。这是癌症和其它恶性疾病的前兆！！！</p>
+<p>不要担心高烧，我不是说高烧就没问题，一般来讲，高烧是人体免疫系统激活的标志。</p>
+<p>但长期低烧，一定要注意，只要低烧超过3天，一定要去查血！</p>
+<p>体重下降。</p>
+<p>如果短期内，体重下降非常厉害，</p>
+<p>比如2个月10斤，不是刻意减肥的，一定要抓紧时间去医院检查。</p>
+<p>皮肤和眼球眼敛的变化。</p>
+<p>皮肤色素淡化，皮肤血色淡化，一般都是血液病。</p>
+<p>肝脏系统功能的改变，会映射到眼球血丝上。</p>
+<p>3、如何直面亲人的死亡？</p>
+<p>岳父去世，是在我们的意料之中。</p>
+<p>2013年端午节，距离他的离开，还有约1个月。</p>
+<p>他的精神很好，我们居然一起出去散步、聊天，他还有兴趣让我找家好馆子。呵呵</p>
+<p>癌症最后的扩散速度非常快，一夜之间，就能长满身体所有的器官。</p>
+<p>岳父很坚强，后来化疗不能做，做微创，把肋骨敲开，把热焰刀插进去，定点烧癌细胞，</p>
+<p>他用手抓着手术床头，疼的全身如洗澡一样。</p>
+<p>后来他告诉我，真疼，我把牙快咬碎了。</p>
+<p>岳父生命意志很强，许多医生都觉得他活不了半年。</p>
+<p>我们用自己的生命，给父亲延命。不管我们多累，至少还有个爹，能通通电话，说说话。</p>
+<p>爹死了，埋到黄土里了。说给阎王爷拿100万，能不能通融一下，让我给爸爸打个电话？？？</p>
+<p>他死的时候，已经意志昏迷了，吗啡针也没用。</p>
+<p>人最痛的时候，中枢神经会自动把痛感调低。</p>
+<p>我问过医生，癌症有多疼？</p>
+<p>医生想了一会儿说，万蚁噬骨。</p>
+<p>我爸前一段，过的忌日1周年。时间真快。</p>
+<p>我爸爸治疗时间非常短，只有大概35天。</p>
+<p>妈妈一直陪护着他，医生安排要吃高蛋白的，</p>
+<p>妈妈每天去菜市场，买条鱼，在菜农家里自己亲手做。</p>
+<p>爸爸在去世前2天，和正常人完全一样，只是稍微虚弱一点点，</p>
+<p>和他交流，完全看不到任何病态。</p>
+<p>他不疼的。我问他，疼不疼？他说，就是难受。</p>
+<p>肯定难受，体内的细胞都被病毒吞噬了。</p>
+<p>当天，我给爸爸说：</p>
+<p>爸啊，我得回公司看看，刚到个新单位，我每天陪你，担心人家有意见啊。</p>
+<p>爸爸说：你走吧，没事，这边人多。</p>
+<p>然后，我就走了。</p>
+<p>我在高铁站，给我四哥打了个电话，四堂哥。</p>
+<p>我就象个SB一样，在高铁站放声大哭，我说：哥，我撑不住了！</p>
+<p>四哥说，你忙吧，这边人多。我和你嫂子，一直都会在。</p>
+<p>我是中午12：00走的，下午18：00陪个朋友吃饭。</p>
+<p>妻打来电话，说爸不行了，妈在找救护车，准备往老家拉。</p>
+<p>太快了。</p>
+<p>我没见到爸最后一面。</p>
+<p>到家已经是第2天凌晨了，爸已经换好了寿衣，冰冷安静地躺在那里。</p>
+<p>爸没什么大本事，普通人，但人缘很好。</p>
+<p>见过的，没见过的，亲戚、朋友，全来了。</p>
+<p>我读高中的时候，朋友很多，很多人几千公里，跑回来，参加爸的葬礼。</p>
+<p>当年，32岁，我穿着孝衣，抱着照片，送我的父亲，最后一程。</p>
+<p>爸死之前，妻一直在身边陪护。</p>
+<p>我问妻，爸死前的景象。</p>
+<p>妻说，从医院拉回家，快下高速的时候，爸突然说要小便。</p>
+<p>小便之后，就只能长出气，呼吸不畅。然后就去了。</p>
+<p>人的最后一口气，吐出的时候，全身在一刹那，就如同四季花朵一刻凋谢，那么的放松。</p>
+<p>爸的最后一顿饭，是和我吃的。</p>
+<p>爸去世之前的头一天，妻和我中午晚上陪他，堂姐一帮人在宾馆休息，妈妈回老家看外婆。</p>
+<p>我问他，爸，中午你想吃啥啊？咱吃面条好不好？医生安排了，不能太油腻啊！</p>
+<p>爸似乎有点生气，说，面条不好吃，买点肉吧。</p>
+<p>我就问了护士，能不能吃肉，护士想了想，说吃吧，提高蛋白，可以的。</p>
+<p>我到饭店订了个猪肉肘子，要了一个素菜，2个米饭。打包回来。</p>
+<p>我们爷儿俩，把一个肘子，约有小2斤，全部吃完。</p>
+<p>这是爸爸辛苦一生的最后一顿餐。</p>
+<p>给爸爸守灵那3天，我只知道哭，见了人就磕头。</p>
+<p>别的什么都不知道。</p>
+<p>四个堂兄，两个伯父，把家里的大事和妈妈都处理好。</p>
+<p>外婆快90岁了，白发人送黑法人，</p>
+<p>她告诉我：你爸出殡、起灵的时候，我看见他进来，跑到我床头，给我磕了个头。</p>
+<p>亲人的死，比我自己的死还要痛苦。</p>
+<p>生老病死，是最自然的自然，但也是最痛苦的痛苦。</p>
+<p>万物生于尘土，复归尘土。</p>
+<p>我不敢和二伯吃饭，每次去看望他，然后就匆匆离开。</p>
+<p>每次吃饭，他都要喝酒，然后抱着我哭，哭我的肝颤。</p>
+<p>他抱着我哭：孩子，该死也得轮流来啊，我比你爸大，咋让他先死了啊！</p>
+<p>爸爸和两个伯伯感情很好，二伯有次摔伤住院，爸爸去看，</p>
+<p>啥也没买，就买了几只甘蔗，二伯爱吃甘蔗，然后一节一节地刮干净、切片好，</p>
+<p>说这样方便吃。</p>
+<p>爸爸的灵寿、周年，大伯从不去墓地，他70多了，他说，我去了，受不了。</p>
+<p>人生真苦。</p>
+<p>也因为苦难，和苦难的搏击，人类的文明才走到今天。</p>
+<p>苦难长生。</p>
+<p>2015年5月20日，夜。此文就此搁笔了。</p>
+<p>这几天比较忙，几乎每天加班，今天周三，从上周末到今天，熬夜到凌晨，有3个晚上。</p>
+<p>一打开“知乎”，消息栏目一直在闪，拨开很多不认识的朋友祝福与鼓励，看到了一个在工业文明冲击下依然保持血亲伦理的亲情底色社会。</p>
+<p>向和同龄的朋友，“倾诉”生活的艰辛，以及我们要活得更好的勇气。</p>
+<p> 1、2011年的生活状态——距离家庭破产，只有一步之遥。</p>
+<p>2011年，基本没什么额外收入，教研室的好同事给我介绍到继续教育学院，给孩子上课 。</p>
+<p>每节课60块钱，每个周，加上学校的任务教学量，最多时候，要上40节课，</p>
+<p>因为有时候周末，还要出去兼职出差，这就意味着我要尽量地在工作日5天，上完这些课程。</p>
+<p>每天差不多，4节连上在学校，4节在机构，晚上2节自习。几乎每天如此，晚上回家备课。</p>
+<p>网友中肯定有做教师的，这种辛苦和压力，对人的精神摧残，想都有戚戚的感觉。</p>
+<p>那时候真累。周五晚上定好火车票，一下课，立即就出发。</p>
+<p>那个时候开始，养成了到哪里都能睡好觉的习惯，牙膏、牙刷随身带着，</p>
+<p>一是中午直接在教室睡觉，二是出差的话，不用绕回家了。</p>
+<p>那时候，生活真难 ， 记得很清楚：</p>
+<p>去上课的机构外边，有家炒面，爱吃鸡蛋，加一个鸡蛋，就觉得很幸福。</p>
+<p>在淘宝上买裤子，100元3条包邮，刚好够夏天换洗的。</p>
+<p>有时候，下课急，要赶火车，太堵，直接叫个摩的，冬天特别冷，刮的脸疼、头疼。不敢生病，因为要用钱。</p>
+<p>每个月大概拿到手，辛苦上课和学校工资，至少1W。这些钱，都不舍得花，要准备老人看病的医疗费用。</p>
+<p>妻那时候，甚至于一直穿着几年前大学读书时候的羽绒服，仔细看袖口都磨出内胆，她要穿着这样的衣服，走上冬天的大学讲堂 。</p>
+<p>每个月挣的钱，两个人加起来，很厚了。送到医院却那么薄。</p>
+<p>2011年11月份，在岳父手术之后不久，妻怀孕，年纪有这么大了，医生建议一定留下。</p>
+<p>2011年年底，寒假放假之前，学校给每个老师发放1箱橙子，当时我在外地出差，就安排妻，找我同事帮忙搬到家。妻脸皮薄，自己提着箱子，不舍得打车，去赶车，结果先兆流产。</p>
+<p>2012年的春节，我们一家，都是在医院度过的：</p>
+<p>岳父在老家省会医院持续治疗。。。</p>
+<p>妻在医院，静躺安胎，绝对卧床2周。。。</p>
+<p>春节的城市，人很少，我穿梭在家和医院之间。</p>
+<p>那个冬天，真冷。给妻买了生排骨，在家煲煮好，送到医院，</p>
+<p>妻的第一句话，就是：多少钱一斤啊？</p>
+<p>我妈妈深明大义，她讲，你岳父活一天，你和你大舅哥，就要救一天，没钱，先卖你大舅哥的房子，再卖我们家的房子 。</p>
+<p>岳父那年，春节后的精神很好。</p>
+<p>我们的孩子也保住了。</p>
+<p>岳父生病的消息，和同事都没说，但几个家伙似乎觉察到什么了，对我很好，只要外边有课，就介绍给我，离开学校之后，依然是人生最好的朋友。</p>
+<p>那一年，真难。</p>
+<p>上天保佑！苦难是人生的财富。</p>
+<p>2012年的生活状态—— 收入好了一些，除了照顾岳父，还能有盈余。</p>
+<p>2012年，是一生中收入最高的一年。</p>
+<p>天不绝人。当人遭遇困难的时候，似乎所有的潜力，都会迸发。</p>
+<p>跟踪的项目，几乎都能结算。自己都觉得诧异！</p>
+<p>老师兼职，一般就是培训和咨询。培训的劳务费，都会按时、按约支付的。</p>
+<p>咨询不是这样的，中间的支付周期很长，甲方主动权很强势。</p>
+<p>但2012年，只要是带的项目，都能成。师兄公司的人，都愿意跟着。</p>
+<p>妻也没闲着，帮人家编教材、怀孕到7个月的时候，还在讲台上课。</p>
+<p>肚子很大，穿着一个西瓜红的孕妇裙，她那时候，爱口渴，得空就喝水，</p>
+<p>不舍得买矿泉水，自己带个大杯子。</p>
+<p>从小家庭条件还好的她，这时候最大可能地为我减压。</p>
+<p>2012年1年，差不多给岳父拿了15W。如果没有外边的兼职，这是我们两个全年的收入。</p>
+<p>2012年暑假，我挣到了第一笔最大的项目费10万。然后，其它款项，陆续到来。</p>
+<p>每到一笔钱，妻就给岳父打电话，讲我又挣了多少多少，让他安心治病、疗养。</p>
+<p>和家里人商量了一下，岳父也觉得有经济上的安全感，于是首付买了一套商品房。</p>
+<p>到暑假快结束，手里居然还有盈余！</p>
+<p>妻的野心比我大，她讲再找一些钱，我们买个投资用房，算是给未来的孩子一个交代。</p>
+<p>当时房地产还有上升空间，当时岳父的身体已经不可能再做大手术，基本治疗费用每个月有个大体的预算。于是又借款，凑足手里的钱，贷款一半买了一个写字楼。</p>
+<p>孩子出生，看到了新生的力量和希望。</p>
+<p>孩子没有母乳过，妻差不多在孩子出生后2个周，就出去上课。</p>
+<p>学校有产假，能休一个学期，但只发基本工资80%，大概只有2000元。</p>
+<p>妻也出去代课，给机构代，给学校代。</p>
+<p>岳父很疼爱我们的孩子，每次见面都抱着，爱不释手，疼得钻心。</p>
+<p>爸爸妈妈因为要帮忙照看孩子，和我们住一起。</p>
+<p>外婆也跟我们一起住在学校的流转房。</p>
+<p>从小是外婆带大的，她很爱我。</p>
+<p>快90岁的老人了，身体很好，有天出差不在家，她突然生病了，急性肠胃炎。</p>
+<p>以为自己要死了，就给妈妈说：最近的火葬场在哪里啊？别给孩子添麻烦。</p>
+<p>2013年的生活状态——生死疲劳，梦想不灭。</p>
+<p>2013年7月，岳父走完自己最后一段岁月。</p>
+<p>2013年大年初二，去给老人家拜年，他拿出酒喝。</p>
+<p>岳母拦下了，他夺了过来，说：还能和孩子喝几次酒啊。</p>
+<p>家里有病人的春节，是人生的一种凄凉 。</p>
+<p>大年三十的晚上，妻突然提出要去岳父家看看。</p>
+<p>当时我说一起去吧。妻拒绝了，说：你就在家陪爸妈，带孩子吧。</p>
+<p>很久以后，妻告诉我：</p>
+<p>那年大年三十晚上，岳父又开始发烧，大摆子、哆嗦，岳母一个人都按不住。</p>
+<p>岳父成为他们医院的“抗癌明星”，但也没耗过死神对他时刻的骚扰。</p>
+<p>岳父去世那天，学校还没放假，刚好妻和我，把手头的试卷阅完。</p>
+<p>妻带过班，那帮孩子要来我家吃饭。妻担心孩子到家，要花钱买东西，</p>
+<p>就直接订在了酒店。</p>
+<p>来了十几个孩子，一桌满满的。</p>
+<p>那天孩子们兴致都很高，还喝了酒。</p>
+<p>晚上9：00多，学生们返身回宿舍的那刻，妻的电话响了。</p>
+<p>妻一直在听，沉默了一下，趴在我怀里，说了一句：爸爸没了。</p>
+<p>岳父死后，妻把岳母带了出来，和我们一起住了一段。</p>
+<p>18个月，横跨2个春节，岳母一直没有怨言照顾岳父。</p>
+<p>脑海中有时候呈现 一幕幕图景：</p>
+<p>岳母搀扶着岳父，赶大巴去医院。。。</p>
+<p>两个人相互搀扶，到医院餐厅吃饭。。。</p>
+<p>岳母和大舅哥在医院奔波，找医生、找药。。。</p>
+<p>每次到医院，几乎每次，岳父都坐在床上，拿着前一天的住院清单，带着老花镜，安静地看着，轻声地唏嘘。略带负罪地看我，打招呼。</p>
+<p>每次我离开医院，都告诉自己，坚持！再坚持一把！</p>
+<p>2014年的生活状态——谋变，送走我的父亲。</p>
+<p>爸是我的精神领袖。</p>
+<p>是我最爱、最敬重的人。</p>
+<p>他死后这一年，我几乎每个礼拜都能梦见他。</p>
+<p>有时候梦境里，我就摸他脑袋，很凉。</p>
+<p>我见过很多癌症家属，有个习惯性的动作，就是摸病人的脑袋。</p>
+<p>长期的精神紧张，如果某天病人不发烧，就是最大的幸福。</p>
+<p>梦里面，我和爸说话。</p>
+<p>我说，爸，你不发烧了，你好了啊！</p>
+<p>爸说，是啊，我好了啊！</p>
+<p>。。。。。。。</p>
+<p>2014年，经济上更宽裕一些。</p>
+<p>妻还筹划着，让妈陪岳母，报个团，出去旅游一下。</p>
+<p>爸的病太突然了。</p>
+<p>他一直身体很好，不抽烟、不喝酒、不动怒。</p>
+<p>第一次去医院的时候，还和妈生气，说就是感冒，</p>
+<p>没想到这一去，就没活着回来。</p>
+<p>妈真难。要照顾小家伙，最后把小家伙放到岳母家。</p>
+<p>岳母也难，大舅哥的小家伙也得看着。</p>
+<p>大舅哥工作很辛苦。</p>
+<p>2个小家伙一哭，岳母也跟着哭。</p>
+<p>妈还要把我外婆安顿好。</p>
+<p>找医生、陪爸爸、给爸爸做饭、看药。</p>
+<p>我不在医院的时候，给妈打电话，妈就讲：你爸快好了，两天就能出院了。</p>
+<p>妻去年也忙。在外边讲课的老板，很欣赏她，给她大课上。</p>
+<p>每年换的新课程，要重新备课。还有科研压力。</p>
+<p>妻在医院照顾爸的时候，就在爸床边看书。</p>
+<p>爸和她说：每天这么辛苦，咱们回家，不治了。</p>
+<p>她说：我们还想再生个孩子，让你看着呢。</p>
+<p>爸想念小家伙，就让姐夫拍成视频，放到手机里给他看。</p>
+<p>爸最后的岁月里，我的小家伙，成为他的精神支柱。</p>
+<p>妈告诉我，没有人的时候，爸就偷偷看小家伙的视频，然后满脸泪花。</p>
+<p>爸爸兄弟3个，生了10个孩子，5个男孩，5个女孩。</p>
+<p>10个孩子，我是最小的孩子，是唯一的80后。</p>
+<p>爸生病的时候，4个堂哥堂嫂如同伺候亲生父母，轮流过来值班。</p>
+<p>妈使唤他们，就象自己孩子。</p>
+<p>爸死的时候，我没守在身边，我哥哥们在门口给吊丧的人磕头。</p>
+<p>爸中间治疗的时候，休克过一次，差点死掉。</p>
+<p>抢救过来后，和我说：</p>
+<p>别生气，别抱怨，都不容易。</p>
+<p>爸死的时候，我已经离开教研室1个月了。</p>
+<p>有个教研室的家伙，给我打电话，问我爸的身体 好点没有？</p>
+<p>当时是给爸守灵的第2个晚上21：00。</p>
+<p>我说，爸已经出院了。</p>
+<p>刚说完，家里来了吊唁的亲戚，家属答礼的时候，姐姐们号哭。</p>
+<p>那边电话挂了。</p>
+<p>次日早上6：00，又给我打电话，讲已经到了我老家。</p>
+<p>教研室的3个家伙，赶了一夜，来参加爸的葬礼。</p>
+<p>三十岁了，还能交到这样的朋友。我很幸运。</p>
+<p>2014年5月份，爸走后，过了“五七”。</p>
+<p>开始抑郁。</p>
+<p>师兄很好，让我休假。保持电话畅通、邮件畅通即可。</p>
+<p>每天喝酒，刚开始是亲人、朋友陪着喝，</p>
+<p>后来是自己喝，自己要酒喝，</p>
+<p>自己在家吃饭也喝。</p>
+<p>觉得活着没意思。</p>
+<p>爸出殡的时候，我在灵棺边上，脸上的黄纸，随着灵车的行驶</p>
+<p>被振动下来。</p>
+<p>隔着玻璃，我看着爸的脸，就象他睡者了一样。</p>
+<p>我送走了他，</p>
+<p>谁来送走我 。</p>
+<p>小家伙 不让我抱，说爸爸嘴臭，喝酒。</p>
+<p>抑郁了2个月。</p>
+<p>刚开始大家都认为是心情问题，</p>
+<p>后来发现有必要去看医院了。</p>
+<p>我喝酒，外婆就坐我边上看着我，也不劝止，就爱怜地看着我。</p>
+<p>好朋友联系好了医院，预约了一个很好的精神科医生，</p>
+<p>当时说好的，最好不要用药。只是酒精依赖，轻度抑郁。</p>
+<p>在准备去医院的前2天，师兄打来电话，</p>
+<p>说新项目要上了，你赶紧过来跟吧。</p>
+<p>2015年，还在活者和努力活得更好的路上。</p>
+<p>苦难长生。</p>
+<p>==================================================================</p>
+<p>2015年5月22日，上午11：03</p>
+<p>年龄及与互联网的磨合度问题，对于亲爱的朋友的鼓励与支持，不能一一回复。万分感恩。</p>
+<p>话题的提问者，提出的问题是“中国真的有很多穷人吗？”</p>
+<p>我讲述了自己的故事，大体是不符合知乎回答问题的方式的。</p>
+<p>本来憋住了，不再想每次把自己结痂的伤口扒开，再一次缝合。</p>
+<p>1、穷是，穷厄、穷困、穷难。</p>
+<p>一分钱难倒英雄汉，它解决不了所有问题，但它能带来相对安全感。</p>
+<p>这一代人，拼命努力，从小努力读书，成年努力工作，</p>
+<p>背后的支撑性答案，就是解决“穷”，</p>
+<p>包括经济贫穷、机会贫穷、心智贫穷。。。</p>
+<p>认识一个在大学美食街出摊卖鸡蛋饼的，我们经常一起聊天</p>
+<p>后来熟了，他偷偷告诉我，他一天能净赚1000元，好的话，1500元 。</p>
+<p>我问他，你经济条件很好了啊，为什么还这么努力啊？</p>
+<p>他沉默一下说，孩子上学，老人看病，自己养老，还要抵抗厄运。</p>
+<p>命运的可怕在于，它总在人最得意的时候，不经意给你开个玩笑。</p>
+<p>在之前读书的时候，我总喜欢给世界贴上自己以为是其所是的标签：</p>
+<p>比如，有钱的生活，应该如何？社会，应该如何？别人，应该如何？</p>
+<p>慢慢地磨练，学会了不说话，低着头，隐忍地活着。</p>
+<p>知乎上大牛多，高学历的也多，诸位可以回视下，</p>
+<p>大部分博士，其实都是家景非常普通的人。</p>
+<p>也正因为怀揣着对未来的希望，才不断追求、不断进步的。</p>
+<p>人生那么短，其实没什么好抱怨的。</p>
+<p>努力了、争取了，也就欣慰了。</p>
+<p>人生真正的穷，是人生穷短，给我们的时间太短、机会太少，</p>
+<p>来不及爱，人就老了。</p>
+<p> 2、生死是人生大苦，但也是人间最大的公平。</p>
+<p>死亡面前，人人平等。</p>
+<p>不管是亲人，或是我们，因死而生，因生而死。</p>
+<p>但死亡不是个负面的悲剧，而是人价值呈现的悲壮：</p>
+<p>渺小的人类，知晓个体命运终结的必然，却依然飞蛾扑火地抗争，</p>
+<p>每一缕小小的火苗，构建了人类今天的文明。</p>
+<p>生死真苦，但这是生命的常态。</p>
+<p>我们都会这样老去，死去，在尘土中滋养新的生命。</p>
+<p>给自己一个理想，一个希望，</p>
+<p>让这段孤独的旅程，显得有光，</p>
+<p> 3、感谢所有人，亦以与众生同行而荣耀。</p>
+<p>没有绝对的善恶。</p>
+<p>没有永恒的仇恨。</p>
+<p>没有必然的因果。</p>
+<p>短短人生，所能秉持的只有：</p>
+<p>行天之健，以苦为乐，勤苦为荣。</p>
+<p>我们都在世间修行。</p>
+<p>编辑于 2015-05-22</p>
+<blockquote>
+<p>著作权归作者所有。<br>商业转载请联系作者获得授权，非商业转载请注明出处。<br>作者：匿名用户<br>链接：<a href="https://www.zhihu.com/question/30277318/answer/48152465" target="_blank" rel="external">https://www.zhihu.com/question/30277318/answer/48152465</a><br>来源：知乎</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;中国真的有很多穷人吗？&quot;&gt;&lt;a href=&quot;#中国真的有很多穷人吗？&quot; class=&quot;headerlink&quot; title=&quot;中国真的有很多穷人吗？&quot;&gt;&lt;/a&gt;中国真的有很多穷人吗？&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;   Note:我纠结了很久要不要把这篇文
+    
+    </summary>
+    
+      <category term="文学" scheme="http://yichewx.com/categories/%E6%96%87%E5%AD%A6/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>你眼中的数据结构是什么样的？</title>
+    <link href="http://yichewx.com/2016/12/13/%E4%BD%A0%E7%9C%BC%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%98%AF%E4%BB%80%E4%B9%88%E6%A0%B7%E7%9A%84%EF%BC%9F/"/>
+    <id>http://yichewx.com/2016/12/13/你眼中的数据结构是什么样的？/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="你眼中的数据结构是什么样的？"><a href="#你眼中的数据结构是什么样的？" class="headerlink" title="你眼中的数据结构是什么样的？"></a>你眼中的数据结构是什么样的？</h3><p>​<br> 斯蒂芬·沃尔夫勒姆（数学软件 <code>Mathematica</code> 和计算型知识引擎 <code>Wolfram Alpha</code> 的发明者）在他的《新科学》一书中说道：</p>
+<p>  三个世纪以前，人们发现建立在数学方程基础上的规律能够用于对自然界的描述，伴随着这种新观念，科学发生了转变。在此书中我的目的是将要用简单的电脑程序来表达更为一般类型的规律，并在此种规律基础上建立一种新的科学，从而启动另一场科学变革。</p>
+<ul>
+<li><p>你理解的数据结构是什么？</p>
+</li>
+<li><p>你对学习数据结构有兴趣吗？</p>
+</li>
+<li><p>数据结构是一门值得研究的科学吗？</p>
+</li>
+<li><p>你学习数据解构的目标是什么?</p>
+</li>
+</ul>
+<p>人工智能是现在很火的一个话题，德·加里斯在他的《智能简史》一书中说道：</p>
+<p>  不远的将来，人工智能机器的智能将是人类的万亿个万亿倍，它们面对我们，并不像我们面对狗，而是如同我们面对蚊子、跳蚤甚至岩石，当它们消灭我们的时候，如同我们将蚊子拍死，将臭虫冲进下水道，谁会在消灭跳蚤的时候觉得这样太残忍了呢？！这也许是人类逃脱不了的宿命。</p>
+<p>你认为这样的情况会出现吗？</p>
+<p>数据结构的未来又是什么样的？</p>
+<p> 相关链接：</p>
+<ul>
+<li><a href="http://www.guokr.com/article/439770/?page=4%20%E2%80%9C%E2%80%9D" target="_blank" rel="external">果壳网对 Wolfram 的专访</a></li>
+<li><a href="http://v.youku.com/v_show/id_XNTkwNzI5OTIw.html" target="_blank" rel="external">6 分钟演示 15 种排序算法</a></li>
+<li><a href="http://v.youku.com/v_show/id_XMTQ0MTM5Njg0.html" target="_blank" rel="external">MIT学生普拉纳夫在TED上关于虚拟现实的演讲</a></li>
+</ul>
+<hr>
+<p>这是某论坛讨论里面看到的一个问题，</p>
+<p>​    //todo 放了好久了，再不写就烂尾。</p>
+<p>简单的说，几个关键词：<strong>原子性</strong>,  <strong>手术刀</strong>, <strong>自由</strong></p>
+<p>晚安,地球</p>
+<p>by wanglinzhizhi</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;你眼中的数据结构是什么样的？&quot;&gt;&lt;a href=&quot;#你眼中的数据结构是什么样的？&quot; class=&quot;headerlink&quot; title=&quot;你眼中的数据结构是什么样的？&quot;&gt;&lt;/a&gt;你眼中的数据结构是什么样的？&lt;/h3&gt;&lt;p&gt;​&lt;br&gt; 斯蒂芬·沃尔夫勒姆（数学软件 &lt;
+    
+    </summary>
+    
+      <category term="算法" scheme="http://yichewx.com/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="算法" scheme="http://yichewx.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>关于html 结构的划分的办法</title>
+    <link href="http://yichewx.com/2016/12/13/%E5%85%B3%E4%BA%8Ehtml%20%E7%BB%93%E6%9E%84%E7%9A%84%E5%88%92%E5%88%86%E7%9A%84%E5%8A%9E%E6%B3%95/"/>
+    <id>http://yichewx.com/2016/12/13/关于html 结构的划分的办法/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="关于html-结构的划分的办法"><a href="#关于html-结构的划分的办法" class="headerlink" title="关于html 结构的划分的办法"></a>关于html 结构的划分的办法</h2><ul>
+<li>同级元素的z-index 相同</li>
+<li>同级元素的可以设置同样的背景色/border 等方式加以区分. 背景色和border 值在 test阶段之后删除 </li>
+</ul>
+<p><img src="/images/cj.png" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;关于html-结构的划分的办法&quot;&gt;&lt;a href=&quot;#关于html-结构的划分的办法&quot; class=&quot;headerlink&quot; title=&quot;关于html 结构的划分的办法&quot;&gt;&lt;/a&gt;关于html 结构的划分的办法&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;同级元素的z-index
+    
+    </summary>
+    
+      <category term="web" scheme="http://yichewx.com/categories/web/"/>
+    
+    
+      <category term="html" scheme="http://yichewx.com/tags/html/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>前后端分离的思考与实践 by阿里</title>
+    <link href="http://yichewx.com/2016/12/13/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E7%9A%84%E6%80%9D%E8%80%83%E4%B8%8E%E5%AE%9E%E8%B7%B5(1)/"/>
+    <id>http://yichewx.com/2016/12/13/前后端分离的思考与实践(1)/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前后端分离的思考与实践（一）"><a href="#前后端分离的思考与实践（一）" class="headerlink" title="前后端分离的思考与实践（一）"></a>前后端分离的思考与实践（一）</h2><h3 id="TOC"><a href="#TOC" class="headerlink" title="TOC"></a>TOC</h3><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>为了解决传统Web开发模式带来的各种问题，我们进行了许多尝试，但由于前/后端的物理鸿沟，尝试的方案都大同小异。痛定思痛，今天我们重新思考了“前后端”的定义，引入前端同学都熟悉的NodeJS，试图探索一条全新的前后端分离模式。</p>
+<p>随着不同终端(Pad/Mobile/PC)的兴起，对开发人员的要求越来越高，纯浏览器端的响应式已经不能满足用户体验的高要求，我们往往需要针对不同的终端开发定制的版本。为了提升开发效率，前后端分离的需求越来越被重视，后端负责业务/数据接口，前端负责展现/交互逻辑，同一份数据接口，我们可以定制开发多个版本。</p>
+<p>这个话题最近被讨论得比较多，阿里有些BU也在进行一些尝试。讨论了很久之后，我们团队决定探索一套基于NodeJS的前后端分离方案，过程中有一些不断变化的认识以及思考，记录在这里，也希望看到的同学参与讨论，帮我们完善。</p>
+<h3 id="一、什么是前后端分离？"><a href="#一、什么是前后端分离？" class="headerlink" title="一、什么是前后端分离？"></a>一、什么是前后端分离？</h3><p>最开始组内讨论的过程中我发现，每个人对前后端分离的理解不一样，为了保证能在同一个频道讨论，先就什么是”前后端分离”达成一致。</p>
+<p>大家一致认同的前后端分离的例子就是SPA(Single-page application)，所有用到的展现数据都是后端通过异步接口(AJAX/JSONP)的方式提供的，前端只管展现。<br>从某种意义上来说，SPA确实做到了前后端分离，但这种方式存在两个问题：</p>
+<ul>
+<li>WEB服务中，SPA类占的比例很少。很多场景下还有同步/同步+异步混合的模式，SPA不能作为一种通用的解决方案。</li>
+<li>现阶段的SPA开发模式，接口通常是按照展现逻辑来提供的，有时候为了提高效率，后端会帮我们处理一些展现逻辑，这就意味着后端还是涉足了View层的工作，不是真正的前后端分离。</li>
+</ul>
+<p>SPA式的前后端分离，是从物理层做区分（认为只要是客户端的就是前端，服务器端的就是后端），这种分法已经无法满足我们前后端分离的需求，我们认为从职责上划分才能满足目前我们的使用场景：</p>
+<ul>
+<li>前端：负责View和Controller层。</li>
+<li>后端：只负责Model层，业务处理/数据等。</li>
+</ul>
+<p>为什么去做这种职责的划分，后面会继续探讨。</p>
+<h3 id="二、为什么要前后端分离？"><a href="#二、为什么要前后端分离？" class="headerlink" title="二、为什么要前后端分离？"></a>二、为什么要前后端分离？</h3><p>关于这个问题，玉伯的文章<a href="https://github.com/lifesinger/lifesinger.github.com/issues/184" target="_blank" rel="external"><img src="http://f.ydr.me/https://github.com/lifesinger/lifesinger.github.com/issues/184" alt="f">Web研发模式演变</a>中解释得非常全面，我们再大概理一下：</p>
+<h3 id="2-1-现有开发模式的适用场景"><a href="#2-1-现有开发模式的适用场景" class="headerlink" title="2.1 现有开发模式的适用场景"></a>2.1 现有开发模式的适用场景</h3><p>玉伯提到的几种开发模式，各有各的适用场景，没有哪一种完全取代另外一种。</p>
+<ul>
+<li>比如后端为主的MVC，做一些同步展现的业务效率很高，但是遇到同步异步结合的页面，与后端开发沟通起来就会比较麻烦。</li>
+<li>Ajax为主SPA型开发模式，比较适合开发APP类型的场景，但是只适合做APP，因为SEO等问题不好解决，对于很多类型的系统，这种开发方式也过重。</li>
+</ul>
+<h3 id="2-2-前后端职责不清"><a href="#2-2-前后端职责不清" class="headerlink" title="2.2 前后端职责不清"></a>2.2 前后端职责不清</h3><p>在业务逻辑复杂的系统里，我们最怕维护前后端混杂在一起的代码，因为没有约束，M-V-C每一层都可能出现别的层的代码，日积月累，完全没有维护性可言。<br>虽然前后端分离没办法完全解决这种问题，但是可以大大缓解。因为从物理层次上保证了你不可能这么做。</p>
+<h3 id="2-3-开发效率问题"><a href="#2-3-开发效率问题" class="headerlink" title="2.3 开发效率问题"></a>2.3 开发效率问题</h3><p>淘宝的Web基本上都是基于MVC框架webx，架构决定了前端只能依赖后端。<br>所以我们的开发模式依然是，前端写好静态demo，后端翻译成VM模版，这种模式的问题就不说了，被吐槽了很久。<br>直接基于后端环境开发也很痛苦，配置安装使用都很麻烦。为了解决这个问题，我们发明了各种工具，比如<a href="https://www.npmjs.org/package/vmarket" target="_blank" rel="external"><img src="http://f.ydr.me/https://www.npmjs.org/package/vmarket" alt="f">VMarket</a>，但是前端还是要写VM，而且依赖后端数据，效率依然不高。<br>另外，后端也没法摆脱对展现的强关注，从而专心于业务逻辑层的开发。</p>
+<h3 id="2-4-对前端发挥的局限"><a href="#2-4-对前端发挥的局限" class="headerlink" title="2.4 对前端发挥的局限"></a>2.4 对前端发挥的局限</h3><p>性能优化如果只在前端做空间非常有限，于是我们经常需要后端合作才能碰撞出火花，但由于后端框架限制，我们很难使用Comet、Bigpipe等技术方案来优化性能。</p>
+<p>为了解决以上提到的一些问题，我们进行了很多尝试，开发了各种工具，但始终没有太多起色，主要是因为我们只能在后端给我们划分的那一小块空间去发挥。只有真正做到前后端分离，我们才能彻底解决以上问题。</p>
+<h3 id="三、怎么做前后端分离？"><a href="#三、怎么做前后端分离？" class="headerlink" title="三、怎么做前后端分离？"></a>三、怎么做前后端分离？</h3><p>怎么做前后端分离，其实第一节中已经有了答案：</p>
+<ul>
+<li>前端：负责View和Controller层。</li>
+<li>后端：负责Model层，业务处理/数据等。</li>
+</ul>
+<p><img src="http://gtms01.alicdn.com/tps/i1/T1qg9oFu4iXXXk_Dc5-555-263.png" alt="MVC分"></p>
+<p>试想一下，如果前端掌握了Controller，我们可以做url design，我们可以根据场景决定在服务端同步渲染，还是根据view层数据输出json数据，我们还可以根据表现层需求很容易的做Bigpipe,Comet,Socket等等，完全是需求决定使用方式。</p>
+<h3 id="3-1-基于NodeJS“全栈”式开发"><a href="#3-1-基于NodeJS“全栈”式开发" class="headerlink" title="3.1 基于NodeJS“全栈”式开发"></a>3.1 基于NodeJS“全栈”式开发</h3><p>如果想实现上图的分层，就必然需要一种web服务帮我们实现以前后端做的事情，于是就有了标题提到的“基于NodeJS的全栈式开发”</p>
+<p><img src="http://gtms03.alicdn.com/tps/i3/T1xW8OFrXkXXXK71TW-590-611.png" alt="Node 带来的全栈时代"></p>
+<p>这张图看起来简单而且很好理解，但没尝试过，会有很多疑问。</p>
+<ul>
+<li>SPA模式中，后端已供了所需的数据接口，view前端已经可以控制，为什么要多加NodeJS这一层？</li>
+<li>多加一层，性能怎么样？</li>
+<li>多加一层，前端的工作量是不是增加了？</li>
+<li>多加一层就多一层风险，怎么破？</li>
+<li>NodeJS什么都能做，为什么还要JAVA？</li>
+</ul>
+<p>这些问题要说清楚不容易，下面说下我的认识过程。</p>
+<h3 id="3-2-为什么要增加一层NodeJS？"><a href="#3-2-为什么要增加一层NodeJS？" class="headerlink" title="3.2 为什么要增加一层NodeJS？"></a>3.2 为什么要增加一层NodeJS？</h3><p>现阶段我们主要以后端MVC的模式进行开发，这种模式严重阻碍了前端开发效率，也让后端不能专注于业务开发。<br>解决方案是让前端能控制Controller层，但是如果在现有技术体系下很难做到，因为不可能让所有前端都学java，安装后端的开发环境，写VM。<br>NodeJS就能很好的解决这个问题，我们无需学习一门新的语言，就能做到以前开发帮我们做的事情，一切都显得那么自然。</p>
+<h3 id="3-3-性能问题"><a href="#3-3-性能问题" class="headerlink" title="3.3 性能问题"></a>3.3 性能问题</h3><p>分层就涉及每层之间的通讯，肯定会有一定的性能损耗。但是合理的分层能让职责清晰、也方便协作，会大大提高开发效率。分层带来的损失，一定能在其他方面的收益弥补回来。<br>另外，一旦决定分层，我们可以通过优化通讯方式、通讯协议，尽可能把损耗降到最低。</p>
+<p><strong>举个例子：</strong><br>淘宝宝贝详情页静态化之后，还是有不少需要实时获取的信息，比如物流、促销等等，因为这些信息在不同业务系统中，所以需要前端发送5，6个异步请求来回填这些内容。<br>有了NodeJS之后，前端可以在NodeJS中去代理这5个异步请求，还能很容易的做Bigpipe,这块的优化能让整个渲染效率提升很多。<br>可能在PC上你觉得发5,6个异步请求也没什么，但是在无线端，在客户手机上建立一个HTTP请求开销很大，有了这个优化，性能一下提升好几倍。</p>
+<p>淘宝详情基于NodeJS的优化我们正在进行中，上线之后我会分享一下优化的过程。</p>
+<h3 id="3-4-前端的工作量是否增加了？"><a href="#3-4-前端的工作量是否增加了？" class="headerlink" title="3.4 前端的工作量是否增加了？"></a>3.4 前端的工作量是否增加了？</h3><p>相对于只切页面/做demo，肯定是增加了一点，但是当前模式下有联调、沟通环节，这个过程非常花时间，也容易出bug，还很难维护。<br>所以，虽然工作量会增加一点，但是总体开发效率会提升很多。</p>
+<p>另外，测试成本可以节省很多。以前开发的接口都是针对表现层的，很难写测试用例。如果做了前后端分离，甚至测试都可以分开，一拨人专门测试接口，一拨人专注测试UI（这部分工作甚至可以用工具代替）。</p>
+<h3 id="3-5-增加Node层带来的风险怎么控制？"><a href="#3-5-增加Node层带来的风险怎么控制？" class="headerlink" title="3.5 增加Node层带来的风险怎么控制？"></a>3.5 增加Node层带来的风险怎么控制？</h3><p>随着Node大规模使用，系统/运维/安全部门的同学也一定会加入到基础建设中，他们会帮助我们去完善各个环节可能出现的问题，保障系的稳定性。</p>
+<h3 id="3-6-Node什么都能做，为什么还要JAVA？"><a href="#3-6-Node什么都能做，为什么还要JAVA？" class="headerlink" title="3.6 Node什么都能做，为什么还要JAVA？"></a>3.6 Node什么都能做，为什么还要JAVA？</h3><p>我们的初衷是做前后端分离，如果考虑这个问题就有点违背我们的初衷了。即使用Node替代Java，我们也没办法保证不出现今天遇到的种种问题，比如职责不清。我们的目的是分层开发，专业的人，专注做专业的事。基于JAVA的基础架构已经非常强大而且稳定，而且更适合做现在架构的事情。</p>
+<h3 id="四、淘宝基于Node的前后端分离"><a href="#四、淘宝基于Node的前后端分离" class="headerlink" title="四、淘宝基于Node的前后端分离"></a>四、淘宝基于Node的前后端分离</h3><p><img src="http://gtms03.alicdn.com/tps/i3/T1OMsAFApcXXaI5uU7-800-521.jpg" alt="淘宝基于NodeJS的前后端分离"></p>
+<p>上图是我理解的淘宝基于Node的前后端分离分层，以及Node的职责范围。简单解释下：</p>
+<ul>
+<li>最上端是服务端，就是我们常说的后端。后端对于我们来说，就是一个接口的集合，服务端提供各种各样的接口供我们使用。因为有Node层，也不用局限是什么形式的服务。对于后端开发来说，他们只用关心业务代码的接口实现。</li>
+<li>服务端下面是Node应用。</li>
+<li>Node应用中有一层Model Proxy与服务端进行通讯。这一层主要目前是抹平我们对不同接口的调用方式，封装一些view层需要的Model。</li>
+<li>Node层还能轻松实现原来vmcommon,tms（引用淘宝内容管理系统）等需求。</li>
+<li>Node层要使用什么框架由开发者自己决定。不过推荐使用express+xTemplate的组合，xTemplate能做到前后端公用。</li>
+<li>怎么用Node大家自己决定，但是令人兴奋的是，我们终于可以使用Node轻松实现我们想要的输出方式:JSON/JSONP/RESTful/HTML/BigPipe/Comet/Socket/同步、异步，想怎么整就怎么整，完全根据你的场景决定。</li>
+<li>浏览器层在我们这个架构中没有变化，也不希望因为引入Node改变你以前在浏览器中开发的认知。</li>
+<li>引入Node，只是把本该就前端控制的部分交由前端掌控。</li>
+</ul>
+<p>这种模式我们已经有两个项目在开发中，虽然还没上线，但是无论是在开发效率，还是在性能优化方面，我们都已经尝到了甜头。</p>
+<h3 id="五、我们还需要要做什么？"><a href="#五、我们还需要要做什么？" class="headerlink" title="五、我们还需要要做什么？"></a>五、我们还需要要做什么？</h3><ul>
+<li>把Node的开发流程集成到淘宝现有的SCM流程中。</li>
+<li>基础设施建设，比如session,logger等通用模块。</li>
+<li>最佳开发实践</li>
+<li>线上成功案例</li>
+<li>大家对Node前后端分离概念的认识</li>
+<li>安全</li>
+<li>性能</li>
+<li>…</li>
+</ul>
+<p>技术上不会有太多需要去创新和研究的，已经有非常多现成的积累。其实关键是一些流程的打通和通用解决方案的积累，相信随着更多的项目实践，这块慢慢会变成一个稳定的流程。</p>
+<h3 id="六、“中途岛”"><a href="#六、“中途岛”" class="headerlink" title="六、“中途岛”"></a>六、“中途岛”</h3><p>虽然“基于NodeJS的全栈式开发”模式很让人兴奋，但是把基于Node的全栈开发变成一个稳定，让大家都能接受的东西还有很多路要走，我们正在进行的“中途岛”项目就是为了解决这个问题。虽然我们起步不久，但是离目标已经越来越近！！</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前后端分离的思考与实践（一）&quot;&gt;&lt;a href=&quot;#前后端分离的思考与实践（一）&quot; class=&quot;headerlink&quot; title=&quot;前后端分离的思考与实践（一）&quot;&gt;&lt;/a&gt;前后端分离的思考与实践（一）&lt;/h2&gt;&lt;h3 id=&quot;TOC&quot;&gt;&lt;a href=&quot;#TO
+    
+    </summary>
+    
+      <category term="web架构" scheme="http://yichewx.com/categories/web%E6%9E%B6%E6%9E%84/"/>
+    
+    
+      <category term="架构" scheme="http://yichewx.com/tags/%E6%9E%B6%E6%9E%84/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>前后端分离的思考与实践（二） by阿里</title>
+    <link href="http://yichewx.com/2016/12/13/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E7%9A%84%E6%80%9D%E8%80%83%E4%B8%8E%E5%AE%9E%E8%B7%B5(2)/"/>
+    <id>http://yichewx.com/2016/12/13/前后端分离的思考与实践(2)/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前后端分离的思考与实践（二）"><a href="#前后端分离的思考与实践（二）" class="headerlink" title="前后端分离的思考与实践（二）"></a>前后端分离的思考与实践（二）</h2><h3 id="TOC"><a href="#TOC" class="headerlink" title="TOC"></a>TOC</h3><p><strong>基于前后端分离的模版探索</strong></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在做前后端分离时，第一个关注到的问题就是 <strong>渲染</strong>，也就是 <strong>View</strong> 这个层面的工作。</p>
+<p>在传统的开发模式中，浏览器端与服务器端是由不同的前后端两个团队开发，但是模版却又在这两者中间的模糊地带。因此模版上面总不可避免的越来越多复杂逻辑，最终难以维护。</p>
+<p>而我们选择了NodeJS，作为一个前后端的中间层。试图藉由NodeJS，来疏理 <strong>View</strong> 层面的工作。</p>
+<p>使得前后端分工更明确，让专案更好维护，达成更好的用户体验。</p>
+<h3 id="本文"><a href="#本文" class="headerlink" title="本文"></a>本文</h3><p>渲染这块工作，对于前端开发者的日常工作来说，佔了非常大的比例，也是最容易与后端开发纠结不清的地方。</p>
+<p>回首过去前端技术发展的这几年， <strong>View</strong> 这个层面的工作，经过了许多次的变革，像是：</p>
+<ol>
+<li>Form Submit 全页刷新 =&gt; <em>AJAX局部刷新</em></li>
+<li>服务端续染 + MVC =&gt; <em>客户端渲染 + MVC</em></li>
+<li>传统换页跳转 =&gt; 单页面应用</li>
+</ol>
+<p>可以观察到在这几年，大家都倾向将 <strong>渲染</strong> 这件事，从服务器端端移向了浏览器端。</p>
+<p>而服务器端则专注于 <strong>服务化</strong> ，提供数据接口。</p>
+<h3 id="浏览器端渲染的好处"><a href="#浏览器端渲染的好处" class="headerlink" title="浏览器端渲染的好处"></a>浏览器端渲染的好处</h3><p>浏览器端渲染的好处，我们都很清楚，像是</p>
+<ol>
+<li>摆脱业务逻辑与呈现逻辑在Java模版引擎中的耦合与混乱。</li>
+<li>针对多终端应用，更容易以接口化的形式。在浏览器端搭配不同的模版，呈现不同的应用。</li>
+<li>页面呈现本来就不仅是html，在前端的渲染可以更轻易的以组件化形式 (html + js + css)提供功能，使得前端组件不需依赖于服务端产生的html结构。</li>
+<li>脱离对于后端开发、发佈流程的依赖。</li>
+<li>方便联调。</li>
+</ol>
+<h3 id="浏览器端渲染造成的坏处"><a href="#浏览器端渲染造成的坏处" class="headerlink" title="浏览器端渲染造成的坏处"></a>浏览器端渲染造成的坏处</h3><p>但是在享受好处的同时，我们同样的也面临了 <strong>浏览器端渲染</strong> 所带来的坏处，像是：</p>
+<ol>
+<li>模版分离在不同的库。有的模版放在服务端 (JAVA)，而有的放在浏览器端 (JS)。前后端模版语言不相通。</li>
+<li>需要等待所有模版与组件在浏览器端载入完成后才能开始渲染，无法即开即看。</li>
+<li>首次进入会有白屏等待渲染的时间，不利于用户体验</li>
+<li>开发单页面应用时，前端Route与服务器端Route不匹配，处理起来很麻烦。</li>
+<li>重要内容都在前端组装，不利于SEO</li>
+</ol>
+<h3 id="反思前后端的定义"><a href="#反思前后端的定义" class="headerlink" title="反思前后端的定义"></a>反思前后端的定义</h3><p>其实回头想想，在我们把渲染的工作从 服务端(Java) 抽出来到 浏览器端(JS) 的时候，我们的目的只是 <strong>明确的前后端职责划分，并不是非浏览器渲染不可</strong> 。</p>
+<p>只是因为在传统的开发模式中，出了服务器就到了浏览器，所以前端的工作内容只能被限制在浏览器端。</p>
+<p>也因此很多人认定了 <code>后端 = 服务端</code> <code>前端 = 浏览器端</code> ，就像下面这张图。</p>
+<p><img src="http://gtms04.alicdn.com/tps/i4/T1q1.bFvRcXXb1InQp-499-130.png" alt="img"></p>
+<p>而在淘宝UED目前进行的 <strong>中途岛Midway</strong> 项目中，藉由在 JAVA - Browser中间搭建一个NodeJS中间层，试图把这个前后端的分割线，重新针对 <strong>工作职责</strong> 去区分，而非针对硬体环境去区分（服务器 &amp; 浏览器）。</p>
+<p>因此我们有机会做到模版与路由的共享，也是一个前后端分工中最理想的状态。</p>
+<hr>
+<h3 id="淘宝中途岛-Midway"><a href="#淘宝中途岛-Midway" class="headerlink" title="淘宝中途岛 Midway"></a>淘宝中途岛 Midway</h3><p>在中途岛项目中，我们把前后端分界的那条线，从浏览器端移回到了服务器端。</p>
+<p><img src="http://gtms02.alicdn.com/tps/i2/T1qGMbFyJcXXbhov2c-562-130.png" alt="img"></p>
+<p>藉由一个由前端 <strong>轻松掌控</strong> 且 <strong>与浏览器共通</strong> 的Nodejs层，可以更清晰的完成了前后端分离。</p>
+<p>也可以让前端开发针对不同的情况，自行决定 <strong>最适当的解决方案</strong> 。而不是所有事情 <strong>都在浏览器端来处理</strong> 。</p>
+<h3 id="职责划分"><a href="#职责划分" class="headerlink" title="职责划分"></a>职责划分</h3><p>中途岛并不是前端试图抢后端饭碗的项目，目的只是把 <strong>模版</strong> 这个模糊地带切割清楚，取得更明确的职责划分。</p>
+<ul>
+<li>后端 (JAVA)，专注于<ol>
+<li>服务层</li>
+<li>数据格式、数据稳定</li>
+<li>业务逻辑</li>
+</ol>
+</li>
+<li>前端，专注于<ol>
+<li>UI层</li>
+<li>控制逻辑、渲染逻辑</li>
+<li>交互、用户体验</li>
+</ol>
+</li>
+</ul>
+<p>而不再拘泥于服务端或浏览器端的差异。</p>
+<h3 id="模版共享"><a href="#模版共享" class="headerlink" title="模版共享"></a>模版共享</h3><p>在传统的开发模式中，浏览器端与服务器端是由不同的前后端两个团队开发，但是模版却又在这两者中间的模糊地带。因此模版上面总不可避免的越来越多复杂逻辑，最终难以维护。</p>
+<p>有了NodeJS，后端同学可以在JAVA层专注于业务逻辑与数据的开发。而前端同学则专注于控制逻辑与渲染的开发。并且自行选择这些模版是要在 <strong>服务端 (NodeJS)</strong> 或是 <strong>浏览器端</strong> 做渲染。</p>
+<p>用著一样的模版语言 <em>XTemplate</em> ，一样的渲染引擎 <em>JavaScript</em></p>
+<p>在 <strong>不同的渲染环境</strong> （Server-side、PC Browser、Mobile Browser、Web View、etc.） 渲染出 <strong>一样的结果</strong> 。</p>
+<h3 id="路由共享"><a href="#路由共享" class="headerlink" title="路由共享"></a>路由共享</h3><p>也因为有了NodeJS这一层，可以更细致的控制路由。</p>
+<p>假如需要在前端做浏览器端路由时，可以同时配置服务器端的路由，使其在 <strong>浏览器端换页</strong> 或是 <strong>服务端换页</strong> ，都可以得到一致的渲染效果。</p>
+<p>同时也处理了SEO的问题。</p>
+<hr>
+<h3 id="模版共享的实践"><a href="#模版共享的实践" class="headerlink" title="模版共享的实践"></a>模版共享的实践</h3><p>通常我们在浏览器端渲染一份模版时，流程不外乎是</p>
+<ol>
+<li>在浏览器端載入模版引擎 （xtmpleate, juicer, handlerbar, etc.）</li>
+<li>在浏览器端载入模版档案，方法可能有<ul>
+<li>使用 `` 印在页面上</li>
+<li>使用模块载入工具，载入模版档案 （KISSY, requireJS, etc.）</li>
+<li>其他</li>
+</ul>
+</li>
+<li>取得数据，使用模版引擎产生html</li>
+<li>将html插入到指定位置。</li>
+</ol>
+<p>從以上的流程可以觀察到，要想要做到模版的跨端共享，重点其实在 <strong>一致的模块选型</strong> 这件事。</p>
+<p>市面上流行很多种模块标准，例如 KMD、AMD、CommonJS，只要能将NodeJS的模版档案透过一致模块规范输出到NodeJS端，就可以做基本的模版共享了。</p>
+<p>而后续的系列文章会针对Model的proxy与共享，做进一步的探讨。</p>
+<hr>
+<h3 id="案例探讨"><a href="#案例探讨" class="headerlink" title="案例探讨"></a>案例探讨</h3><p>因为有了中途岛这中间层，针对过往的一些问题都有了更好的解答，例如说</p>
+<h3 id="案例一-复杂交互应用-（如购物车、下单页面）"><a href="#案例一-复杂交互应用-（如购物车、下单页面）" class="headerlink" title="案例一 复杂交互应用 （如购物车、下单页面）"></a>案例一 复杂交互应用 （如购物车、下单页面）</h3><ul>
+<li>状况：全部的HTML都是在前端渲染完成，服务端仅提供接口。</li>
+<li>问题：进入页面时，会有短暂白屏。</li>
+<li>解答：<ol>
+<li>首次进入页面，在NodeJS端进行 <strong>全页渲染</strong> ，并在背景下载相关的模版。</li>
+<li>后续交互操作，在浏览器端完成 <strong>局部刷新</strong></li>
+<li>用的是 <strong>同一份模版</strong> ， 产生 <strong>一样的结果</strong></li>
+</ol>
+</li>
+</ul>
+<h3 id="案例二-单页面应用"><a href="#案例二-单页面应用" class="headerlink" title="案例二 单页面应用"></a>案例二 单页面应用</h3><ul>
+<li>状况：使用Client Side MVC框架，在浏览器换页。</li>
+<li>问题：渲染与换页都在浏览器端完成，直接输入网址进入或f5刷新时，无法直接呈现同样的内容。</li>
+<li>解答：<ol>
+<li>在浏览器端与NodeJS端共享 <strong>同样的Route</strong> 设定</li>
+<li>浏览器端换页时，在浏览器端进行Route变更与 <strong>页面内容渲染</strong></li>
+<li>直接输入同样的网址时，在NodeJS端进行 <strong>页面框架 + 页面内容渲染</strong></li>
+<li>不管是浏览器端换页，或直接输入同样的网址，看到的内容都是 <strong>一样的</strong> 。</li>
+<li>除了增加体验、减少逻辑複杂度外。更解决了 <strong>SEO</strong> 的问题</li>
+</ol>
+</li>
+</ul>
+<h3 id="案例三-纯浏览型页面"><a href="#案例三-纯浏览型页面" class="headerlink" title="案例三 纯浏览型页面"></a>案例三 纯浏览型页面</h3><ul>
+<li>状况：页面仅提供资讯，较少或没有交互</li>
+<li>问题：html在服务端产生，css与js放在另外一个位置，彼此间有依赖。</li>
+<li>解答：<ol>
+<li>透过NodeJS，统一管理html + css + js</li>
+<li>日后若需要扩展成复杂应用或是单页面应用，也可以轻易转移。</li>
+</ol>
+</li>
+</ul>
+<h3 id="案例四-跨终端页面"><a href="#案例四-跨终端页面" class="headerlink" title="案例四 跨终端页面"></a>案例四 跨终端页面</h3><ul>
+<li>状况：同样的应用要在不同端点呈现不同的介面与交互</li>
+<li>问题：html管理不易，常常会在服务端产生不一样的html，浏览器端又要做不一样的处理</li>
+<li>解答：<ol>
+<li>跨终端的页面是渲染的问题，统一由前端来处理。</li>
+<li>透过NodeJS层与后端服务化，可以针对这类型复杂应用，设计最佳的解决方案。</li>
+</ol>
+</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>过去的AJAX、Client-side MVC、SPA、Two-way Data Binding 等技术的出现，都是试图要解决当时的前端开发遇到的瓶颈。</p>
+<p>而NodeJS中间层的出现，也是在试图解决现今前端被侷限在浏览器端的一个限制。</p>
+<p>这边文章专注于前后端模版共享，也希望能抛砖引玉，与大家一起讨论如何在NodeJS中间层这个架构下，我们可以怎样的改善我们的工作流程，怎样的跟 <strong>后端</strong>配合，来把 <strong>前端</strong> 这个工作做得更好。\</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前后端分离的思考与实践（二）&quot;&gt;&lt;a href=&quot;#前后端分离的思考与实践（二）&quot; class=&quot;headerlink&quot; title=&quot;前后端分离的思考与实践（二）&quot;&gt;&lt;/a&gt;前后端分离的思考与实践（二）&lt;/h2&gt;&lt;h3 id=&quot;TOC&quot;&gt;&lt;a href=&quot;#TO
+    
+    </summary>
+    
+      <category term="web架构" scheme="http://yichewx.com/categories/web%E6%9E%B6%E6%9E%84/"/>
+    
+    
+      <category term="架构" scheme="http://yichewx.com/tags/%E6%9E%B6%E6%9E%84/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>前后端分离的思考与实践 （三） by阿里</title>
+    <link href="http://yichewx.com/2016/12/13/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E7%9A%84%E6%80%9D%E8%80%83%E4%B8%8E%E5%AE%9E%E8%B7%B5(3)/"/>
+    <id>http://yichewx.com/2016/12/13/前后端分离的思考与实践(3)/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="前后端分离的思考与实践（三）"><a href="#前后端分离的思考与实践（三）" class="headerlink" title="前后端分离的思考与实践（三）"></a>前后端分离的思考与实践（三）</h3><h3 id="TOC"><a href="#TOC" class="headerlink" title="TOC"></a>TOC</h3><h3 id="Midway-ModelProxy-—-轻量级的接口配置建模框架"><a href="#Midway-ModelProxy-—-轻量级的接口配置建模框架" class="headerlink" title="Midway-ModelProxy — 轻量级的接口配置建模框架"></a>Midway-ModelProxy — 轻量级的接口配置建模框架</h3><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>使用Node做前后端分离的开发模式带来了一些性能及开发流程上的优势(见 <a href="http://ued.taobao.org/blog/2014/04/full-stack-development-with-nodejs/" target="_blank" rel="external"><img src="http://f.ydr.me/http://ued.taobao.org/blog/2014/04/full-stack-development-with-nodejs/" alt="f">《前后端分离的思考与实践 一》</a> ), 但同时也面临不少挑战。在淘宝复杂的业务及技术架构下，后端必须依赖Java搭建基础架构，同时提供相关业务接口供前端使用。Node在整个环境中最重要的工作之一就是代理这些业务接口，以方便前端(Node端和浏览器端)整合数据做页面渲染。如何做好代理工作，使得前后端开发分离之后，仍然可以在流程上无缝衔接，是我们需要考虑的问题。本文将就该问题做相关探讨，并提出解决方案。</p>
+<p><img src="http://img3.tbcdn.cn/L1/461/1/51d06ddc3f781892df0a19a053c249bb5d0a4108" alt="img"></p>
+<p><strong>由于</strong>后端提供的接口方式可能多种多样，同时开发人员在编写Node端代码访问这些接口的方式也有可能多种多样。如果我们在接口访问方式及使用上不做统一架构处理，则会带来以下一些问题：</p>
+<ol>
+<li>每一个开发人员使用各自的代码风格编写接口访问代码，造成工程目录及编码风格混乱，维护相对困难。</li>
+<li>每一个开发人员编写自己的mock数据方式，开发完毕之后，需要手工修改代码移除mock。</li>
+<li>每一个开发人员为了实现接口的不同环境切换(日常，预发，线上)，可能各自维护了一些配置文件。</li>
+<li>数据接口调用方式无法被各个业务model非常方便地复用。</li>
+<li>对于数据接口的描述约定散落在代码的各个角落，有可能跟后端人员约定的接口文档不一致。</li>
+<li>整个项目分离开发之后，对于接口的联调或者测试回归成本依然很高，需要涉及到每一个接口提供者和使用者。</li>
+</ol>
+<p>于是我们希望有这样一个框架，通过该框架提供的机制去描述工程项目中依赖的所有外部接口，对他们进行统一管理，同时提供灵活的接口建模及调用方式，并且提供便捷的线上环境和生产环境切换方法，使前后端开发无缝结合。ModelProxy就是满足这样要求的轻量级框架，它是Midway Framework 核心构件之一，也可以单独使用。使用ModelProxy可以带来如下优点：</p>
+<ol>
+<li>不同的开发者对于接口访问代码编写方式统一，含义清晰，降低维护难度。</li>
+<li>框架内部采用工厂+单例模式，实现接口一次配置多次复用。并且开发者可以随意定制组装自己的业务Model(依赖注入)。</li>
+<li>可以非常方便地实现线上，日常，预发环境的切换。</li>
+<li>内置 <a href="http://gitlab.alibaba-inc.com/river/mock/tree/master" target="_blank" rel="external"><img src="http://f.ydr.me/http://gitlab.alibaba-inc.com/river/mock/tree/master" alt="f">river-mock</a> 和 <a href="http://mockjs.com/" target="_blank" rel="external"><img src="http://f.ydr.me/http://mockjs.com" alt="f">mockjs</a> 等mock引擎，提供mock数据非常方便。</li>
+<li>使用接口配置文件，对接口的依赖描述做统一的管理，避免散落在各个代码之中。</li>
+<li>支持浏览器端共享Model，浏览器端可以使用它做前端数据渲染。整个代理过程对浏览器透明。</li>
+<li>接口配置文件本身是结构化的描述文档，可以使用 <a href="http://gitlab.alibaba-inc.com/river/spec/tree/master" target="_blank" rel="external"><img src="http://f.ydr.me/http://gitlab.alibaba-inc.com/river/spec/tree/master" alt="f">river</a> 工具集合，自动生成文档。也可使用它做相关自动化接口测试，使整个开发过程形成一个闭环。</li>
+</ol>
+<h3 id="ModelProxy工作原理图及相关开发过程图览"><a href="#ModelProxy工作原理图及相关开发过程图览" class="headerlink" title="ModelProxy工作原理图及相关开发过程图览"></a>ModelProxy工作原理图及相关开发过程图览</h3><p><img src="http://img2.tbcdn.cn/L1/461/1/12bb633225499cdbba656335c3ec845dec7a92b4" alt="img"></p>
+<p>在上图中，开发者首先需要将工程项目中所有依赖的后端接口描述，按照指定的json格式，写入interface.json配置文件。必要时，需要对每个接口编写一个规则文件，也即图中interface rules部分。该规则文件用于在开发阶段mock数据或者在联调阶段使用River工具集去验证接口。规则文件的内容取决于采用哪一种mock引擎（比如 mockjs, river-mock 等等）。配置完成之后，即可在代码中按照自己的需求创建自己的业务model。</p>
+<p>下面是一个简单的例子：</p>
+<p>【例一】</p>
+<p>第一步 在工程目录中创建接口配置文件interface.json, 并在其中添加主搜接口json定义</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;title&quot;: &quot;pad淘宝项目数据接口集合定义&quot;,</div><div class="line">    &quot;version&quot;: &quot;1.0.0&quot;,</div><div class="line">    &quot;engine&quot;: &quot;mockjs&quot;,</div><div class="line">    &quot;rulebase&quot;: &quot;./interfaceRules/&quot;,</div><div class="line">    &quot;status&quot;: &quot;online&quot;,</div><div class="line">    &quot;interfaces&quot;: [ &#123;</div><div class="line">        &quot;name&quot;: &quot;主搜索接口&quot;,</div><div class="line">        &quot;id&quot;: &quot;Search.getItems&quot;,</div><div class="line">        &quot;urls&quot;: &#123;</div><div class="line">            &quot;online&quot;: &quot;http://s.m.taobao.com/client/search.do&quot;</div><div class="line">        &#125;</div><div class="line">    &#125; ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>第二步 在代码中创建并使用model</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">// 引入模块</div><div class="line">var ModelProxy = require( &apos;modelproxy&apos; );</div><div class="line"></div><div class="line">// 全局初始化引入接口配置文件  （注意：初始化工作有且只有一次）</div><div class="line">ModelProxy.init( &apos;./interface.json&apos; );</div><div class="line"></div><div class="line">// 创建model 更多创建模式请参后文</div><div class="line">var searchModel = new ModelProxy( &#123;</div><div class="line">searchItems: &apos;Search.getItems&apos;  // 自定义方法名: 配置文件中的定义的接口ID</div><div class="line">&#125; );</div><div class="line"></div><div class="line">// 使用model, 注意: 调用方法所需要的参数即为实际接口所需要的参数。</div><div class="line">searchModel.searchItems( &#123; q: &apos;iphone6&apos; &#125; )</div><div class="line">// !注意 必须调用 done 方法指定回调函数，来取得上面异步调用searchItems获得的数据!</div><div class="line">.done( function( data ) &#123;</div><div class="line">console.log( data );</div><div class="line">&#125; )</div><div class="line">.error( function( err ) &#123;</div><div class="line">console.log( err );</div><div class="line">&#125; );</div></pre></td></tr></table></figure>
+<p>ModelProxy的功能丰富性在于它支持各种形式的profile以创建需要业务model：</p>
+<p>使用接口ID创建&gt;生成的对象会取ID最后’.’号后面的单词作为方法名</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">ModelProxy.create( &apos;Search.getItem&apos; );</div></pre></td></tr></table></figure>
+<p>使用键值JSON对象&gt;自定义方法名: 接口ID</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">ModelProxy.create( &#123;</div><div class="line">  getName: &apos;Session.getUserName&apos;,</div><div class="line">  getMyCarts: &apos;Cart.getCarts&apos;</div><div class="line">&#125; );</div></pre></td></tr></table></figure>
+<p>使用数组形式&gt;取最后 . 号后面的单词作为方法名</p>
+<p>下例中生成的方法调用名依次为: Cart_getItem, getItem, suggest, getName</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">ModelProxy.create( [ &apos;Cart.getItem&apos;, &apos;Search.getItem&apos;, &apos;Search.suggest&apos;, &apos;Session.User.getName&apos; ] );</div></pre></td></tr></table></figure>
+<p>前缀形式&gt;所有满足前缀的接口ID会被引入对象，并取其后半部分作为方法名</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">ModelProxy.create( &apos;Search.*&apos; );</div></pre></td></tr></table></figure>
+<p>同时，使用这些Model，你可以很轻易地实现合并请求或者依赖请求，并做相关模板渲染</p>
+<p>【例二】 合并请求</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">var model = new ModelProxy( &apos;Search.*&apos; );</div><div class="line"></div><div class="line">// 合并请求 (下面调用的model方法除done之外，皆为配置接口id时指定)</div><div class="line">model.suggest( &#123; q: &apos;女&apos; &#125; )</div><div class="line">  .list( &#123; keyword: &apos;iphone6&apos; &#125; )</div><div class="line">  .getNav( &#123; key: &apos;流行服装&apos; &#125; )</div><div class="line">  .done( function( data1, data2, data3 ) &#123;</div><div class="line">  // 参数顺序与方法调用顺序一致</div><div class="line">  console.log( data1, data2, data3 );</div><div class="line">&#125; );</div></pre></td></tr></table></figure>
+<p>【例三】 依赖请求</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">var model = new ModelProxy( &#123;</div><div class="line">    getUser: &apos;Session.getUser&apos;,</div><div class="line">    getMyOrderList: &apos;Order.getOrder&apos;</div><div class="line">&#125; );</div><div class="line">// 先获得用户id，然后再根据id号获得订单列表</div><div class="line">model.getUser( &#123; sid: &apos;fdkaldjfgsakls0322yf8&apos; &#125; )</div><div class="line">    .done( function( data ) &#123;</div><div class="line">        var uid = data.uid;</div><div class="line">        // 二次数据请求依赖第一次取得的id号</div><div class="line">        this.getMyOrderList( &#123; id: uid &#125; )</div><div class="line">            .done( function( data ) &#123;</div><div class="line">                console.log( data );</div><div class="line">            &#125; );</div><div class="line">    &#125; );</div></pre></td></tr></table></figure>
+<p>此外ModelProxy不仅在Node端可以使用，也可以在浏览器端使用。只需要在页面中引入官方包提供的modelproxy-client.js即可。<br>【例四】浏览器端使用ModelProxy</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&lt;!-- 引入modelproxy模块，该模块本身是由KISSY封装的标准模块--&gt;</div><div class="line">&lt;script src=&quot;modelproxy-client.js&quot; &gt;&lt;/script&gt;</div><div class="line"></div><div class="line">&lt;script type=&quot;text/javascript&quot;&gt;</div><div class="line">KISSY.use( &quot;modelproxy&quot;, function( S, ModelProxy ) &#123;</div><div class="line">  // !配置基础路径，该路径与第二步中配置的拦截路径一致!</div><div class="line">  // 且全局配置有且只有一次！</div><div class="line">  ModelProxy.configBase( &apos;/model/&apos; );</div><div class="line"></div><div class="line">  // 创建model</div><div class="line">  var searchModel = ModelProxy.create( &apos;Search.*&apos; );</div><div class="line">  searchModel</div><div class="line">    .list( &#123; q: &apos;ihpone6&apos; &#125; )</div><div class="line">    .list( &#123; q: &apos;冲锋衣&apos; &#125; )</div><div class="line">    .suggest( &#123; q: &apos;i&apos; &#125; )</div><div class="line">    .getNav( &#123; q: &apos;滑板&apos; &#125; )</div><div class="line">    .done( function( data1, data2, data3, data4 ) &#123;</div><div class="line">      console.log( &#123;</div><div class="line">      &quot;list_ihpone6&quot;: data1,</div><div class="line">      &quot;list_冲锋衣&quot;: data2,</div><div class="line">      &quot;suggest_i&quot;: data3,</div><div class="line">      &quot;getNav_滑板&quot;: data4</div><div class="line">      &#125; );</div><div class="line">  &#125; );</div><div class="line">&#125; );</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<p>同时，ModelProxy可以配合Midway另一核心组件<a href="http://search.npm.taobao.net/package/midway-xtpl" target="_blank" rel="external"><img src="http://f.ydr.me/http://search.npm.taobao.net/package/midway-xtpl" alt="f">Midway-XTPL</a>一起使用，实现数据和模板以及相关渲染过程在浏览器端和服务器端的全共享。关于ModelProxy的详细教程及文档请移步<a href="https://github.com/purejs/modelproxy" target="_blank" rel="external"><img src="http://f.ydr.me/https://github.com/purejs/modelproxy" alt="f"><a href="https://github.com/purejs/modelproxy" target="_blank" rel="external">https://github.com/purejs/modelproxy</a></a></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>ModelProxy以一种配置化的轻量级框架存在，提供友好的接口model组装及使用方式，同时很好的解决前后端开发模式分离中的接口使用规范问题。在整个项目开发过程中，接口始终只需要定义描述一次，前端开发人员即可引用，同时使用River工具自动生成文档，形成与后端开发人员的契约，并做相关自动化测试，极大地优化了整个软件工程开发过程。</p>
+<p>【注】River 是阿里集团研发的前后端统一接口规范及相关工具集合的统称</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;前后端分离的思考与实践（三）&quot;&gt;&lt;a href=&quot;#前后端分离的思考与实践（三）&quot; class=&quot;headerlink&quot; title=&quot;前后端分离的思考与实践（三）&quot;&gt;&lt;/a&gt;前后端分离的思考与实践（三）&lt;/h3&gt;&lt;h3 id=&quot;TOC&quot;&gt;&lt;a href=&quot;#TO
+    
+    </summary>
+    
+      <category term="web架构" scheme="http://yichewx.com/categories/web%E6%9E%B6%E6%9E%84/"/>
+    
+    
+      <category term="架构" scheme="http://yichewx.com/tags/%E6%9E%B6%E6%9E%84/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>前后端分离的思考与实践（五） by阿里</title>
+    <link href="http://yichewx.com/2016/12/13/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E7%9A%84%E6%80%9D%E8%80%83%E4%B8%8E%E5%AE%9E%E8%B7%B5(5)/"/>
+    <id>http://yichewx.com/2016/12/13/前后端分离的思考与实践(5)/</id>
+    <published>2016-12-13T01:49:30.000Z</published>
+    <updated>2016-12-13T01:49:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前后端分离的思考与实践（五）"><a href="#前后端分离的思考与实践（五）" class="headerlink" title="前后端分离的思考与实践（五）"></a>前后端分离的思考与实践（五）</h2><h3 id="TOC"><a href="#TOC" class="headerlink" title="TOC"></a>TOC</h3><p><strong>基于前后端分离的多终端适配</strong></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>近年来各站点基于 Web 的多终端适配进行得如火如荼，行业间也发展出依赖各种技术的解决方案。有如基于浏览器原生 CSS3 Media Query 的响应式设计、基于云端智能重排的「云适配」方案等。本文则主要探讨在前后端分离基础下的多终端适配方案。</p>
+<blockquote>
+<p><strong>关于前后端分离</strong></p>
+<p>关于前后端分离的方案，在<a href="http://ued.taobao.org/blog/2014/04/full-stack-development-with-nodejs/" target="_blank" rel="external"><img src="http://f.ydr.me/http://ued.taobao.org/blog/2014/04/full-stack-development-with-nodejs/" alt="f">《前后端分离的思考与实践（一）》</a>中有非常清晰的解释。我们在服务端接口和浏览器之间引入 NodeJS 作为渲染层，因为 NodeJS 层彻底与数据抽离，同时无需关心大量的业务逻辑，所以十分适合在这一层进行多终端的适配工作。</p>
+</blockquote>
+<h3 id="UA-探测"><a href="#UA-探测" class="headerlink" title="UA 探测"></a>UA 探测</h3><p>进行多终端适配首先要解决的是 UA 探测问题，对于一个过来的请求，我们需要知道这个设备的类型才能针对对它输出对应的内容。现在市面上已经有非常成熟的兼容大量设备的 User Agent 特征库和探测工具，<a href="https://wiki.mozilla.org/Compatibility/UADetectionLibraries" target="_blank" rel="external"><img src="http://f.ydr.me/https://wiki.mozilla.org/Compatibility/UADetectionLibraries" alt="f">这里有 Mozilla 整理的一个列表</a>。其中，既有运行在浏览器端的，也有运行在服务端代码层的，甚至有些工具提供了 Nginx/Apache 的模块，负责解析每个请求的 UA 信息。</p>
+<p>实际上我们推荐最后一种方式。基于前后端分离的方案决定了 UA 探测只能运行在服务器端，但如果把探测的代码和特征库耦合在业务代码里并不是一个足够友好的方案。我们把这个行为再往前挪，挂在 Nginx/Apache 上，它们负责解析每个请求的 UA 信息，再通过如 HTTP Header 的方式传递给业务代码。</p>
+<p>这样做有几点好处：</p>
+<ol>
+<li>我们的代码里面无需再去关注 UA 如何解析，直接从上层取出解析后的信息即可。</li>
+<li>如果在同一台服务器上有多个应用，则能够共同使用同一个 Nginx 解析后的 UA 信息，节省了不同应用间的解析损耗。</li>
+</ol>
+<p><img src="http://gtms03.alicdn.com/tps/i3/T1s8L7FFNcXXbvv3MO-968-509.png" alt="http://gtms03.alicdn.com/tps/i3/T1s8L7FFNcXXbvv3MO-968-509.png"></p>
+<p>来自天猫分享的基于 Nginx 的 UA 探测方案</p>
+<p>淘宝的 Tengine Web 服务器也提供了类似的模块 <a href="http://tengine.taobao.org/document/http_user_agent.html" target="_blank" rel="external"><img src="http://f.ydr.me/http://tengine.taobao.org/document/http_user_agent.html" alt="f">ngx_http_user_agent_module</a>。</p>
+<p>值得一提的是，选用 UA 探测工具时必须要考虑特征库的可维护性，因为市面上新增的设备类型越来越多，每个设备都会有独立的 User Agent，所以该特征库必须提供良好的更新和维护策略，以适应不断变化的设备。</p>
+<h3 id="建立在-MVC-模式中的几种适配方案"><a href="#建立在-MVC-模式中的几种适配方案" class="headerlink" title="建立在 MVC 模式中的几种适配方案"></a>建立在 MVC 模式中的几种适配方案</h3><p>取得 UA 信息后，我们就要考虑如果根据指定的 UA 进行终端适配了。即使在 NodeJS 层，虽然没有了大部分的业务逻辑，但我们依然把内部区分为 Model / Controller / View 三个模型。</p>
+<p><img src="http://gtms04.alicdn.com/tps/i4/T1oGP_FIlbXXc1sab4-200-220.png" alt="http://gtms04.alicdn.com/tps/i4/T1oGP_FIlbXXc1sab4-200-220.png"></p>
+<p>我们先利用上面的图，去解析一些已有的多终端适配方案。</p>
+<h3 id="建立在-Controller-上的适配方案"><a href="#建立在-Controller-上的适配方案" class="headerlink" title="建立在 Controller 上的适配方案"></a>建立在 Controller 上的适配方案</h3><p><img src="http://gtms03.alicdn.com/tps/i3/T1YkZcFMhXXXa36h6P-507-400.png" alt="http://gtms03.alicdn.com/tps/i3/T1YkZcFMhXXXa36h6P-507-400.png"></p>
+<p>这种方案应该是最简单粗暴的处理方法。通过路由（Router）将相同的 URL 统一传递到同一个控制层（Controller）。控制层再通过 UA 信息将数据和模型（Model）逻辑派发到对应的展现（View）进行渲染，渲染层则按预先的约定提供了适配几个终端的模板。</p>
+<p>这种方案的好处是，保持了数据和控制层的统一性，业务逻辑只需处理一次遍可以应用在所有终端上。但这种场景只适合如展示型页面等低交互型的应用，一旦业务比较复杂，各个终端的 Controller 可能有各自的处理逻辑，如果还是共用一个 Controller ，会导致 Controller 非常的臃肿而且难以维护，这无疑是一个错误的选择。</p>
+<h3 id="建立在-Router-上的适配方案"><a href="#建立在-Router-上的适配方案" class="headerlink" title="建立在 Router 上的适配方案"></a>建立在 Router 上的适配方案</h3><p>为了解决上面遇到的问题，我们可以在 Router 上就将设备区分，针对不同的终端分发到不同的 Controller 上：</p>
+<p><img src="http://gtms03.alicdn.com/tps/i3/T1UQr7FK8cXXXKYi.n-531-348.png" alt="http://gtms03.alicdn.com/tps/i3/T1UQr7FK8cXXXKYi.n-531-348.png"></p>
+<p>这也是最常见的方案之一，大多表现在针对不同终端使用各自独立的一套应用。如 PC 淘宝首页和 WAP 版的淘宝首页，不同设备访问 www.taobao.com ，服务器会通过 Router 的控制，重定向到 WAP 版的淘宝首页或者 PC 版的淘宝首页，它们各自是完全独立的两套应用。</p>
+<p>但这种方案无疑带来了数据和部分逻辑无法共用的问题，各种终端之间无法分享同一份数据和业务逻辑，产生大量重复性工作，效率低下。</p>
+<p>为了缓解这个问题，有人提出了优化后的方案：依然是在同一套应用里面，各个数据来源抽象成各个 Model，提供给不同终端的 Controller 组合使用：</p>
+<p><img src="http://gtms01.alicdn.com/tps/i1/T1pR_fFGxaXXXGaK2H-685-520.png" alt="http://gtms01.alicdn.com/tps/i1/T1pR_fFGxaXXXGaK2H-685-520.png"></p>
+<p>这个方案解决了前面数据无法共用的问题。在 Controller 上各个终端还是相互独立，但能共同使用同一批数据源，至少在数据上无需再针对终端类型开发独立的接口了。</p>
+<p>以上两种基于 Router 的方案，由于 Controller 的独立，各个终端可以为自己的页面实现不同的交互逻辑，保证了各终端自身足够的灵活度，这也是为什么大部分应用采用这种方案的主要原因。</p>
+<h3 id="建立在-View-层的适配方案"><a href="#建立在-View-层的适配方案" class="headerlink" title="建立在 View 层的适配方案"></a>建立在 View 层的适配方案</h3><p>这是淘宝下单页面使用的方案，不过区别是下单页将整体的渲染层放在了浏览器端，而不是 NodeJS 层。不过无论是浏览器还是 NodeJS，整体设计思路还是一致的：</p>
+<p><img src="http://gtms02.alicdn.com/tps/i2/T18IvnFMtXXXc.mb7O-1327-494.png" alt="http://gtms02.alicdn.com/tps/i2/T18IvnFMtXXXc.mb7O-1327-494.png"></p>
+<p>在这个方案里面，Router、Controller 和 Model 都无需关注设备信息，终端类型的判断完全交给展现层来处理。图中主要的模块是「View Factory」，Model 和 Controller 将数据和渲染逻辑传递过来之后，通过 View Factory 根据设备信息和其它状态（不仅仅是 UA 信息、也可以是网络环境、用户地区等等）从一堆预设好的组件（View Component）中抓取特定的组件，再组合成最终的页面。</p>
+<p>这种方案有几个优势：</p>
+<ol>
+<li>上层无需关注设备信息（UA），多终端的视频还是交由和最终展现最大关系的 View 层来处理；</li>
+<li>不仅仅是多终端适配，除了 UA 信息，各个 View Component 还可以根据用户状态决定自身输出何种模版，如低网速下默认隐藏图片、指定地区输出活动 Banner。</li>
+<li>每个 View Component 的不同模版间可以自行决定是否使用同一份数据、业务逻辑，提供十分灵活的实现方式。</li>
+</ol>
+<p>但明显的是，这个方案也是最复杂的，尤其是要考虑一些富交互的应用场景时，Router 和 Controller 也许无法保持这么纯粹。特别对于一些整体性比较强的业务，本身无法被拆分成组件，这种方案也许并不适用；而且对于一些简单的业务，使用这种架构可能不是最佳的选择。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>以上几种方案，都各自体现在 MVC 模型中的一个或多个部分，在业务上如果一个方案不满足需求，更可以采取多个方案同时采用的方式。或是可以理解为，业务上的复杂度和交互属性决定了该产品更适合采用哪种多终端适配方案。</p>
+<p>对比基于浏览器的响应式设计方案，因为绝大部分终端探测和渲染逻辑迁移到了服务端，所以在 NodeJS 层进行适配无疑带来了更好的性能和用户体验；另外，相对于一些所谓的「云适配」方案带来的转换质量问题，在基于前后端分离的「定制式」方案中也不会存在。前后端分离的适配方案在这些方面有着天然优势。</p>
+<p>最后，为了适应更灵活的强大的适配需求，基于前后端分离的适配方案将会面临更多挑战！</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前后端分离的思考与实践（五）&quot;&gt;&lt;a href=&quot;#前后端分离的思考与实践（五）&quot; class=&quot;headerlink&quot; title=&quot;前后端分离的思考与实践（五）&quot;&gt;&lt;/a&gt;前后端分离的思考与实践（五）&lt;/h2&gt;&lt;h3 id=&quot;TOC&quot;&gt;&lt;a href=&quot;#TO
+    
+    </summary>
+    
+      <category term="web架构" scheme="http://yichewx.com/categories/web%E6%9E%B6%E6%9E%84/"/>
+    
+    
+      <category term="架构" scheme="http://yichewx.com/tags/%E6%9E%B6%E6%9E%84/"/>
+    
+  </entry>
+  
+</feed>
