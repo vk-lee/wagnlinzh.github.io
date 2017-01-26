@@ -2720,31 +2720,6 @@ vendor/         # 第三方库
   </entry>
   
   <entry>
-    <title>取消双击上滑 </title>
-    <link href="http://www.wanglinzhizhi.me/2017/01/21/%E7%A6%81%E6%AD%A2IOS%E5%8F%8C%E5%87%BB%E4%B8%8A%E6%BB%91/"/>
-    <id>http://www.wanglinzhizhi.me/2017/01/21/禁止IOS双击上滑/</id>
-    <published>2017-01-21T10:51:18.000Z</published>
-    <updated>2017-01-21T10:51:18.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="取消双击上滑"><a href="#取消双击上滑" class="headerlink" title="取消双击上滑"></a>取消双击上滑</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> agent = navigator.userAgent.toLowerCase();</div><div class="line"><span class="keyword">var</span> iLastTouch = <span class="literal">null</span>;</div><div class="line"><span class="keyword">if</span> (agent.indexOf(<span class="string">"iphone"</span>) &gt;= <span class="number">0</span> || agent.indexOf(<span class="string">"ipad"</span>) &gt;= <span class="number">0</span>) &#123;</div><div class="line">    <span class="built_in">document</span>.body.addEventListener(<span class="string">"touchend"</span>, <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> a = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</div><div class="line">        iLastTouch = iLastTouch || a + <span class="number">1</span>;</div><div class="line">        <span class="keyword">var</span> c = a - iLastTouch;</div><div class="line">        <span class="keyword">if</span> (c &lt; <span class="number">500</span> &amp;&amp; c &gt; <span class="number">0</span>) &#123;</div><div class="line">            event.preventDefault();</div><div class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        &#125;</div><div class="line">        iLastTouch = a</div><div class="line">    &#125;, <span class="literal">false</span>);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;取消双击上滑&quot;&gt;&lt;a href=&quot;#取消双击上滑&quot; class=&quot;headerlink&quot; title=&quot;取消双击上滑&quot;&gt;&lt;/a&gt;取消双击上滑&lt;/h2&gt;&lt;figure class=&quot;highlight javascript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class
-    
-    </summary>
-    
-      <category term="移动Web" scheme="http://www.wanglinzhizhi.me/categories/%E7%A7%BB%E5%8A%A8Web/"/>
-    
-    
-      <category term="iOS" scheme="http://www.wanglinzhizhi.me/tags/iOS/"/>
-    
-      <category term="HTML5" scheme="http://www.wanglinzhizhi.me/tags/HTML5/"/>
-    
-  </entry>
-  
-  <entry>
     <title>朱炫 白马将军</title>
     <link href="http://www.wanglinzhizhi.me/2017/01/21/%E7%99%BD%E9%A9%AC%E5%B0%86%E5%86%9B/"/>
     <id>http://www.wanglinzhizhi.me/2017/01/21/白马将军/</id>
@@ -2786,6 +2761,31 @@ vendor/         # 第三方库
       <category term="文学" scheme="http://www.wanglinzhizhi.me/tags/%E6%96%87%E5%AD%A6/"/>
     
       <category term="爱情" scheme="http://www.wanglinzhizhi.me/tags/%E7%88%B1%E6%83%85/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>取消双击上滑 </title>
+    <link href="http://www.wanglinzhizhi.me/2017/01/21/%E7%A6%81%E6%AD%A2IOS%E5%8F%8C%E5%87%BB%E4%B8%8A%E6%BB%91/"/>
+    <id>http://www.wanglinzhizhi.me/2017/01/21/禁止IOS双击上滑/</id>
+    <published>2017-01-21T10:51:18.000Z</published>
+    <updated>2017-01-21T10:51:18.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="取消双击上滑"><a href="#取消双击上滑" class="headerlink" title="取消双击上滑"></a>取消双击上滑</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> agent = navigator.userAgent.toLowerCase();</div><div class="line"><span class="keyword">var</span> iLastTouch = <span class="literal">null</span>;</div><div class="line"><span class="keyword">if</span> (agent.indexOf(<span class="string">"iphone"</span>) &gt;= <span class="number">0</span> || agent.indexOf(<span class="string">"ipad"</span>) &gt;= <span class="number">0</span>) &#123;</div><div class="line">    <span class="built_in">document</span>.body.addEventListener(<span class="string">"touchend"</span>, <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> a = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</div><div class="line">        iLastTouch = iLastTouch || a + <span class="number">1</span>;</div><div class="line">        <span class="keyword">var</span> c = a - iLastTouch;</div><div class="line">        <span class="keyword">if</span> (c &lt; <span class="number">500</span> &amp;&amp; c &gt; <span class="number">0</span>) &#123;</div><div class="line">            event.preventDefault();</div><div class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        &#125;</div><div class="line">        iLastTouch = a</div><div class="line">    &#125;, <span class="literal">false</span>);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;取消双击上滑&quot;&gt;&lt;a href=&quot;#取消双击上滑&quot; class=&quot;headerlink&quot; title=&quot;取消双击上滑&quot;&gt;&lt;/a&gt;取消双击上滑&lt;/h2&gt;&lt;figure class=&quot;highlight javascript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class
+    
+    </summary>
+    
+      <category term="移动Web" scheme="http://www.wanglinzhizhi.me/categories/%E7%A7%BB%E5%8A%A8Web/"/>
+    
+    
+      <category term="iOS" scheme="http://www.wanglinzhizhi.me/tags/iOS/"/>
+    
+      <category term="HTML5" scheme="http://www.wanglinzhizhi.me/tags/HTML5/"/>
     
   </entry>
   
